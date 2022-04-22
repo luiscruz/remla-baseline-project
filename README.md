@@ -26,3 +26,5 @@ Results evaluated using several classification metrics:
 - [Pandas](https://pandas.pydata.org/) — a library providing high-performance, easy-to-use data structures and data analysis tools for the Python
 - [scikit-learn](http://scikit-learn.org/stable/index.html) — a tool for data mining and data analysis.
 - [NLTK](http://www.nltk.org/) — a platform to work with natural language.
+
+Note: this sample project was originally created by @partoftheorigin
