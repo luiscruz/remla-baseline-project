@@ -28,3 +28,8 @@ Results evaluated using several classification metrics:
 - [NLTK](http://www.nltk.org/) — a platform to work with natural language.
 
 Note: this sample project was originally created by @partoftheorigin
+
+
+## Additions
+
+- Template code from: https://github.com/mengdong/python-ml-structure
