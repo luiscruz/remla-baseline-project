@@ -29,6 +29,9 @@ Results evaluated using several classification metrics:
 
 Note: this sample project was originally created by @partoftheorigin
 
+## Terraform
+All the terraform files should be stored in the `terraform` folder.
+If you want to use the terraform cli tool, you should first `cd terraform` to navigate to the terraform folder.
 
 ## Additions
 
