@@ -5,6 +5,7 @@ import numpy as np
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import MultiLabelBinarizer
 
 def read_data(filename):
     data = pd.read_csv(filename, sep='\t')
@@ -25,6 +26,27 @@ def process_question(text):
     text = re.sub(BAD_SYMBOLS_RE, "", text) # delete symbols which are in BAD_SYMBOLS_RE from text
     text = " ".join([word for word in text.split() if not word in STOPWORDS]) # delete stopwords from text
     return text
+
+def count_tags_and_words(X_train, y_train):
+    # Dictionary of all tags from train corpus with their counts.
+    tags_counts = {}
+    # Dictionary of all words from train corpus with their counts.
+    words_counts = {}
+
+    for sentence in X_train:
+        for word in sentence.split():
+            if word in words_counts:
+                words_counts[word] += 1
+            else:
+                words_counts[word] = 1
+
+    for tags in y_train:
+        for tag in tags:
+            if tag in tags_counts:
+                tags_counts[tag] += 1
+            else:
+                tags_counts[tag] = 1
+    return (tags_counts, words_counts)
 
 def tfidf_features(X_train, X_val, X_test):
     """
@@ -59,6 +81,17 @@ def preprocess_data(input_dir, output_dir):
 
     X_train, X_val, X_test, vocab = tfidf_features(X_train, X_val, X_test)
     reversed_vocab = {i:word for word,i in vocab.items()}
+
+    (tags_counts, word_counts) = count_tags_and_words(X_train, y_train)
+
+    mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
+    y_train = mlb.fit_transform(y_train)
+    y_val = mlb.fit_transform(y_val)
+
+    X_train.to_csv(output_dir + '/X_train.tsv', sep='\t')
+    X_test.to_csv(output_dir + '/X_test.tsv', sep='\t')
+    y_train.to_csv(output_dir + '/y_train.tsv', sep='\t')
+    y_val.to_csv(output_dir + '/y_val.tsv', sep='\t')
 
 if __name__ == "__main__":
     # execute only if run as the entry point into the program

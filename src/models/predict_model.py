@@ -1,0 +1,2 @@
+y_val_predicted_labels_tfidf = classifier_tfidf.predict(X_val_tfidf)
+y_val_predicted_scores_tfidf = classifier_tfidf.decision_function(X_val_tfidf)
