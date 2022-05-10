@@ -33,3 +33,7 @@ Note: this sample project was originally created by @partoftheorigin
 ## Additions
 
 - Template code from: https://github.com/mengdong/python-ml-structure
+
+Get started:
+- `python3 ./src/features/build_features.py`
+- `python3 ./src/models/train_model.py`

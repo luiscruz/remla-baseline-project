@@ -7,6 +7,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 import re 
+from scipy import sparse
 
 def read_data(filename):
     data = pd.read_csv(filename, sep='\t')
@@ -60,10 +61,10 @@ def tfidf_features(X_train, X_val, X_test):
     
     
     tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1,2), token_pattern='(\S+)') ####### YOUR CODE HERE #######
-    
-    X_train = pd.DataFrame(tfidf_vectorizer.fit_transform(X_train), columns=["word"])
-    X_val = pd.DataFrame(tfidf_vectorizer.transform(X_val), columns=["word"])
-    X_test = pd.DataFrame(tfidf_vectorizer.transform(X_test), columns=["word"])
+
+    X_train = tfidf_vectorizer.fit_transform(X_train)
+    X_val = tfidf_vectorizer.transform(X_val)
+    X_test = tfidf_vectorizer.transform(X_test)
     
     return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
 
@@ -95,10 +96,11 @@ def preprocess_data(input_dir, output_dir):
     y_train = pd.DataFrame(y_train, columns=["y"])
     y_val = pd.DataFrame(y_val, columns=["y"])
 
-    X_train.to_csv(output_dir + '/X_train.tsv', sep='\t')
-    X_test.to_csv(output_dir + '/X_test.tsv', sep='\t')
-    y_train.to_csv(output_dir + '/y_train.tsv', sep='\t')
-    y_val.to_csv(output_dir + '/y_val.tsv', sep='\t')
+    sparse.save_npz(output_dir + '/X_train.npz', X_train)
+    sparse.save_npz(output_dir + '/X_test.npz', X_test)
+
+    y_train.to_csv(output_dir + '/y_train.csv', sep='\t')
+    y_val.to_csv(output_dir + '/y_val.csv', sep='\t')
 
 if __name__ == "__main__":
     # execute only if run as the entry point into the program
