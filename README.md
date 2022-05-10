@@ -37,3 +37,5 @@ Note: this sample project was originally created by @partoftheorigin
 Get started:
 - `python3 ./src/features/build_features.py`
 - `python3 ./src/models/train_model.py`
+
+Build the HTTP server container: `docker build http_server`
