@@ -6,6 +6,7 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
+import re 
 
 def read_data(filename):
     data = pd.read_csv(filename, sep='\t')
@@ -60,9 +61,9 @@ def tfidf_features(X_train, X_val, X_test):
     
     tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1,2), token_pattern='(\S+)') ####### YOUR CODE HERE #######
     
-    X_train = tfidf_vectorizer.fit_transform(X_train)
-    X_val = tfidf_vectorizer.transform(X_val)
-    X_test = tfidf_vectorizer.transform(X_test)
+    X_train = pd.DataFrame(tfidf_vectorizer.fit_transform(X_train), columns=["word"])
+    X_val = pd.DataFrame(tfidf_vectorizer.transform(X_val), columns=["word"])
+    X_test = pd.DataFrame(tfidf_vectorizer.transform(X_test), columns=["word"])
     
     return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
 
@@ -79,14 +80,20 @@ def preprocess_data(input_dir, output_dir):
     X_val = [process_question(x)  for x in X_val]
     X_test = [process_question(x)  for x in X_test]
 
+    (tags_counts, word_counts) = count_tags_and_words(X_train, y_train)
+
     X_train, X_val, X_test, vocab = tfidf_features(X_train, X_val, X_test)
     reversed_vocab = {i:word for word,i in vocab.items()}
-
-    (tags_counts, word_counts) = count_tags_and_words(X_train, y_train)
 
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
     y_train = mlb.fit_transform(y_train)
     y_val = mlb.fit_transform(y_val)
+
+    y_train = np.apply_along_axis(lambda x : str(x), 1, y_train)
+    y_val = np.apply_along_axis(lambda x : str(x), 1, y_val)
+
+    y_train = pd.DataFrame(y_train, columns=["y"])
+    y_val = pd.DataFrame(y_val, columns=["y"])
 
     X_train.to_csv(output_dir + '/X_train.tsv', sep='\t')
     X_test.to_csv(output_dir + '/X_test.tsv', sep='\t')
@@ -95,4 +102,4 @@ def preprocess_data(input_dir, output_dir):
 
 if __name__ == "__main__":
     # execute only if run as the entry point into the program
-    preprocess_data(input_dir="../../data/raw", output_dir="../../data/data/processed")
+    preprocess_data(input_dir="./data/raw", output_dir="./data/processed")
