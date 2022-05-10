@@ -38,4 +38,6 @@ Get started:
 - `python3 ./src/features/build_features.py`
 - `python3 ./src/models/train_model.py`
 
-Build the HTTP server container: `docker build http_server`
+Build and run the HTTP server container:
+- `docker build -t nidhogg-http-server http_server`
+- `docker run -it -p 8080:8080 nidhogg-http-server`
