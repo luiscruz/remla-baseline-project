@@ -90,17 +90,14 @@ def preprocess_data(input_dir, output_dir):
     y_train = mlb.fit_transform(y_train)
     y_val = mlb.fit_transform(y_val)
 
-    y_train = np.apply_along_axis(lambda x : str(x), 1, y_train)
-    y_val = np.apply_along_axis(lambda x : str(x), 1, y_val)
-
-    y_train = pd.DataFrame(y_train, columns=["y"])
-    y_val = pd.DataFrame(y_val, columns=["y"])
-
     sparse.save_npz(output_dir + '/X_train.npz', X_train)
     sparse.save_npz(output_dir + '/X_test.npz', X_test)
-
-    y_train.to_csv(output_dir + '/y_train.csv', sep='\t')
-    y_val.to_csv(output_dir + '/y_val.csv', sep='\t')
+    
+    with open(f'{output_dir}/y_train.npy', 'wb') as f:
+        np.save(f, y_train)
+    
+    with open(f'{output_dir}/y_val.npy', 'wb') as f:
+        np.save(f, y_val)
 
 if __name__ == "__main__":
     # execute only if run as the entry point into the program
