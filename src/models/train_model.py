@@ -11,11 +11,6 @@ import pickle
 import pandas as pd
 import numpy as np
 
-def print_evaluation_scores(y_val, predicted):
-    print('Accuracy score: ', accuracy_score(y_val, predicted))
-    print('F1 score: ', f1_score(y_val, predicted, average='weighted'))
-    print('Average precision score: ', average_precision_score(y_val, predicted, average='macro'))
-
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
       X_train, y_train — training data

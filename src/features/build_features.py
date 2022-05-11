@@ -91,6 +91,7 @@ def preprocess_data(input_dir, output_dir):
     y_val = mlb.fit_transform(y_val)
 
     sparse.save_npz(output_dir + '/X_train.npz', X_train)
+    sparse.save_npz(output_dir + '/X_val.npz', X_val)
     sparse.save_npz(output_dir + '/X_test.npz', X_test)
     
     with open(f'{output_dir}/y_train.npy', 'wb') as f:
