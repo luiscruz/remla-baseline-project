@@ -29,6 +29,9 @@ Results evaluated using several classification metrics:
 
 Note: this sample project was originally created by @partoftheorigin
 
+## Terraform
+All the terraform files should be stored in the `terraform` folder.
+If you want to use the terraform cli tool, you should first `cd terraform` to navigate to the terraform folder.
 
 ## Additions
 
@@ -37,3 +40,7 @@ Note: this sample project was originally created by @partoftheorigin
 Get started:
 - `python3 ./src/features/build_features.py`
 - `python3 ./src/models/train_model.py`
+
+Build and run the HTTP server container:
+- `docker build -t nidhogg-http-server http_server`
+- `docker run -it -p 8080:8080 nidhogg-http-server`
