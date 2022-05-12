@@ -16,8 +16,7 @@ def print_evaluation_scores(y_val, predicted):
     print('F1 score: ', f1_score(y_val, predicted, average='weighted'))
     print('Average precision score: ', average_precision_score(y_val, predicted, average='macro'))
 
-if __name__ == "__main__":
-    # execute only if run as the entry point into the program
+def evaluate():
     clf = pickle.load(open("./models/tfidf_model.pkl", "rb"))
     X_val_tfidf = sparse.load_npz('./data/processed/X_val.npz')
     y_val = np.array([])
@@ -28,4 +27,7 @@ if __name__ == "__main__":
     y_val_predicted_scores_tfidf = clf.decision_function(X_val_tfidf)
     print_evaluation_scores(y_val, y_val_predicted_labels_tfidf)
 
+if __name__ == "__main__":
+    # execute only if run as the entry point into the program
+    evaluate()
     

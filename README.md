@@ -38,8 +38,9 @@ If you want to use the terraform cli tool, you should first `cd terraform` to na
 - Template code from: https://github.com/mengdong/python-ml-structure
 
 Get started:
-- `python3 ./src/features/build_features.py`
-- `python3 ./src/models/train_model.py`
+- `python3 ./src/run.py --preprocess`
+- `python3 ./src/run.py --train`
+- `python3 ./src/run.py --serve`
 
 Build and run the HTTP server container:
 - `docker build -t nidhogg-http-server http_server`

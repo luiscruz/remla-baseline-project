@@ -23,9 +23,9 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
     clf = OneVsRestClassifier(clf)
     clf.fit(X_train, y_train)
     
-    return clf
+    return clf  
 
-if __name__ == "__main__":
+def start_training():
     # execute only if run as the entry point into the program
     X_train_tfidf = sparse.load_npz('./data/processed/X_train.npz')
     y_train = np.array([])
@@ -35,3 +35,6 @@ if __name__ == "__main__":
     clf = train_classifier(X_train_tfidf, y_train, penalty='l2', C=10)
     with open("./models/tfidf_model.pkl", "wb") as f:
         pickle.dump(clf, f)
+
+if __name__ == "__main__":
+    start_training()
