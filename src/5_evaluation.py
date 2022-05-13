@@ -6,7 +6,7 @@ from sklearn.metrics import recall_score
 from joblib import dump, load
 
 
-def print_evaluation_scores(y_val, predicted):
+def print_evaluation_scores(y_val, predicted, prediction_results):
     print('Accuracy score: ', accuracy_score(y_val, predicted))
     print('F1 score: ', f1_score(y_val, predicted, average='weighted'))
     print('Average precision score: ', average_precision_score(y_val, predicted, average='macro'))
@@ -14,12 +14,15 @@ def print_evaluation_scores(y_val, predicted):
 
 
 # Change variable names
+def main():
+    prediction_results = load('output/prediction_results.joblib')
 
-prediction_results = load('output/prediction_results.joblib')
+    scores = prediction_results["scores"]
+    labels = prediction_results["labels"]
+    y_val = load('output/val_data.joblib')
+
+    print_evaluation_scores(y_val, labels, prediction_results)
 
 
-scores = prediction_results["scores"]
-labels = prediction_results["labels"]
-y_val = load('output/val_data.joblib')
-
-print_evaluation_scores(y_val, labels)
+if __name__ == "__main__":
+    main()
