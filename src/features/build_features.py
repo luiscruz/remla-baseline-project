@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
 	X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
 
-	write_data(ROOT_DIR / 'data/processed/train.tsv', zip(X_train_tfidf, y_train))
-	write_data(ROOT_DIR / 'data/processed/validation.tsv', zip(X_val_tfidf, y_val))
-	write_data(ROOT_DIR / 'data/processed/test.tsv', X_test_tfidf)
+	write_data(ROOT_DIR / 'data/processed/train.tsv', zip(X_train_tfidf, y_train), ['title', 'tags'])
+	write_data(ROOT_DIR / 'data/processed/validation.tsv', zip(X_val_tfidf, y_val), ['title', 'tags'])
+	write_data(ROOT_DIR / 'data/processed/test.tsv', X_test_tfidf, ['title'])
 
