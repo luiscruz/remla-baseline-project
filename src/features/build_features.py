@@ -5,7 +5,7 @@ import re
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from config.definitions import ROOT_DIR
+from src.config.definitions import ROOT_DIR
 from src.common.data import read_data
 
 nltk.data.path.append((ROOT_DIR / 'data/external').as_posix()) # specify path to nltk data

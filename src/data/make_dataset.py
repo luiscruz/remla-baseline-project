@@ -1,6 +1,6 @@
 import nltk
 
-from config.definitions import ROOT_DIR
+from src.config.definitions import ROOT_DIR
 
 
 if __name__ == '__main__':

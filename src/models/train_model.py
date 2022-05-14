@@ -4,7 +4,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression, RidgeClassifier
 
-from config.definitions import ROOT_DIR
+from src.config.definitions import ROOT_DIR
 
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
