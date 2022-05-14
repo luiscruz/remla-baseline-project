@@ -11,10 +11,4 @@ def read_data(infile):
     return data
 
 
-def write_data(outfile, data, header = Optional[List[str]]):
-	with open(outfile, 'w') as f:
-		writer = csv.writer(f, delimiter='\t')
-		writer.writerow(header)
-		for row in data:
-			writer.writerow(row)
 
