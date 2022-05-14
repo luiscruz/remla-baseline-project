@@ -1,5 +1,6 @@
 import nltk
 import pandas as pd
+import pickle
 import re
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -33,13 +34,12 @@ def tfidf_features(X_train, X_val, X_test):
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
     
-    
     tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1,2), token_pattern='(\S+)') ####### YOUR CODE HERE #######
     
     X_train = tfidf_vectorizer.fit_transform(X_train)
     X_val = tfidf_vectorizer.transform(X_val)
     X_test = tfidf_vectorizer.transform(X_test)
-    
+
     return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
 
 
@@ -62,8 +62,10 @@ if __name__ == '__main__':
 	X_test = [text_prepare(x) for x in X_test]
 
 	X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
-
-	write_data(ROOT_DIR / 'data/processed/train.tsv', zip(X_train_tfidf, y_train), ['title', 'tags'])
-	write_data(ROOT_DIR / 'data/processed/validation.tsv', zip(X_val_tfidf, y_val), ['title', 'tags'])
-	write_data(ROOT_DIR / 'data/processed/test.tsv', X_test_tfidf, ['title'])
-
+	
+	with open(ROOT_DIR / 'data/processed/train', 'wb') as a:
+		pickle.dump((X_train_tfidf, y_train), a)
+	with open(ROOT_DIR / 'data/processed/validation', 'wb') as b:
+		pickle.dump((X_val_tfidf, y_val), b)
+	with open(ROOT_DIR / 'data/processed/test', 'wb') as c:
+		pickle.dump(X_test_tfidf, c)
