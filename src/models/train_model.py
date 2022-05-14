@@ -24,7 +24,7 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 
 if __name__ == '__main__':
-	with open(ROOT_DIR / 'data/processed/train', 'rb') as f:
+	with open(ROOT_DIR / 'data/processed/train.pkl', 'rb') as f:
 		X_train_tfidf, y_train = pickle.load(f)
 
 	# Dictionary of all tags from train corpus with their counts.
@@ -42,7 +42,7 @@ if __name__ == '__main__':
 	
 	classifier_tfidf = train_classifier(X_train_tfidf, y_train)
 	
-	with open(ROOT_DIR / 'models/tfidf', 'wb') as f:
+	with open(ROOT_DIR / 'models/tfidf.pkl', 'wb') as f:
 		pickle.dump(classifier_tfidf, f) # save trained model
 	
 

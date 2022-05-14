@@ -63,9 +63,9 @@ if __name__ == '__main__':
 
 	X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
 	
-	with open(ROOT_DIR / 'data/processed/train', 'wb') as f:
+	with open(ROOT_DIR / 'data/processed/train.pkl', 'wb') as f:
 		pickle.dump((X_train_tfidf, y_train), f)
-	with open(ROOT_DIR / 'data/processed/validation', 'wb') as f:
+	with open(ROOT_DIR / 'data/processed/validation.pkl', 'wb') as f:
 		pickle.dump((X_val_tfidf, y_val), f)
-	with open(ROOT_DIR / 'data/processed/test', 'wb') as f:
+	with open(ROOT_DIR / 'data/processed/test.pkl', 'wb') as f:
 		pickle.dump(X_test_tfidf, f)
