@@ -6,7 +6,7 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from config.definitions import ROOT_DIR
-from src.common.data import read_data, write_data
+from src.common.data import read_data
 
 nltk.data.path.append((ROOT_DIR / 'data/external').as_posix()) # specify path to nltk data
 from nltk.corpus import stopwords 
@@ -63,9 +63,9 @@ if __name__ == '__main__':
 
 	X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
 	
-	with open(ROOT_DIR / 'data/processed/train', 'wb') as a:
-		pickle.dump((X_train_tfidf, y_train), a)
-	with open(ROOT_DIR / 'data/processed/validation', 'wb') as b:
-		pickle.dump((X_val_tfidf, y_val), b)
-	with open(ROOT_DIR / 'data/processed/test', 'wb') as c:
-		pickle.dump(X_test_tfidf, c)
+	with open(ROOT_DIR / 'data/processed/train', 'wb') as f:
+		pickle.dump((X_train_tfidf, y_train), f)
+	with open(ROOT_DIR / 'data/processed/validation', 'wb') as f:
+		pickle.dump((X_val_tfidf, y_val), f)
+	with open(ROOT_DIR / 'data/processed/test', 'wb') as f:
+		pickle.dump(X_test_tfidf, f)
