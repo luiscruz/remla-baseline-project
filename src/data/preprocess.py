@@ -36,5 +36,5 @@ def preprocess_sentences(X_vals, vectorizer):
 
 def preprocess_sentence(sentence, vectorizer):
     sentence = process_question(sentence)
-    sentence = vectorizer.transform(sentence)
+    sentence = vectorizer.transform([sentence])
     return sentence

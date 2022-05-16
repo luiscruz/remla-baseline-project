@@ -7,6 +7,8 @@ import re
 from scipy import sparse
 from data.preprocess import train_tfidf_vectorizer, preprocess_sentences
 
+import pickle
+
 def read_data(filename):
     data = pd.read_csv(filename, sep='\t')
     data['tags'] = data['tags'].apply(literal_eval)
@@ -58,6 +60,9 @@ def preprocess_data(input_dir, output_dir):
     sparse.save_npz(output_dir + '/X_train.npz', X_train)
     sparse.save_npz(output_dir + '/X_val.npz', X_val)
     sparse.save_npz(output_dir + '/X_test.npz', X_test)
+
+    with open("./models/vectorizer.pkl", "wb") as f:
+        pickle.dump(vectorizer, f)
     
     with open(f'{output_dir}/y_train.npy', 'wb') as f:
         np.save(f, y_train)

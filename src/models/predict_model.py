@@ -7,6 +7,8 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import recall_score
 from scipy import sparse
 
+from data.preprocess import preprocess_sentence
+
 import pickle
 import pandas as pd
 import numpy as np
@@ -26,6 +28,14 @@ def evaluate():
     y_val_predicted_labels_tfidf = clf.predict(X_val_tfidf)
     y_val_predicted_scores_tfidf = clf.decision_function(X_val_tfidf)
     print_evaluation_scores(y_val, y_val_predicted_labels_tfidf)
+
+def predict(sentence):
+    vectorizer = pickle.load(open("./models/vectorizer.pkl", "rb"))
+    clf = pickle.load(open("./models/tfidf_model.pkl", "rb"))
+    sentence = preprocess_sentence(sentence, vectorizer)
+
+    return clf.predict(sentence)
+
 
 if __name__ == "__main__":
     # execute only if run as the entry point into the program

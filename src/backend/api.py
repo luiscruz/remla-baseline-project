@@ -4,10 +4,10 @@ import json
 import numpy as np
 
 from data.preprocess import preprocess_sentence
+from models.predict_model import predict
 
 class S(BaseHTTPRequestHandler):
     def __init__(self, *args):
-        self.clf = pickle.load(open("./models/tfidf_model.pkl", "rb"))
         BaseHTTPRequestHandler.__init__(self, *args)
 
     def _set_response(self):
@@ -19,10 +19,10 @@ class S(BaseHTTPRequestHandler):
         self._set_response()
 
         #sentence = preprocess_sentence("What dies my JS compiler have in common with Pytorch?", vectorizer)
-        labels = self.clf.predict(np.array(["What dies my JS compiler have in common with Pytorch?"]).reshape(1, -1))
+        labels = predict("What does my JS compiler have in common with Pytorch?")
 
         response = {
-            "Tags" : labels
+            "Tags" : labels.tolist()
         }
         json_str=json.dumps(response)
         self.wfile.write(json_str.encode('utf-8'))
