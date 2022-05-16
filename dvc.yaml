@@ -6,9 +6,9 @@ stages:
         outs:
             - output/preprocessed_data.joblib
     createBag:
-        cmd: python src/2_bagOfWords.py
+        cmd: python src/2_bag_of_words.py
         deps:
-            - src/2_bagOfWords.py
+            - src/2_bag_of_words.py
             - output/preprocessed_data.joblib
         outs:
             - output/bag_of_words.joblib

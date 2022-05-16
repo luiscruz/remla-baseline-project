@@ -27,6 +27,7 @@ def text_prepare(text):
         text: a string
         return: modified initial string
     """
+
     text = text.lower()  # lowercase text
     text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
     text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
@@ -47,9 +48,20 @@ def main():
 
     # Clean all the data
     prepared_questions = []
+    cont = 0
+    test_texts = []
+    test_outs = []
     for line in open('data/text_prepare_tests.tsv', encoding='utf-8'):
+        test_texts.append(line)
         line = text_prepare(line.strip())
         prepared_questions.append(line)
+
+        test_outs.append(line)
+        cont += 1
+        if cont == 100:
+            print(test_texts)
+            print(test_outs)
+            exit()
     text_prepare_results = '\n'.join(prepared_questions)
 
     # Retrieve preprocesed data
