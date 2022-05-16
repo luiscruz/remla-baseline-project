@@ -28,3 +28,24 @@ Results evaluated using several classification metrics:
 - [NLTK](http://www.nltk.org/) — a platform to work with natural language.
 
 Note: this sample project was originally created by @partoftheorigin
+
+
+## Executing the pipeline
+
+To execute the pipeline we have to first build and run the docker image of this repository:
+
+```
+docker build --progress plain . -t remla-project-g18
+docker run -it --rm -v "$(pwd)":/root/project remla-project-g18
+
+```
+
+Once inside docker we have to access the project folder and we can execute the pipeline:
+
+```
+cd project
+dvc init
+dvc repro
+```
+
+The results of our execution will be in the folder results, in a JSON format, with a list of the most/least popular words in the text and metrics such as the accuracy or the precision of the tags that were set.

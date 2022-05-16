@@ -14,6 +14,7 @@ def dump_eval_results(results):
     if os.path.exists(RESULTS_DIRECTION):
         creation_time = int(os.path.getctime(RESULTS_DIRECTION)*10e5)
         os.rename(RESULTS_DIRECTION, RESULTS_DIRECTION.replace("metrics.", f"metrics-{creation_time}.json"))
+
     with open(f"{RESULTS_DIRECTION}", "w") as file_write:
         file_write.write(json.dumps(results, indent=4))
 
