@@ -1,0 +1,49 @@
+# docker build --progress plain . -t docker-project
+# docker run -it --rm -v "$(pwd)":/root/project docker-project
+
+# dvc run -n preprocess -d src/1_preprocessing.py -o output/preprocessed_data.joblib python src/1_preprocessing.py
+# dvc run -n createBag -d src/2_bagOfWords.py -o output python src/2_bagOfWords.py
+# dvc run -n train -d src/3_train.py -o output python src/3_train.py
+# dvc run -n predict -d src/4_predict.py -o output python src/4_predict.py
+# dvc run -n evaluate -d src/5_evaluation.py -o output python src/5_evaluation.py
+# dvc run -n analyze -d src/6_analyze_features.py -o output python src/6_analyze_features.py
+stages:
+    preprocess:
+        cmd: python src/1_preprocessing.py
+        deps:
+            - src/1_preprocessing.py
+        outs:
+            - output/preprocessed_data.joblib
+    createBag:
+        cmd: python src/2_bagOfWords.py
+        deps:
+            - src/2_bagOfWords.py
+        outs:
+            - output/bag_of_words.joblib
+            - output/words_dictionaries.joblib
+    train:
+        cmd: python src/3_train.py
+        deps:
+            - src/3_train.py
+        outs:
+            - output/multi_label_binarizer.joblib
+            - output/classifier.joblib
+            - output/val_data.joblib
+    predict:
+        cmd: python src/4_predict.py
+        deps:
+            - src/4_predict.py
+        outs:
+            - output/prediction_results.joblib
+    evaluation:
+        cmd: python src/5_evaluation.py
+        deps:
+            - src/5_evaluation.py
+
+        metrics:
+            - results/metrics.json:
+                  cache: false
+    analyze:
+        cmd: python src/6_analyze_features.py
+        deps:
+            - src/6_analyze_features.py
