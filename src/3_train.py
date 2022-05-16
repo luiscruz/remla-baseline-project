@@ -5,6 +5,8 @@ from joblib import dump, load
 
 # Trainning function
 
+OUTPUT_DIR = "output/"
+
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
@@ -36,9 +38,9 @@ def main():
 
     classifier = train_classifier(X_train, y_train)
 
-    dump(mlb, "output/multi_label_binarizer.joblib")
-    dump(classifier, 'output/classifier.joblib')
-    dump(y_val, 'output/val_data.joblib')
+    dump(mlb, f"{OUTPUT_DIR}multi_label_binarizer.joblib")
+    dump(classifier, f'{OUTPUT_DIR}classifier.joblib')
+    dump(y_val, f'{OUTPUT_DIR}val_data.joblib')
 
 
 if __name__ == "__main__":
