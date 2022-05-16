@@ -1,8 +1,17 @@
 # Multilabel classification on Stack Overflow tags
-Predict tags for posts from StackOverflow with multilabel classification approach.
+This project aims to predict tags for posts from [StackOverflow](https://stackoverflow.com). To solve this task we use multilabel classification. This is based on a project by partoftheorigin
+
+### Libraries
+
+In this task you will need the following libraries:
+- [Numpy](http://www.numpy.org) — a package for scientific computing.
+- [Pandas](https://pandas.pydata.org) — a library providing high-performance, easy-to-use data structures and data analysis tools for the Python
+- [scikit-learn](http://scikit-learn.org/stable/index.html) — a tool for data mining and data analysis.
+- [NLTK](http://www.nltk.org) — a platform to work with natural language.
 
 ## Dataset
 - Dataset of post titles from StackOverflow
+- All data required for this project is into the folder `/data`.
 
 ## Transforming text to a vector
 - Transformed text data to numeric vectors using bag-of-words and TF-IDF.
