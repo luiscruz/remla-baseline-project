@@ -24,7 +24,7 @@ def print_evaluation_scores(y_val, predicted, prediction_results):
     results = {}
     results["accuracy"] = accuracy_score(y_val, predicted)
     results["f1"] = f1_score(y_val, predicted, average='weighted')
-    results["precison"] = average_precision_score(y_val, predicted, average='macro')
+    results["precision"] = average_precision_score(y_val, predicted, average='macro')
     results["roc"] = roc_auc_score(y_val, prediction_results["scores"], multi_class="ovo")
 
     dump_eval_results(results)

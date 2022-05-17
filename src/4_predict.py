@@ -9,8 +9,13 @@ def main():
 
     # This one would be cool that it reads the arguments for the validation and do the rest.
 
+    print(X_val)
+    print("HHAS")
     labels = classifier.predict(X_val)
     scores = classifier.decision_function(X_val)
+
+    print(labels)
+    print(scores)
 
     results = {"labels": labels,
                "scores": scores}

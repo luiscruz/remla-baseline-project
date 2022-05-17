@@ -10,4 +10,5 @@ dslinter
 dvc==2.1.0
 dvc[gdrive]
 mllint 
+pylint
 codecarbon==1.2.0

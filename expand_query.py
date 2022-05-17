@@ -123,12 +123,3 @@ def expand(sentence):
 tokens = generate_tokens('Silenced by the chaos.')
 print(tokens)
 print(expand("Boat gala"))
-
-
-{'hush': 1,
- 'silence': 1,
- 'chaos': 1,
- 'suppress': 12,
- 'confusion': 6,
- 'physical phenomenon': 6,
- 'dynamical system': 6}

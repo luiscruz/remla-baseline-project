@@ -58,10 +58,7 @@ def main():
 
         test_outs.append(line)
         cont += 1
-        if cont == 100:
-            print(test_texts)
-            print(test_outs)
-            exit()
+
     text_prepare_results = '\n'.join(prepared_questions)
 
     # Retrieve preprocesed data
