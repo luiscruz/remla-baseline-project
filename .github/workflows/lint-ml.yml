@@ -1,12 +1,12 @@
 name: Lint using mllint
 
-env:
-  RESULTS_FILE: results.md
-
 on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ main ]
+
+env:
+  RESULTS_FILE: results.md
 
 jobs:
   lint-ml:
