@@ -9,7 +9,7 @@ env:
   RESULTS_FILE: results.md
 
 jobs:
-  lint-ml:
+  lintml:
     runs-on: ubuntu-latest
     name: Lint
     steps:

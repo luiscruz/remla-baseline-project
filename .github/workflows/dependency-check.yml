@@ -14,7 +14,7 @@ on:
     branches: [ main ]
 
 jobs:
-  dependency-check:
+  dependencycheck:
     runs-on: ubuntu-latest
     name: Safety
     steps:

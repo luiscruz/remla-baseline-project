@@ -14,7 +14,7 @@ on:
     branches: [ main ]
 
 jobs:
-  lint-flake8:
+  lintflake8:
     runs-on: ubuntu-latest
     name: Lint
     steps:
