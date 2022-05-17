@@ -1,0 +1,4 @@
+outs:
+- md5: 0ac15c7eb94aef598a88441b5a310499
+  size: 5091
+  path: text_prepare_tests.tsv
