@@ -1,6 +1,8 @@
-from sklearn.preprocessing import MultiLabelBinarizer
+import joblib
+from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.linear_model import LogisticRegression, RidgeClassifier
+from sklearn.preprocessing import MultiLabelBinarizer
+
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
@@ -19,6 +21,11 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 
 def main():
+    tags_counts = joblib.load("../output/tags_counts.joblib")
+    X_train_mybag, X_train_tfidf, X_val_mybag, X_val_tfidf = joblib.load("../output/vectorized_x.joblib")
+    _, X_val, _ = joblib.load("../output/X_preprocessed.joblib")
+    y_train, y_val = joblib.load("../output/y_preprocessed.joblib")
+
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
     y_train = mlb.fit_transform(y_train)
     y_val = mlb.fit_transform(y_val)
@@ -27,22 +34,9 @@ def main():
     classifier_mybag = train_classifier(X_train_mybag, y_train)
     classifier_tfidf = train_classifier(X_train_tfidf, y_train)
 
-    # Now you can create predictions for the data. You will need two types of predictions: labels and scores.
-    y_val_predicted_labels_mybag = classifier_mybag.predict(X_val_mybag)
-    y_val_predicted_scores_mybag = classifier_mybag.decision_function(X_val_mybag)
-
-    y_val_predicted_labels_tfidf = classifier_tfidf.predict(X_val_tfidf)
-    y_val_predicted_scores_tfidf = classifier_tfidf.decision_function(X_val_tfidf)
-
-    # Now take a look at how classifier, which uses TF-IDF, works for a few examples:
-    y_val_pred_inversed = mlb.inverse_transform(y_val_predicted_labels_tfidf)
-    y_val_inversed = mlb.inverse_transform(y_val)
-    for i in range(3):
-        print('Title:\t{}\nTrue labels:\t{}\nPredicted labels:\t{}\n\n'.format(
-            X_val[i],
-            ','.join(y_val_inversed[i]),
-            ','.join(y_val_pred_inversed[i])
-        ))
+    joblib.dump((classifier_mybag, classifier_tfidf), "../output/classifiers.joblib")
+    joblib.dump(y_val, "../output/fitted_y_val.joblib")
+    joblib.dump(mlb, "../output/mlb.joblib")
 
 
 if __name__ == "__main__":

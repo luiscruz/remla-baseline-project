@@ -87,6 +87,7 @@ def main():
     joblib.dump((X_train, X_val, X_test), "../output/X_preprocessed.joblib")
     joblib.dump((y_train, y_val), "../output/y_preprocessed.joblib")
     joblib.dump(words_counts, "../output/words_counts.joblib")
+    joblib.dump(tags_counts, "../output/tags_counts.joblib")
 
 
 if __name__ == "__main__":
