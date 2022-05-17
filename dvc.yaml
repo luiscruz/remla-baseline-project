@@ -1,0 +1,22 @@
+stages:
+  get_data:
+    cmd: python src/get_data.py
+    deps:
+    - src/get_data.py
+    outs:
+    - dataset
+  preprocess:
+    cmd: python src/text_preprocessing.py
+    deps:
+    - dataset
+    outs:
+    - output/preprocessed_data.joblib
+    - output/preprocessor.joblib
+  train:
+    cmd: python src/text_classification.py AdaBoost
+    deps:
+    - output/preprocessed_data.joblib
+    outs:
+    - output/AdaBoost_model.joblib
+    - output/accuracy_scores.png
+    - output/misclassified_msgs.txt

@@ -6,9 +6,11 @@ from sklearn.metrics import roc_auc_score as roc_auc
 
 
 def print_evaluation_scores(y_val, predicted):
-    print('Accuracy score: ', accuracy_score(y_val, predicted))
-    print('F1 score: ', f1_score(y_val, predicted, average='weighted'))
-    print('Average precision score: ', average_precision_score(y_val, predicted, average='macro'))
+    f = open("../output/accuracies.txt", "w")
+    f.write(f"Accuracy score: {accuracy_score(y_val, predicted)} \n"
+            f"F1 score: {f1_score(y_val, predicted, average='weighted')} \n"
+            f"Average precision score: {average_precision_score(y_val, predicted, average='macro')}")
+    f.close()
 
 
 def main():
