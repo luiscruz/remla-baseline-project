@@ -58,5 +58,5 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
     httpd.server_close()
     print('Stopping httpd...\n')
 
-def serve(port=3333):
+def serve(port=8080):
     run(port=port)
