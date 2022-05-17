@@ -1,22 +1,38 @@
 stages:
-  get_data:
-    cmd: python src/get_data.py
-    deps:
-    - src/get_data.py
-    outs:
-    - dataset
   preprocess:
     cmd: python src/text_preprocessing.py
     deps:
-    - dataset
+    - data
     outs:
-    - output/preprocessed_data.joblib
-    - output/preprocessor.joblib
-  train:
-    cmd: python src/text_classification.py AdaBoost
+    - output/X_preprocessed.joblib
+    - output/y_preprocessed.joblib
+    - output/words_counts.joblib
+    - output/tags_counts.joblib
+  embedding:
+    cmd: python src/vectorization.py
     deps:
-    - output/preprocessed_data.joblib
+    - output/X_preprocessed.joblib
+    - output/words_counts.joblib
     outs:
-    - output/AdaBoost_model.joblib
-    - output/accuracy_scores.png
-    - output/misclassified_msgs.txt
+    - output/vectorized_x.joblib
+  model_training:
+    cmd: python src/model_training.py
+    deps:
+    - output/tags_counts.joblib
+    - output/vectorized_x.joblib
+    - output/X_preprocessed.joblib
+    - output/y_preprocessed.joblib
+    outs:
+    - output/classifiers.joblib
+    - output/fitted_y_val.joblib
+    - output/mlb.joblib
+  evaluation:
+    cmd: python src/evaluation.py
+    deps:
+    - output/classifiers.joblib
+    - output/vectorized_x.joblib
+    - output/mlb.joblib
+    - output/X_preprocessed.joblib
+    - output/fitted_y_val.joblib
+    outs:
+    - output/accuracies.txt
