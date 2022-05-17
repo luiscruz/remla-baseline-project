@@ -1,0 +1,80 @@
+[
+    {
+        "type": "convention",
+        "module": "evaluation",
+        "obj": "",
+        "line": 5,
+        "column": 0,
+        "endLine": 5,
+        "endColumn": 52,
+        "path": "src\\evaluation.py",
+        "symbol": "import-sklearn",
+        "message": "The import from sklearn module has an alias.",
+        "message-id": "C5504"
+    },
+    {
+        "type": "refactor",
+        "module": "text_preprocessing",
+        "obj": "read_data",
+        "line": 10,
+        "column": 4,
+        "endLine": 10,
+        "endColumn": 42,
+        "path": "src\\text_preprocessing.py",
+        "symbol": "column-selection-pandas",
+        "message": "There is no column selection after the dataframe is imported.",
+        "message-id": "R5504"
+    },
+    {
+        "type": "refactor",
+        "module": "text_preprocessing",
+        "obj": "read_data",
+        "line": 10,
+        "column": 11,
+        "endLine": 10,
+        "endColumn": 42,
+        "path": "src\\text_preprocessing.py",
+        "symbol": "datatype-pandas",
+        "message": "Datatype is not set when a dataframe is imported from data.",
+        "message-id": "R5503"
+    },
+    {
+        "type": "refactor",
+        "module": "text_preprocessing",
+        "obj": "main",
+        "line": 44,
+        "column": 4,
+        "endLine": 44,
+        "endColumn": 62,
+        "path": "src\\text_preprocessing.py",
+        "symbol": "column-selection-pandas",
+        "message": "There is no column selection after the dataframe is imported.",
+        "message-id": "R5504"
+    },
+    {
+        "type": "refactor",
+        "module": "text_preprocessing",
+        "obj": "main",
+        "line": 44,
+        "column": 11,
+        "endLine": 44,
+        "endColumn": 62,
+        "path": "src\\text_preprocessing.py",
+        "symbol": "datatype-pandas",
+        "message": "Datatype is not set when a dataframe is imported from data.",
+        "message-id": "R5503"
+    },
+    {
+        "type": "warning",
+        "module": "vectorization",
+        "obj": "",
+        "line": 1,
+        "column": 0,
+        "endLine": null,
+        "endColumn": null,
+        "path": "src\\vectorization.py",
+        "symbol": "randomness-control-numpy",
+        "message": "The np.random.seed() is not set in numpy program.",
+        "message-id": "W5508"
+    }
+]
