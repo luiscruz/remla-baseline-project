@@ -1,0 +1,35 @@
+name: Typecheck using mypy
+
+on:
+  push:
+    paths:
+      - "**.py"
+      - .github/workflows/type-check.yml
+    branches: [ main ]
+  pull_request:
+    paths:
+      - "**.py"
+      - .github/workflows/type-check.yml
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Mypy
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
+
+    - name: Install Dependencies
+      run: |
+        pip install mypy
+        
+    - name: Typecheck using mypy
+      run: |
+        mypy .

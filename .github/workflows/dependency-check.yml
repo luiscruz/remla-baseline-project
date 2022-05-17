@@ -1,22 +1,22 @@
-name: Typecheck using mypy
+name: Check dependencies using safety
 
 on:
   push:
     paths:
-      - "**.py"
-      - .github/workflows/typecheck.yml
+      - requirements.txt
+      - .github/workflows/dependency-check.yml
     branches: [ main ]
   pull_request:
     paths:
-      - "**.py"
-      - .github/workflows/typecheck.yml
+      - requirements.txt
+      - .github/workflows/dependency-check.yml
     # The branches below must be a subset of the branches above
     branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Mypy
+    name: Safety
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -28,8 +28,8 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        pip install mypy
+        pip install safety
         
-    - name: Typecheck using mypy
+    - name: Check dependencies using safety
       run: |
-        mypy .
+        safety .
