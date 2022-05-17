@@ -9,17 +9,17 @@ env:
   RESULTS_FILE: results.md
 
 jobs:
-  lintml:
+  lint-ml:
     runs-on: ubuntu-latest
     name: Lint
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python environment
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.8
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
 
     - name: Install Dependencies
       run: |
