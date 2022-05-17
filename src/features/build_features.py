@@ -57,6 +57,7 @@ def preprocess_data(input_dir, output_dir):
     y_train = mlb.fit_transform(y_train)
     y_val = mlb.fit_transform(y_val)
 
+    np.savetxt(output_dir + '/tags.txt', sorted(tags_counts.keys()), fmt='%s')
     sparse.save_npz(output_dir + '/X_train.npz', X_train)
     sparse.save_npz(output_dir + '/X_val.npz', X_val)
     sparse.save_npz(output_dir + '/X_test.npz', X_test)

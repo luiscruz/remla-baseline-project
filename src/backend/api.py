@@ -1,6 +1,8 @@
+import cgi
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import pickle
 import json
+from urllib.parse import urlsplit, parse_qs, urlparse
 import numpy as np
 
 from data.preprocess import preprocess_sentence
@@ -19,20 +21,31 @@ class S(BaseHTTPRequestHandler):
         self._set_response()
 
         #sentence = preprocess_sentence("What dies my JS compiler have in common with Pytorch?", vectorizer)
-        labels = predict("What does my JS compiler have in common with Pytorch?")
+        # get url param
+        params = parse_qs(urlparse(self.path).query)
+        print(params)
+        labels = predict(" ".join(params['sentence']))
 
         response = {
-            "Tags" : labels.tolist()
+            "Tags" : labels
         }
         json_str=json.dumps(response)
         self.wfile.write(json_str.encode('utf-8'))
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
-        post_data = self.rfile.read(content_length) # <--- Gets the data itself
+        content_len = int(self.headers['content-length'])
+        post_body = self.rfile.read(content_len)
+        labels = predict(str(post_body))
 
+        response = {
+            "tags" : labels
+        }
+        json_str=json.dumps(response)
         self._set_response()
-        self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
+        self.wfile.write(json_str.encode('utf-8'))
+
+        #self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
 def run(server_class=HTTPServer, handler_class=S, port=8080):
     server_address = ('', port)

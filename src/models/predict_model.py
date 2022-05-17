@@ -33,9 +33,17 @@ def predict(sentence):
     vectorizer = pickle.load(open("./models/vectorizer.pkl", "rb"))
     clf = pickle.load(open("./models/tfidf_model.pkl", "rb"))
     sentence = preprocess_sentence(sentence, vectorizer)
+    tags = np.loadtxt('./data/processed/tags.txt', dtype=str, delimiter="\n")
 
-    return clf.predict(sentence)
+    prediction = clf.predict(sentence)
+    output = []
 
+    index = 0
+    for p in prediction[0]:
+        if p == 1:
+            output.append(tags[index])
+        index = index + 1
+    return output
 
 if __name__ == "__main__":
     # execute only if run as the entry point into the program
