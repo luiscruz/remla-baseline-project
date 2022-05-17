@@ -32,8 +32,8 @@ jobs:
         mllint . -o ${{ env.RESULTS_FILE }}
 
     - name: Comment results to PR
-      uses: machine-learning-apps/pr-comment@master
+      uses: NejcZdovc/comment-pr@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        path: ${{ env.RESULTS_FILE }}
+        file: ../../${{ env.RESULTS_FILE }}
