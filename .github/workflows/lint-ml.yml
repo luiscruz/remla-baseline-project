@@ -1,20 +1,15 @@
-name: Lint using flake8
+name: Lint using mllint
+
+env:
+  RESULTS_FILE: results.md
 
 on:
-  push:
-    paths:
-      - "**.py"
-      - .github/workflows/lint.yml
-    branches: [ main ]
   pull_request:
-    paths:
-      - "**.py"
-      - .github/workflows/lint.yml
     # The branches below must be a subset of the branches above
     branches: [ main ]
 
 jobs:
-  flake8-lint:
+  lint-ml:
     runs-on: ubuntu-latest
     name: Lint
     steps:
@@ -28,8 +23,15 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        pip install flake8
+        pip install mllint[tools]
         
-    - name: Lint using flake8
+    - name: Lint using mllint
       run: |
-        flake8 .
+        mllint . -o ${{ env.RESULTS_FILE }}
+
+    - name: Comment results to PR
+      uses: machine-learning-apps/pr-comment@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        path: ${{ env.RESULTS_FILE }}

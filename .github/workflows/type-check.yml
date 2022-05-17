@@ -14,7 +14,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  type-check:
     runs-on: ubuntu-latest
     name: Mypy
     steps:

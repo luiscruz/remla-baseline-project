@@ -1,0 +1,35 @@
+name: Lint using flake8
+
+on:
+  push:
+    paths:
+      - "**.py"
+      - .github/workflows/lint-flake8.yml
+    branches: [ main ]
+  pull_request:
+    paths:
+      - "**.py"
+      - .github/workflows/lint-flake8.yml
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+
+jobs:
+  lint-flake8:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+
+    - name: Install Dependencies
+      run: |
+        pip install flake8
+        
+    - name: Lint using flake8
+      run: |
+        flake8 .
