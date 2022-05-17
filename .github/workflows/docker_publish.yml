@@ -1,0 +1,7 @@
+  name: Multi-label-classification
+  on: push
+  jobs:
+    init:
+      runs-on: ubuntu-latest
+      steps:
+        - run: !pip install -r requirements.txt
