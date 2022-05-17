@@ -1,5 +1,5 @@
-from src.vectorization import my_bag_of_words
 from src.text_preprocessing import text_prepare
+from src.vectorization import my_bag_of_words
 
 
 def test_text_prepare():
@@ -11,7 +11,6 @@ def test_text_prepare():
         if text_prepare(ex) != ans:
             return "Wrong answer for the case: '%s'" % ex
     return 'Basic tests are passed.'
-
 
 
 def test_my_bag_of_words():
