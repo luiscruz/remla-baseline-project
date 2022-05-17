@@ -13,10 +13,10 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ main, feat/add-static-analysis ]
+    branches: [ main ]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ main, feat/add-static-analysis ]
+    branches: [ main ]
   schedule:
     - cron: '23 23 * * 2'
 
