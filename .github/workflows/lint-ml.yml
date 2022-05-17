@@ -12,6 +12,8 @@ jobs:
   lint-ml:
     runs-on: ubuntu-latest
     name: Lint
+    permissions:
+      pull-requests: write
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
