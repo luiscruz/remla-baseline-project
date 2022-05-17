@@ -1,0 +1,5 @@
+[core]
+    remote = backblaze
+['remote "backblaze"']
+    url = s3://remla-group13/remla
+    endpointurl = https://s3.eu-central-003.backblazeb2.com
