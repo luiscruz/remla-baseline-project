@@ -1,3 +1,10 @@
+[MASTER]
+
+load-plugins=dslinter
+
+
+[MESSAGES CONTROL]
+
 disable=all
 
 enable=import,

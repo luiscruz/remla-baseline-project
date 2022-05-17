@@ -14,9 +14,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression, RidgeClassifier
-from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, average_precision_score, recall_score, roc_auc_score as roc_auc
+from sklearn.metrics import accuracy_score, f1_score, average_precision_score, recall_score, roc_auc_score
 import nltk
+
 nltk.download('stopwords')
+np.random.seed(42)
 
 
 def read_data(filename):
@@ -264,9 +266,9 @@ def main():
     print('Tfidf')
     print_evaluation_scores(y_val, y_val_predicted_labels_tfidf)
 
-    print(roc_auc(y_val, y_val_predicted_scores_mybag, multi_class='ovo'))
+    print(roc_auc_score(y_val, y_val_predicted_scores_mybag, multi_class='ovo'))
 
-    print(roc_auc(y_val, y_val_predicted_scores_tfidf, multi_class='ovo'))
+    print(roc_auc_score(y_val, y_val_predicted_scores_tfidf, multi_class='ovo'))
 
     # coefficients = [0.1, 1, 10, 100]
     # penalties = ['l1', 'l2']
