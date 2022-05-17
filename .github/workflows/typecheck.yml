@@ -1,9 +1,15 @@
-name: mypy typecheck
+name: Typecheck using mypy
 
 on:
   push:
+    paths:
+      - "**.py"
+      - .github/workflows/typecheck.yml
     branches: [ main ]
   pull_request:
+    paths:
+      - "**.py"
+      - .github/workflows/typecheck.yml
     # The branches below must be a subset of the branches above
     branches: [ main ]
 
@@ -24,6 +30,6 @@ jobs:
       run: |
         pip install mypy
         
-    - name: mypy typecheck
+    - name: Typecheck using mypy
       run: |
         mypy .

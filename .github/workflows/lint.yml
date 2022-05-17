@@ -1,9 +1,15 @@
-name: flake8 lint
+name: Lint using flake8
 
 on:
   push:
+    paths:
+      - "**.py"
+      - .github/workflows/lint.yml
     branches: [ main ]
   pull_request:
+    paths:
+      - "**.py"
+      - .github/workflows/lint.yml
     # The branches below must be a subset of the branches above
     branches: [ main ]
 
@@ -24,6 +30,6 @@ jobs:
       run: |
         pip install flake8
         
-    - name: flake8 lint
+    - name: Lint using flake8
       run: |
         flake8 .
