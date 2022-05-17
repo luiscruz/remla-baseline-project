@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-FROM python:3.7.13-slim
-=======
 FROM python:3.7.10
->>>>>>> 56083ab906bee391dc21c066069a941bb85af56e
 
 RUN apt-get update \
 && apt-get install -y --no-install-recommends git \
