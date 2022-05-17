@@ -18,7 +18,12 @@ jobs:
       - name: Set up Python environment
         uses: actions/setup-python@v3
         with:
-          python-version: "3.8"
+          python-version: 3.8
 
-      - name: flake8 lint
-        uses: py-actions/flake8@v2
+    - name: Install Dependencies
+      run: |
+        pip install flake8
+        
+    - name: flake8 lint
+      run: |
+        flake8 .
