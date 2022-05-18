@@ -1,4 +1,5 @@
-"""TODO Summary."""
+"""Train script which trains a classifier using logistic regression, measures the evaluation scores and writes them
+to the output directory."""
 
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.multiclass import OneVsRestClassifier
@@ -9,9 +10,13 @@ from joblib import load, dump
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
-    TODO Summary.
+    Train a classifier using logistic regression with the provided parameters.
 
-    TODO Description
+    :param X_train: train data.
+    :param y_train: multi-class targets for the train data.
+    :param penalty: penalty added to the logistic regression model.
+    :param C: parameter representing the inverse of regularization strength
+    :return: the trained classifier.
     """
     # Create and fit LogisticRegression wraped into OneVsRestClassifier.
 
@@ -24,9 +29,13 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 def write_evaluation_scores(f_name, y_val, pred_labels, pred_scores):
     """
-    TODO Summary.
+    Write the evaluation results for the given inputs to the given filename in the output folder.
 
-    TODO Description
+    :param f_name: filename.
+    :param y_val: target labels for validation set.
+    :param pred_labels: predicted labels.
+    :param pred_scores: predicted scores.
+    :return:
     """
     with open('output/' + f_name, 'w') as f:
         f.write('Accuracy score: {}\n'.format(accuracy_score(y_val, pred_labels)))

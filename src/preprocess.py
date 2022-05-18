@@ -1,4 +1,7 @@
-"""TODO Summary."""
+"""
+Preprocess script used for reading, preparing and transforming the train, test and validation data before dumping it
+to the output folder.
+"""
 
 import re
 from ast import literal_eval
@@ -14,9 +17,10 @@ nltk.download('stopwords')
 
 def read_data(filename):
     """
-    TODO Summary.
+    Read, store and return the data from the given filename.
 
-    TODO Description
+    :param filename: filename of where the data is saved.
+    :return: the data in the form of a dataframe.
     """
     data = pd.read_csv(filename, sep='\t')
     data['tags'] = data['tags'].apply(literal_eval)
@@ -25,9 +29,11 @@ def read_data(filename):
 
 def text_prepare(text):
     """
-    TODO Summary.
+    Take the given text as input data, turn it into lowercase letters, replace certain symbols by space,
+    remove bad symbols and stopwords, and return the final text as result.
 
-    TODO Description
+    :param text: A single record from the input data.
+    :return: prepared version of the text.
     """
     REPLACE_BY_SPACE_RE = re.compile(r'[/(){}\[\]\|@,;]')
     BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
@@ -46,10 +52,15 @@ def text_prepare(text):
 
 def tfidf_features(X_train, X_val, X_test):
     """
-    TODO Summary.
+    A TF-IDF vectorizer with fixed choices of parameters is used to fit the training data, and to transform
+    the training, validation and test data.
 
-    TODO Description
+    :param X_train: training set.
+    :param X_val: validation set.
+    :param X_test: test set.
+    :return: transformed train, test and validation set.
     """
+
     # Create TF-IDF vectorizer with a proper parameters choice
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result

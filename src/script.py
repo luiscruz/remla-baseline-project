@@ -1,7 +1,7 @@
 """
-TODO Summary.
-
-TODO Description
+Script for reading, preparing and training the input data. The true and predicted labels are listed,
+followed by the evaluation scores for Bag-of-words and TF-IDF. Next, the top positive and negative words are printed
+for different tags.
 """
 
 import re
@@ -23,9 +23,10 @@ np.random.seed(42)
 
 def read_data(filename):
     """
-    TODO Summary.
+    Read, store and return the data from the given filename.
 
-    TODO Description
+    :param filename: filename of where the data is saved.
+    :return: the data in the form of a dataframe.
     """
     data = pd.read_csv(filename, sep='\t')
     data['tags'] = data['tags'].apply(literal_eval)
@@ -34,9 +35,11 @@ def read_data(filename):
 
 def text_prepare(text):
     """
-    TODO Summary.
+    Take the given text as input data, turn it into lowercase letters, replace certain symbols by space,
+    remove bad symbols and stopwords, and return the final text as result.
 
-    TODO Description
+    :param text: A single record from the input data.
+    :return: prepared version of the text.
     """
     REPLACE_BY_SPACE_RE = re.compile(r'[/(){}\[\]\|@,;]')
     BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
@@ -55,9 +58,9 @@ def text_prepare(text):
 
 def test_text_prepare():
     """
-    TODO Summary.
+    Test whether the above text_prepare() method works as expected.
 
-    TODO Description
+    :return: a string which states whether the given examples were prepared correctly or not.
     """
     examples = ["SQL Server - any equivalent of Excel's CHOOSE function?",
                 "How to free c++ memory vector<int> * arr?"]
@@ -71,10 +74,14 @@ def test_text_prepare():
 
 def my_bag_of_words(text, words_to_index, dict_size):
     """
-    TODO Summary.
+    Keep track of the word counts from the words_to_index dictionary that occur in the given text.
 
-    TODO Description
+    :param text: text as given input data.
+    :param words_to_index: Dictionary of words and their corresponding index.
+    :param dict_size: Size of the dictionary.
+    :return: array with a word count for each word in text if it is present in the dictionary.
     """
+
     result_vector = np.zeros(dict_size)
 
     for word in text.split():
@@ -85,9 +92,9 @@ def my_bag_of_words(text, words_to_index, dict_size):
 
 def test_my_bag_of_words():
     """
-    TODO Summary.
+    Test whether the above my_bag_of_words() works as expected.
 
-    TODO Description
+    :return: A string indicating if the word counts for the given case are correct or not.
     """
     words_to_index = {'hi': 0, 'you': 1, 'me': 2, 'are': 3}
     examples = ['hi how are you']
@@ -100,9 +107,13 @@ def test_my_bag_of_words():
 
 def tfidf_features(X_train, X_val, X_test):
     """
-    TODO Summary.
+    A TF-IDF vectorizer with fixed choices of parameters is used to fit the training data, and to transform
+    the training, validation and test data.
 
-    TODO Description
+    :param X_train: training set.
+    :param X_val: validation set.
+    :param X_test: test set.
+    :return: transformed train, test, validation set and the vocabulary of the TF-IDF vectorizer.
     """
     # Create TF-IDF vectorizer with a proper parameters choice
     # Fit the vectorizer on the train set
@@ -119,9 +130,13 @@ def tfidf_features(X_train, X_val, X_test):
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
-    TODO Summary.
+    Train a classifier using logistic regression with the provided parameters.
 
-    TODO Description
+    :param X_train: train data.
+    :param y_train: multi-class targets for the train data.
+    :param penalty: penalty added to the logistic regression model.
+    :param C: parameter representing the inverse of regularization strength
+    :return: the trained classifier.
     """
     # Create and fit LogisticRegression wraped into OneVsRestClassifier.
 
@@ -134,9 +149,14 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 def print_words_for_tag(classifier, tag, tags_classes, index_to_words, all_words):
     """
-    TODO Summary.
+    Print the top 5 positive and negative words for the given tag.
 
-    TODO Description
+    :param classifier: given trained classifier.
+    :param tag: given tag
+    :param tags_classes: classes for the tags.
+    :param index_to_words: dictionary mapping the indices to the words.
+    :param all_words: All the present words extracted from the dictionary.
+    :return:
     """
     print('Tag:\t{}'.format(tag))
 
@@ -153,9 +173,11 @@ def print_words_for_tag(classifier, tag, tags_classes, index_to_words, all_words
 
 def print_evaluation_scores(y_val, predicted):
     """
-    TODO Summary.
+    Print the evaluation results, such as the accuracy score, the F1 score and the average precision score.
 
-    TODO Description
+    :param y_val: multi-class targets for the validation data
+    :param predicted: predicted labels from the trained my_bag classifier.
+    :return:
     """
     print('Accuracy score: ', accuracy_score(y_val, predicted))
     print('F1 score: ', f1_score(y_val, predicted, average='weighted'))
