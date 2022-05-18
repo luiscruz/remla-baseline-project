@@ -19,8 +19,13 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
     return clf
 
 def get_classifiers():
-    X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = get_train_test_data(data=3)
+    X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab, tags_counts = get_train_test_data(data=3)
+    from sklearn.preprocessing import MultiLabelBinarizer
+    # %%
+    mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
+    y_train = mlb.fit_transform(y_train)
+    y_val = mlb.fit_transform(y_val)
     classifier_mybag = train_classifier(X_train_mybag, y_train)
     classifier_tfidf = train_classifier(X_train_tfidf, y_train)
 
-    return classifier_mybag, classifier_tfidf
+    return classifier_mybag, classifier_tfidf, y_train, y_val

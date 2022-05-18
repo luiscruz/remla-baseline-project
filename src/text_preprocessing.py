@@ -94,9 +94,9 @@ def get_train_test_data(data):
     :param data: 1 for just the data, 2 for including the bag-of-words representation, 3 for including the tf-idf representation
     :return: partial or all data
     '''
-    train = read_data('data/train.tsv')
-    validation = read_data('data/validation.tsv')
-    test = pd.read_csv('data/test.tsv', sep='\t')
+    train = read_data('../data/train.tsv')
+    validation = read_data('../data/validation.tsv')
+    test = pd.read_csv('../data/test.tsv', sep='\t')
     X_train, y_train = train['title'].values, train['tags'].values
     X_val, y_val = validation['title'].values, validation['tags'].values
     X_test = test['title'].values
@@ -107,7 +107,7 @@ def get_train_test_data(data):
         return X_train, y_train, X_val, y_val, X_test
 
     DICT_SIZE = 5000
-    words_counts, _ = get_word_tags_counts(X_train, y_train)
+    words_counts, tags_counts = get_word_tags_counts(X_train, y_train)
     INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[:DICT_SIZE]
     WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
     ALL_WORDS = WORDS_TO_INDEX.keys()
@@ -119,4 +119,4 @@ def get_train_test_data(data):
         return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag
 
     X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
-    return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab
+    return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab, tags_counts

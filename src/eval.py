@@ -15,8 +15,8 @@ def print_evaluation_scores(y_val, predicted):
 
 
 def bag_of_words_tfidf_evaluation():
-    classifier_mybag, classifier_tfidf = get_classifiers()
-    X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = get_train_test_data(data=3)
+    classifier_mybag, classifier_tfidf, y_train, y_val = get_classifiers()
+    X_train, _, X_val, _, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab, _ = get_train_test_data(data=3)
     y_val_predicted_labels_mybag = classifier_mybag.predict(X_val_mybag)
     y_val_predicted_scores_mybag = classifier_mybag.decision_function(X_val_mybag)
 
