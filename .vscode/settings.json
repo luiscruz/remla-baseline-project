@@ -2,5 +2,6 @@
     "python.linting.pylintEnabled": true,
     "python.linting.flake8Enabled": true,
     "python.linting.pydocstyleEnabled": true,
-    "python.linting.banditEnabled": true
+    "python.linting.banditEnabled": true,
+    "python.linting.banditArgs": ["-c", "bandit.yaml"]
 }
