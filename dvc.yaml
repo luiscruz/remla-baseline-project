@@ -1,0 +1,21 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - data/test.tsv
+    - data/train.tsv
+    - data/validation.tsv
+    - src/preprocess.py
+    outs:
+    - output/test_tfidf.joblib
+    - output/train_tfidf.joblib
+    - output/validation_tfidf.joblib
+  train:
+    cmd: python src/train.py
+    deps:
+    - output/train_tfidf.joblib
+    - output/validation_tfidf.joblib
+    - src/train.py
+    outs:
+    - output/model_tfidf.joblib
+    - output/stats.txt
