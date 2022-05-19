@@ -1,0 +1,28 @@
+name: Code Checks
+on:
+  push:
+  pull_request:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+    - name: Install Requirements
+      run: pip install -r requirements.txt
+    - name: Pylint (dslinter)
+      run: pylint src
+    - name: flake8
+      run: flake8 src
+    - name: pydoctyle
+      run: pydocstyle src
+    - name: Bandit
+      run: bandit -r src -c bandit.yaml
+    - name: Test
+      run: pytest
