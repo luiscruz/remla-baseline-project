@@ -1,8 +1,20 @@
 # -*- coding: utf-8 -*-
+from ast import literal_eval
+import re
+
 import click
 import logging
 from pathlib import Path
+
+import pandas as pd
 from dotenv import find_dotenv, load_dotenv
+
+import nltk
+
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+
+from src.util.util import read_data
 
 
 @click.command()
@@ -14,6 +26,24 @@ def main(input_filepath, output_filepath):
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
+
+
+REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
+BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
+STOPWORDS = set(stopwords.words('english'))
+
+
+def text_prepare(text):
+    """
+        text: a string
+
+        return: modified initial string
+    """
+    text = text.lower()  # lowercase text
+    text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
+    text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
+    text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
+    return text
 
 
 if __name__ == '__main__':
@@ -28,3 +58,14 @@ if __name__ == '__main__':
     load_dotenv(find_dotenv())
 
     main()
+    train = read_data('data/train.tsv')
+    validation = read_data('data/validation.tsv')
+    test = pd.read_csv('data/test.tsv', sep='\t')
+
+    X_train, y_train = train['title'].values, train['tags'].values
+    X_val, y_val = validation['title'].values, validation['tags'].values
+    X_test = test['title'].values
+
+    X_train = [text_prepare(x) for x in X_train]
+    X_val = [text_prepare(x) for x in X_val]
+    X_test = [text_prepare(x) for x in X_test]
