@@ -1,7 +1,9 @@
 {
     "python.linting.pylintEnabled": true,
+    "python.linting.pylintCategorySeverity.refactor": "Warning",
     "python.linting.flake8Enabled": true,
     "python.linting.pydocstyleEnabled": true,
+    "python.linting.pydocstyleArgs": ["--match=^((?!test).)*$"],
     "python.linting.banditEnabled": true,
     "python.linting.banditArgs": ["-c", "bandit.yaml"]
 }
