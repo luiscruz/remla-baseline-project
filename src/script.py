@@ -1,8 +1,5 @@
-"""
-Script for reading, preparing and training the input data. The true and predicted labels are listed,
-followed by the evaluation scores for Bag-of-words and TF-IDF. Next, the top positive and negative words are printed
-for different tags.
-"""
+# flake8: noqa
+"""Script for reading, preparing and training the input data. The true and predicted labels are listed, followed by the evaluation scores for Bag-of-words and TF-IDF. Next, the top positive and negative words are printed for different tags."""
 
 import re
 from ast import literal_eval
@@ -35,8 +32,7 @@ def read_data(filename):
 
 def text_prepare(text):
     """
-    Take the given text as input data, turn it into lowercase letters, replace certain symbols by space,
-    remove bad symbols and stopwords, and return the final text as result.
+    Take the given text as input data, turn it into lowercase letters, replace certain symbols by space, remove bad symbols and stopwords, and return the final text as result.
 
     :param text: A single record from the input data.
     :return: prepared version of the text.
@@ -81,7 +77,6 @@ def my_bag_of_words(text, words_to_index, dict_size):
     :param dict_size: Size of the dictionary.
     :return: array with a word count for each word in text if it is present in the dictionary.
     """
-
     result_vector = np.zeros(dict_size)
 
     for word in text.split():
@@ -107,8 +102,7 @@ def test_my_bag_of_words():
 
 def tfidf_features(X_train, X_val, X_test):
     """
-    A TF-IDF vectorizer with fixed choices of parameters is used to fit the training data, and to transform
-    the training, validation and test data.
+    TF-IDF vectorizer with fixed choices of parameters is used to fit the training data, and to transform the training, validation and test data.
 
     :param X_train: training set.
     :param X_val: validation set.

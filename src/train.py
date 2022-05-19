@@ -1,5 +1,4 @@
-"""Train script which trains a classifier using logistic regression, measures the evaluation scores and writes them
-to the output directory."""
+"""Train script which trains a classifier using logistic regression, measures the evaluation scores and writes them to the output directory."""
 
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.multiclass import OneVsRestClassifier
