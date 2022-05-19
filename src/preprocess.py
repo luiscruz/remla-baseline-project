@@ -19,7 +19,8 @@ def read_data(filename):
     :param filename: filename of where the data is saved.
     :return: the data in the form of a dataframe.
     """
-    data = pd.read_csv(filename, sep='\t')
+    data = pd.read_csv(filename, sep='\t', dtype={'title': str, 'tags': object})
+    data = data[['title', 'tags']]
     data['tags'] = data['tags'].apply(literal_eval)
     return data
 
@@ -72,7 +73,8 @@ def main():
     """Is the main function."""
     train = read_data('data/train.tsv')
     validation = read_data('data/validation.tsv')
-    test = pd.read_csv('data/test.tsv', sep='\t')
+    test = pd.read_csv('data/test.tsv', sep='\t', dtype={'title': str})
+    test = test[['title']]
 
     X_train, y_train = train['title'].values, train['tags'].values
     X_val, y_val = validation['title'].values, validation['tags'].values
