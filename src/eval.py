@@ -1,8 +1,8 @@
 from sklearn.metrics import accuracy_score, f1_score, average_precision_score
 from sklearn.metrics import roc_auc_score as roc_auc
 
-from src.model import get_classifiers
-from src.text_preprocessing import get_train_test_data
+from model import get_classifiers
+from text_preprocessing import get_train_test_data
 
 
 def print_evaluation_scores(y_val, predicted):
