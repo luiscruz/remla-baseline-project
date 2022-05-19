@@ -2,7 +2,6 @@ from src.data import make_dataset
 
 
 def test_text_prepare_1():
-    tests_passed = True
     example = "SQL Server - any equivalent of Excel's CHOOSE function?"
     answer = "sql server equivalent excels choose function"
 
