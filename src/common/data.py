@@ -1,8 +1,6 @@
-import csv
 import pandas as pd
 
 from ast import literal_eval
-from typing import Optional, List
 
 
 def read_data(infile):
