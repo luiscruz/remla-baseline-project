@@ -1,10 +1,11 @@
 from ast import literal_eval
 import pandas as pd
-import numpy as np
-import nltk
-nltk.download('stopwords')
-from nltk.corpus import stopwords
 
+"""
+In this task you will deal with a dataset of post titles from StackOverflow. 
+You are provided a split to 3 sets: train, validation and test. All corpora (except for test) contain titles of the posts and 
+corresponding tags (100 tags are available). The test set doesn’t contain answers.
+"""
 def read_data(filename):
     data = pd.read_csv(filename, sep='\t')
     data['tags'] = data['tags'].apply(literal_eval)
