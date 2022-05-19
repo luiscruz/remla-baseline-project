@@ -28,3 +28,7 @@ Results evaluated using several classification metrics:
 - [NLTK](http://www.nltk.org/) — a platform to work with natural language.
 
 Note: this sample project was originally created by @partoftheorigin
+
+# Testing: PyTest
+## Structure
+Pytests can be found in the "tests" directory. Newly added test classes should end with "_test.py" and newly added test functions should start with "test"
