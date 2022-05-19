@@ -46,7 +46,7 @@ def write_evaluation_scores(f_name, y_val, pred_labels, pred_scores):
 def main():
     """Is the main function."""
     X_train_tfidf, y_train = load('output/train_tfidf.joblib')
-    X_val_tfidf, y_val = load('output/train_tfidf.joblib')
+    X_val_tfidf, y_val = load('output/validation_tfidf.joblib')
 
     # Dictionary of all tags from train corpus with their counts.
     tags_counts = {}
