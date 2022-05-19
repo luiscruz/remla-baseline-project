@@ -20,7 +20,7 @@ jobs:
       run: pylint src
     - name: flake8
       run: flake8 src
-    - name: pydoctyle
+    - name: pydocstyle
       run: pydocstyle src
     - name: Bandit
       run: bandit -r src -c bandit.yaml

@@ -7,4 +7,5 @@ pytest~=7.1
 flake8~=4.0
 bandit~=1.7
 dslinter~=2.0
+pydocstyle~=6.1
 mllint~=0.12
