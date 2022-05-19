@@ -1,4 +1,4 @@
-from src.text_preprocessing import process_for_inference
+from text_preprocessing import process_for_inference
 
 
 def infer(data, classifier_mybag, classifier_tfidf, mlb, tfidf_vectorizer, words_to_index, dict_size):

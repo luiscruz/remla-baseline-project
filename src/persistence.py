@@ -1,7 +1,7 @@
 import os
 from joblib import dump, load
 
-from src.model import get_classifiers
+from model import get_classifiers
 
 CLF_MYBAG_FILE = 'clf_mybag.joblib'
 CLF_TFIDF_FILE = 'clf_tfidf.joblib'

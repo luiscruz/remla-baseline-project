@@ -2,7 +2,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression, RidgeClassifier
 
-from src.text_preprocessing import get_train_test_data
+from text_preprocessing import get_train_test_data
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
