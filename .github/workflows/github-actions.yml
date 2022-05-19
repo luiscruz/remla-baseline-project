@@ -1,20 +1,27 @@
-name:
+name: ML Pipeline
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  static-analysis:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Python use
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Install requirements
         run: |
           pip install -r requirements.txt
+          pip install mllint
       - name: Analysing the code with pylint
         run: |
           find . -name '*.py' -exec pylint {} \;
+          find . -name '*.py' -exec mllint {} \;
+
       - name: Run tests
         run: |
           pytest
