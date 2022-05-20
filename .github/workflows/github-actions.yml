@@ -17,9 +17,6 @@ jobs:
         run: |
           cd path/to/artifacts
       - uses: actions/checkout@v2
-      - name: Run test on Runner
-        run: |
-          sudo ./entrypoint.sh
       - name: mllint analysis
         run: |
           mllint
