@@ -1,3 +1,4 @@
+"""Module for setting up external data."""
 import nltk
 
 from src.config.definitions import ROOT_DIR

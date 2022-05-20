@@ -1,6 +1,4 @@
-"""
-Module for handling feature building.
-"""
+"""Module for handling feature building."""
 import pickle
 import re
 
@@ -28,7 +26,7 @@ def text_prepare(text):
     return text
 
 
-def tfidf_features(X_train, X_val, X_test):
+def tfidf_features(X_train_, X_val_, X_test_):
     """
         X_train, X_val, X_test — samples
         return TF-IDF vectorized representation of each sample and vocabulary
@@ -38,11 +36,11 @@ def tfidf_features(X_train, X_val, X_test):
     # Transform the train, test, and val sets and return the result
     tfidf_vectorizer = TfidfVectorizer(
         min_df=5, max_df=0.9, ngram_range=(1,2), token_pattern=r'(\S+)') ####### YOUR CODE HERE #######
-    X_train = tfidf_vectorizer.fit_transform(X_train)
-    X_val = tfidf_vectorizer.transform(X_val)
-    X_test = tfidf_vectorizer.transform(X_test)
+    X_train_ = tfidf_vectorizer.fit_transform(X_train_)
+    X_val_ = tfidf_vectorizer.transform(X_val_)
+    X_test_ = tfidf_vectorizer.transform(X_test_)
 
-    return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
+    return X_train_, X_val_, X_test_, tfidf_vectorizer.vocabulary_
 
 
 if __name__ == '__main__':
