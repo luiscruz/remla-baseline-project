@@ -39,6 +39,8 @@ def predict_labels_and_scores(X_train, X_val, X_test, y_train, y_val):
     #         ','.join(y_val_pred_inversed[i])
     #     ))
 
+    # alternative_preprocessing_models(X_train_tfidf, X_val_tfidf, X_test_tfidf, y_train, mlb)
+
     return y_val_predicted_labels_mybag, y_val_predicted_scores_mybag, y_val_predicted_labels_tfidf, y_val_predicted_scores_tfidf
 
 
@@ -117,7 +119,7 @@ Task 4 - MultilabelClassification
 """
 
 
-def alternative_preprocessing_models():
+def alternative_preprocessing_models(X_train_tfidf, X_val_tfidf, X_test_tfidf, y_train, mlb):
     """
     Once the evaluation is set up, experiment with training your classifiers. We will use *F1-score weighted* as an evaluation metric.
     Our recommendation:
