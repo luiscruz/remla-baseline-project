@@ -1,6 +1,5 @@
 import unittest
 import os.path as path
-import pandas as pd
 import tensorflow_data_validation as tfdv
 
 
