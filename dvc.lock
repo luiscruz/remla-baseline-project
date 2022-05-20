@@ -1,0 +1,57 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/text_preprocessing.py
+    deps:
+    - path: data
+      md5: 3d9e62a9c241fcfcf634384a95dd4cf4.dir
+      size: 10558981
+      nfiles: 4
+    outs:
+    - path: output/X_preprocessed.joblib
+      md5: dc5a95d229ea8da51a7fdd84f947ce2a
+      size: 6493376
+    - path: output/tags_counts.joblib
+      md5: 21aab886c6d07d562f632c77a4b6fd52
+      size: 1297
+    - path: output/words_counts.joblib
+      md5: aeda02c33039b1d40325848b3521dcb8
+      size: 494710
+    - path: output/y_preprocessed.joblib
+      md5: 5c7da8d6c84b1cb80bd8b987cc7d0638
+      size: 4906143
+  embedding:
+    cmd: python src/vectorization.py
+    deps:
+    - path: output/X_preprocessed.joblib
+      md5: dc5a95d229ea8da51a7fdd84f947ce2a
+      size: 6493376
+    - path: output/words_counts.joblib
+      md5: aeda02c33039b1d40325848b3521dcb8
+      size: 494710
+    outs:
+    - path: output/vectorized_x.joblib
+      md5: 05cbec0a4bc6d1bfb442edbfa625f108
+      size: 19498553
+  model_training:
+    cmd: python src/model_training.py
+    deps:
+    - path: output/tags_counts.joblib
+      md5: 21aab886c6d07d562f632c77a4b6fd52
+      size: 1297
+    - path: output/vectorized_x.joblib
+      md5: 05cbec0a4bc6d1bfb442edbfa625f108
+      size: 19498553
+    - path: output/y_preprocessed.joblib
+      md5: 5c7da8d6c84b1cb80bd8b987cc7d0638
+      size: 4906143
+    outs:
+    - path: output/classifiers.joblib
+      md5: b56b4b38ba17661ddf6e4faf85876d70
+      size: 18696746
+    - path: output/fitted_y_val.joblib
+      md5: 5f0321ea7c81661799dc9f85d7253600
+      size: 12000186
+    - path: output/mlb.joblib
+      md5: f7dd62e29d932f4872b18260b62f7aa8
+      size: 3300

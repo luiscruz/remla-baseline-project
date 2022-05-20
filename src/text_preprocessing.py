@@ -17,6 +17,9 @@ import joblib
 import pandas as pd
 from nltk.corpus import stopwords
 
+data_directory = "data"
+output_directory = "output"
+
 
 def read_data(filename):
     data = pd.read_csv(filename, sep='\t')
@@ -60,9 +63,6 @@ def main():
         * calculating word and tag counts
         * dumps the preprocessed data in a joblib
     """
-    data_directory = "data"
-    output_directory = "output"
-
     # Read data
     train = read_data(data_directory + '/train.tsv')
     validation = read_data(data_directory + '/validation.tsv')

@@ -9,8 +9,8 @@ import numpy as np
 from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+output_directory = "output"
 
-### BAG OF WORDS ###
 
 def my_bag_of_words(text, words_to_index, dict_size):
     """
@@ -26,8 +26,6 @@ def my_bag_of_words(text, words_to_index, dict_size):
             result_vector[words_to_index[word]] += 1
     return result_vector
 
-
-### TF-IDF ###
 
 def tfidf_features(X_train, X_val, X_test):
     """
@@ -56,8 +54,8 @@ def main():
         * vectorizes (embeds) the data
         * dumps the vectors in a joblib
     """
-    X_train, X_val, X_test = joblib.load("../output/X_preprocessed.joblib")
-    words_counts = joblib.load("../output/words_counts.joblib")
+    X_train, X_val, X_test = joblib.load(output_directory + "/X_preprocessed.joblib")
+    words_counts = joblib.load(output_directory + "/words_counts.joblib")
 
     DICT_SIZE = 5000
     INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[
@@ -84,7 +82,7 @@ def main():
     #
     # tfidf_reversed_vocab[1879]
 
-    joblib.dump((X_train_mybag, X_train_tfidf, X_val_mybag, X_val_tfidf), "../output/vectorized_x.joblib")
+    joblib.dump((X_train_mybag, X_train_tfidf, X_val_mybag, X_val_tfidf), output_directory + "/vectorized_x.joblib")
 
 
 if __name__ == "__main__":

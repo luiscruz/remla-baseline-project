@@ -3,6 +3,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
+output_directory = "output"
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
@@ -21,9 +22,9 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 
 def main():
-    tags_counts = joblib.load("../output/tags_counts.joblib")
-    X_train_mybag, X_train_tfidf, _, _ = joblib.load("../output/vectorized_x.joblib")
-    y_train, y_val = joblib.load("../output/y_preprocessed.joblib")
+    tags_counts = joblib.load(output_directory + "/tags_counts.joblib")
+    X_train_mybag, X_train_tfidf, _, _ = joblib.load(output_directory + "/vectorized_x.joblib")
+    y_train, y_val = joblib.load(output_directory + "/y_preprocessed.joblib")
 
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
     y_train = mlb.fit_transform(y_train)
@@ -33,9 +34,9 @@ def main():
     classifier_mybag = train_classifier(X_train_mybag, y_train)
     classifier_tfidf = train_classifier(X_train_tfidf, y_train)
 
-    joblib.dump((classifier_mybag, classifier_tfidf), "../output/classifiers.joblib")
-    joblib.dump(y_val, "../output/fitted_y_val.joblib")
-    joblib.dump(mlb, "../output/mlb.joblib")
+    joblib.dump((classifier_mybag, classifier_tfidf), output_directory + "/classifiers.joblib")
+    joblib.dump(y_val, output_directory + "/fitted_y_val.joblib")
+    joblib.dump(mlb, output_directory + "/mlb.joblib")
 
 
 if __name__ == "__main__":
