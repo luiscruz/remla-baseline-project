@@ -35,6 +35,19 @@ def text_prepare(text):
     text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
     return text
 
+def preprocess_text_prepare(X_train, X_val, X_test):
+    """
+
+    :param X_train:
+    :param X_val:
+    :param X_test:
+    :return:
+    """
+
+    X_train = [text_prepare(x) for x in X_train]
+    X_val = [text_prepare(x) for x in X_val]
+    X_test = [text_prepare(x) for x in X_test]
+    return X_train, X_val, X_test
 
 def text_prepare_tests():
     prepared_questions = []
@@ -140,30 +153,6 @@ def my_bag_of_words(text, words_to_index, dict_size):
     return result_vector
 
 
-def train_mybag(X_train, X_val, X_test, y_train):
-    """
-    The data is transformed to sparse representation (this might take up to a minute), to store the useful information efficiently.
-    There are many [types](https://docs.scipy.org/doc/scipy/reference/sparse.html) of such representations, however sklearn algorithms can work only with [csr](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix) matrix.
-    :return: All samples with my_bag_of_words applied to it.
-    """
-    words_counts, _ = word_tags_count(X_train, y_train)
-    INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[:DICT_SIZE]
-    WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
-    ALL_WORDS = WORDS_TO_INDEX.keys()
-
-
-    X_train_mybag = sp_sparse.vstack(
-        [sp_sparse.csr_matrix(my_bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_train])
-    X_val_mybag = sp_sparse.vstack(
-        [sp_sparse.csr_matrix(my_bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_val])
-    X_test_mybag = sp_sparse.vstack(
-        [sp_sparse.csr_matrix(my_bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_test])
-    print('X_train shape ', X_train_mybag.shape)
-    print('X_val shape ', X_val_mybag.shape)
-    print('X_test shape ', X_test_mybag.shape)
-    return X_train_mybag, X_val_mybag, X_test_mybag
-
-
 """
 Task 3 - BagOfWords
 
@@ -189,3 +178,4 @@ def tfidf_features(X_train, X_val, X_test):
     X_test = tfidf_vectorizer.transform(X_test)
 
     return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
+
