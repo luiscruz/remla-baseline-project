@@ -4,24 +4,22 @@ import tensorflow_data_validation as tfdv
 
 
 REFRESH_SCHEMAS = False
-DATA_LOCATION = '../data'
-SCHEMA_LOCATION = 'schemas'
+
 
 class TestSchemas(unittest.TestCase):
-    def setUp(self) -> None:
-        self.datasets = [
+
+    def test_anomalies(self):
+        datasets = [
             'train',
             'test',
             'validation',
             'text_prepare_tests',
         ]
-
-    def test_anomalies(self):
-        for dataset in self.datasets:
+        for dataset in datasets:
             with self.subTest(dataset=dataset):
                 # get paths to resources
-                data_path = path.join(DATA_LOCATION, '{}.tsv'.format(dataset))
-                schema_path = path.join(SCHEMA_LOCATION, '{}_schema.pbtxt'.format(dataset))
+                data_path = '../data/{}.tsv'.format(dataset)
+                schema_path = 'schemas/{}_schema.pbtxt'.format(dataset)
 
                 # infer schema from data
                 stats = tfdv.generate_statistics_from_csv(data_path, delimiter='\t')
