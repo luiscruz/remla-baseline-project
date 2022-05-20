@@ -16,12 +16,13 @@ jobs:
       - name: Install requirements
         run: |
           pip install -r requirements.txt
-          pip install mllint
       - name: Analysing the code with pylint
         run: |
           find . -name '*.py' -exec pylint {} \;
           find . -name '*.py' -exec mllint {} \;
-
+  tests:
+    runs-on: ubuntu-latest
+    steps:
       - name: Run tests
         run: |
           pytest
