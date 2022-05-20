@@ -13,3 +13,4 @@ pandas
 numpy
 sklearn
 scipy
+dvc[gdrive]
