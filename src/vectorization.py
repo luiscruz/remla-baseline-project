@@ -1,3 +1,9 @@
+"""
+    Main logic of this stage:
+    * loads the loblibs
+    * vectorizes (embeds) the data
+    * dumps the vectors in a joblib
+"""
 import joblib
 import numpy as np
 from scipy import sparse as sp_sparse
@@ -25,7 +31,7 @@ def my_bag_of_words(text, words_to_index, dict_size):
 
 def tfidf_features(X_train, X_val, X_test):
     """
-        X_train, X_val, X_test — samples        
+        X_train, X_val, X_test — samples
         return TF-IDF vectorized representation of each sample and vocabulary
     """
     # Create TF-IDF vectorizer with a proper parameters choice
@@ -44,6 +50,12 @@ def tfidf_features(X_train, X_val, X_test):
 
 # CODE TO TEST RUN THE METHODS
 def main():
+    """
+        Main logic of this stage:
+        * loads the loblibs
+        * vectorizes (embeds) the data
+        * dumps the vectors in a joblib
+    """
     X_train, X_val, X_test = joblib.load("../output/X_preprocessed.joblib")
     words_counts = joblib.load("../output/words_counts.joblib")
 
@@ -65,7 +77,7 @@ def main():
     print('X_test shape ', X_test_mybag.shape)
 
     # TF-IDF
-    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
+    X_train_tfidf, X_val_tfidf, _, _ = tfidf_features(X_train, X_val, X_test)
     # tfidf_reversed_vocab = {i: word for word, i in tfidf_vocab.items()}
 
     # tfidf_vocab["c#"]

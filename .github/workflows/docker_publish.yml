@@ -23,4 +23,4 @@
           run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
 
         - name: run static analysis
-          run: pylint --load-plugins=dslinter src/
+          run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/

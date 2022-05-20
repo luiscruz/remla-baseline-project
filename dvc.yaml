@@ -20,7 +20,6 @@ stages:
     deps:
     - output/tags_counts.joblib
     - output/vectorized_x.joblib
-    - output/X_preprocessed.joblib
     - output/y_preprocessed.joblib
     outs:
     - output/classifiers.joblib

@@ -1,3 +1,3 @@
-Accuracy score: 0.3653666666666667 
-F1 score: 0.652412137683566 
-Average precision score: 0.34928432301713686
+Accuracy score: 0.3655 
+F1 score: 0.6524676949321064 
+Average precision score: 0.349320986142959

@@ -11,7 +11,7 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
       return: trained classifier
     """
 
-    # Create and fit LogisticRegression wraped into OneVsRestClassifier.
+    # Create and fit LogisticRegression wrapped into OneVsRestClassifier.
 
     clf = LogisticRegression(penalty=penalty, C=C, dual=False, solver='liblinear')
     clf = OneVsRestClassifier(clf)
@@ -22,8 +22,7 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 def main():
     tags_counts = joblib.load("../output/tags_counts.joblib")
-    X_train_mybag, X_train_tfidf, X_val_mybag, X_val_tfidf = joblib.load("../output/vectorized_x.joblib")
-    _, X_val, _ = joblib.load("../output/X_preprocessed.joblib")
+    X_train_mybag, X_train_tfidf, _, _ = joblib.load("../output/vectorized_x.joblib")
     y_train, y_val = joblib.load("../output/y_preprocessed.joblib")
 
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))

@@ -1,3 +1,15 @@
+"""
+    Main logic of this stage:
+    * reads the data
+    * splits the data into features and labels, and train, test and validation data
+    * preprocesses the data by:
+        * ensuring all lowercase letters
+        * replacing some symbols by spaces
+        * deleting some symbols
+        * deleting stopwords
+    * calculating word and tag counts
+    * dumps the preprocessed data in a joblib
+"""
 import re
 from ast import literal_eval
 
@@ -22,7 +34,7 @@ def split_data(train, validation, test):
 def text_prepare(text):
     """
         text: a string
-        
+
         return: modified initial string
     """
     REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
@@ -36,7 +48,20 @@ def text_prepare(text):
 
 
 def main():
-    data_directory = "../data"
+    """
+        Main logic of this stage:
+        * reads the data
+        * splits the data into features and labels, and train, test and validation data
+        * preprocesses the data by:
+            * ensuring all lowercase letters
+            * replacing some symbols by spaces
+            * deleting some symbols
+            * deleting stopwords
+        * calculating word and tag counts
+        * dumps the preprocessed data in a joblib
+    """
+    data_directory = "data"
+    output_directory = "output"
 
     # Read data
     train = read_data(data_directory + '/train.tsv')
@@ -52,7 +77,7 @@ def main():
         line = text_prepare(line.strip())
         prepared_questions.append(line)
 
-    text_prepare_results = '\n'.join(prepared_questions)
+    # text_prepare_results = '\n'.join(prepared_questions)
     X_train = [text_prepare(x) for x in X_train]
     X_val = [text_prepare(x) for x in X_val]
     X_test = [text_prepare(x) for x in X_test]
@@ -84,10 +109,10 @@ def main():
     # most_common_tags = sorted(tags_counts.items(), key=lambda x: x[1], reverse=True)[:3]
     # most_common_words = sorted(words_counts.items(), key=lambda x: x[1], reverse=True)[:3]
 
-    joblib.dump((X_train, X_val, X_test), "../output/X_preprocessed.joblib")
-    joblib.dump((y_train, y_val), "../output/y_preprocessed.joblib")
-    joblib.dump(words_counts, "../output/words_counts.joblib")
-    joblib.dump(tags_counts, "../output/tags_counts.joblib")
+    joblib.dump((X_train, X_val, X_test), output_directory + "/X_preprocessed.joblib")
+    joblib.dump((y_train, y_val), output_directory + "/y_preprocessed.joblib")
+    joblib.dump(words_counts, output_directory + "/words_counts.joblib")
+    joblib.dump(tags_counts, output_directory + "/tags_counts.joblib")
 
 
 if __name__ == "__main__":
