@@ -95,9 +95,9 @@ def get_train_test_data(data_dir, mode=3):
     :param mode: 1 for just the data, 2 for including the bag-of-words representation, 3 for including the tf-idf representation
     :return: partial or all data
     '''
-    train = read_data(data_dir + '/train.tsv')
-    validation = read_data(data_dir + '/validation.tsv')
-    test = pd.read_csv(data_dir + '/test.tsv', sep='\t')
+    train = read_data(data_dir + '/raw/train/train.tsv')
+    validation = read_data(data_dir + '/raw/eval/validation.tsv')
+    test = pd.read_csv(data_dir + '/raw/eval/test.tsv', sep='\t')
 
     X_train, y_train = train['title'].values, train['tags'].values
     X_val, y_val = validation['title'].values, validation['tags'].values
