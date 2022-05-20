@@ -1,0 +1,34 @@
+stages:
+  build_features:
+    cmd: python -m src.features.build_features
+    deps:
+    - data/raw/test.tsv
+    - data/raw/train.tsv
+    - data/raw/validation.tsv
+    - data/external/corpora/stopwords/
+    - src/config/definitions.py
+    - src/common/data.py
+    - src/features/build_features.py
+    outs:
+    - data/processed/test.pkl
+    - data/processed/train.pkl
+    - data/processed/validation.pkl
+    - data/derivates/cleaned_train_dataset_properties.pkl
+    - data/derivates/tfidf_vocab.pkl
+  make_dataset:
+    cmd: python -m src.data.make_dataset
+    deps:
+    - src/config/definitions.py
+    - src/data/make_dataset.py
+    outs:
+    - data/external/corpora/stopwords.zip
+    - data/external/corpora/stopwords/
+  train_model:
+    cmd: python -m src.models.train_model
+    deps:
+    - data/processed/train.pkl
+    - src/config/definitions.py
+    - src/models/train_model.py
+    outs:
+    - models/tfidf.pkl
+    - models/mlb.pkl
