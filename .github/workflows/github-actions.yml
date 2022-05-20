@@ -27,4 +27,4 @@ jobs:
           pip install -r requirements.txt
       - name: Run tests
         run: |
-          pytest --junitxml=tests-report.xml --cov=path_to_package_under_test --cov-report=xml
+          pytest --junitxml=tests-report.xml --cov=. --cov-report=xml
