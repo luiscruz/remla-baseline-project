@@ -19,8 +19,6 @@ def test_inference():
         "Configuring Tomcat to Use SSL",
     ]
     y_mybag, y_tfidf = infer(examples, *load_models(test_model_path))
-    print(y_mybag)
-    print(y_tfidf)
     y_mybag_expected = [(), (), (), ('javascript', 'jquery'), ()]
     y_tfidf_expected = [(), (), (), ('javascript',), ()]
     for y_m, y_m_exp in zip(y_mybag, y_mybag_expected):

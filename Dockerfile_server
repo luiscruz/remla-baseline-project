@@ -5,6 +5,8 @@ COPY ./data ./data
 
 RUN python ./src/train_and_save.py --data-dir=/data
 
-FROM base
+COPY ./start-server.sh ./start-server.sh
 
-COPY --from=base /model.joblib .
+EXPOSE 8000
+
+CMD ["./start-server.sh"]
