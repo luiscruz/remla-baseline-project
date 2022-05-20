@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install mllint
-        run: pipenv install --dev mllint
+        run: pip install --upgrade mllint
 
       - name: Run `mllint`
         run: mllint -o mllint-report.md
