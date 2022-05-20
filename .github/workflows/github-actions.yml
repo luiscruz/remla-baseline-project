@@ -4,25 +4,27 @@ jobs:
   static-analysis:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: Python use
-        uses: actions/setup-python@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
           python-version: "3.8"
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Install requirements
-        run: |
+      - run: |
           pip install -r requirements.txt
-      - name: Analysing the code with pylint
+      - name: mllint analysis
+        run: |
+          mllint
+      - name: pylint analysis
         run: |
           find . -name '*.py' -exec pylint {} \;
-          find . -name '*.py' -exec mllint {} \;
   tests:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - run: |
+          pip install -r requirements.txt
       - name: Run tests
         run: |
           pytest
