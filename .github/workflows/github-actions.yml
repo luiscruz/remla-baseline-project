@@ -3,14 +3,11 @@ on: [push]
 jobs:
   static-analysis:
     runs-on: ubuntu-latest
+    container: ngavalas/remlabase:latest
     needs: tests
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: "3.8"
-      - run: |
-          pip install -r requirements.txt
+      - run: ls -l
       - name: mllint analysis
         run: |
           mllint
@@ -22,11 +19,6 @@ jobs:
     container: ngavalas/remlabase:latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: "3.8"
-      - run: |
-          pip install -r requirements.txt
       - name: Run tests
         run: |
           pytest --junitxml=tests-report.xml --cov=. --cov-report=xml
