@@ -86,7 +86,7 @@ def tfidf_features(X_train, X_val, X_test):
     X_val = tfidf_vectorizer.transform(X_val)
     X_test = tfidf_vectorizer.transform(X_test)
 
-    return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
+    return X_train, X_val, X_test, tfidf_vectorizer
 
 
 def get_train_test_data(data):
@@ -118,5 +118,12 @@ def get_train_test_data(data):
     if data == 2:
         return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag
 
-    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
-    return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab, tags_counts
+    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vectorizer = tfidf_features(X_train, X_val, X_test)
+    return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vectorizer, tags_counts, WORDS_TO_INDEX, DICT_SIZE
+
+
+def process_for_inference(data, words_to_index, dict_size, tfidf_vectorizer):
+    data = [text_prepare(x) for x in data]
+    data_mybag = sp_sparse.vstack([sp_sparse.csr_matrix(my_bag_of_words(text, words_to_index, dict_size)) for text in data])
+    data_tfidf = tfidf_vectorizer.transform(data)
+    return data_mybag, data_tfidf
