@@ -29,7 +29,7 @@ jobs:
           mkdir -p path/to/artifacts
       - name: Run tests
         run: |
-          pytest --junitxml=path/to/artifacts/tests-report.xml --cov=path/to/artifacts/ --cov-report=xml
+          pytest --junitxml=/path/to/artifacts/tests-report.xml --cov=/path/to/artifacts/ --cov-report=xml
       - run: ls -l
       - uses: actions/upload-artifact@v2
         with:
