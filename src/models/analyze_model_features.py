@@ -12,20 +12,18 @@ def print_words_for_tag(classifier_, tag_, tags_classes, index_to_words):
         tags_classes: a list of classes names from MultiLabelBinarizer
         index_to_words: index_to_words transformation
         all_words: all words in the dictionary
-        
         return nothing, just print top 5 positive and top 5 negative words for current tag
     """
-    print('Tag:\t{}'.format(tag_))
-    
+    print(f"Tag:\t{tag_}")
+
     # Extract an estimator from the classifier for the given tag.
     # Extract feature coefficients from the estimator.
-    
     model = classifier_.estimators_[tags_classes.index(tag_)]
     top_positive_words = [index_to_words[x] for x in model.coef_.argsort().tolist()[0][-5:]]
     top_negative_words = [index_to_words[x] for x in model.coef_.argsort().tolist()[0][:5]]
-    
-    print('Top positive words:\t{}'.format(', '.join(top_positive_words)))
-    print('Top negative words:\t{}\n'.format(', '.join(top_negative_words)))
+
+    print(f"Top positive words:\t{', '.join(top_positive_words)}")
+    print(f"Top negative words:\t{', '.join(top_negative_words)}\n")
 
 
 if __name__ == '__main__':
@@ -47,4 +45,3 @@ if __name__ == '__main__':
     # ALL_WORDS = characteristics['ALL_WORDS']
     # print_words_for_tag(classifier, TAG, mlb.classes, tfidf_reversed_vocab, ALL_WORDS)
     print_words_for_tag(classifier, TAG, mlb.classes, tfidf_reversed_vocab)
-
