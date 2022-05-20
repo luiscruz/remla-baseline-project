@@ -1,6 +1,6 @@
 [FORMAT]
 # Maximum number of characters on a single line.
-max-line-length=110
+max-line-length=116
 
 # Allow common ML variable naming: e.g., X_train, C
 argument-rgx=[A-Za-z_][a-z0-9_]{0,30}$
