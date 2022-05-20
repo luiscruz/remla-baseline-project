@@ -34,4 +34,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
             name: docker-artifact
-            path: path/to/artifacts
+            path: /path/to/artifacts/
