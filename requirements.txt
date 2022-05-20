@@ -12,3 +12,4 @@ nltk
 pandas
 numpy
 sklearn
+scipy

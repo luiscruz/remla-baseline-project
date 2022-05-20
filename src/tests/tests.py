@@ -1,5 +1,20 @@
-from features.build_features import my_bag_of_words, tfidf_features
-from data.make_data import split_data
+from src.features.build_features import *
+from src.models.train_model import *
+from src.models.predict_model import *
+
+def test_text_prepare():
+    """
+
+    :return:
+    """
+    examples = ["SQL Server - any equivalent of Excel's CHOOSE function?",
+                "How to free c++ memory vector<int> * arr?"]
+    answers = ["sql server equivalent excels choose function",
+               "free c++ memory vectorint arr"]
+    for ex, ans in zip(examples, answers):
+        if text_prepare(ex) != ans:
+            return "Wrong answer for the case: '%s'" % ex
+    return 'Basic tests are passed.'
 
 def test_my_bag_of_words(my_bad_of_words):
     words_to_index = {'hi': 0, 'you': 1, 'me': 2, 'are': 3}
@@ -19,7 +34,11 @@ def test_token():
     return "c#" in tfidf_vocab
 
 def test_token_after_transformation():
-    X_train, X_val, X_test = split_data()
+    """
+    check whether you have c++ or c# in your vocabulary, as they are obviously important tokens in our tags prediction task:
+    :return:
+    """
+
     X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
     tfidf_reversed_vocab = {i:word for word,i in tfidf_vocab.items()}
     return tfidf_reversed_vocab[1879] == 'c#'
