@@ -11,7 +11,7 @@ code-quality:
         - isort
         - bandit
 testing:
-    report: "test_report.xml"
+    report: "tests-report.xml"
     targets:
         minimum: 1
         ratio:
