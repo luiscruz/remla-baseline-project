@@ -63,7 +63,34 @@ if __name__ == '__main__':
     X_val = [text_prepare(x) for x in X_val]
     X_test = [text_prepare(x) for x in X_test]
 
+    # Dictionary of all words from train corpus with their counts.
+    words_counts = {}
+
+    for sentence in X_train:
+        for word in sentence.split():
+            if word in words_counts:
+                words_counts[word] += 1
+            else:
+                words_counts[word] = 1
+
+    DICT_SIZE = 5000 # TODO: find out why 5000
+    INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[:DICT_SIZE]
+    WORDS_TO_INDEX = {word:i for i, word in enumerate(INDEX_TO_WORDS)}
+    ALL_WORDS = list(WORDS_TO_INDEX.keys())
+
+    with open(ROOT_DIR / 'data/derivates/cleaned_train_dataset_properties.pkl', 'wb') as f:
+        properties = {
+            'DICT_SIZE': DICT_SIZE,
+            'INDEX_TO_WORDS': INDEX_TO_WORDS,
+            'WORDS_TO_INDEX': WORDS_TO_INDEX,
+            'ALL_WORDS': ALL_WORDS
+        }
+        pickle.dump(properties, f)
+
     X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
+
+    with open(ROOT_DIR / 'data/derivates/tfidf_vocab.pkl', 'wb') as f:
+        pickle.dump(tfidf_vocab, f)
 
     with open(ROOT_DIR / 'data/processed/train.pkl', 'wb') as f:
         pickle.dump((X_train_tfidf, y_train), f)

@@ -15,8 +15,7 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
       X_train, y_train — training data
       return: trained classifier
     """
-
-    # Create and fit LogisticRegression wraped into OneVsRestClassifier.
+    # Create and fit LogisticRegression wrapped into OneVsRestClassifier.
     clf = LogisticRegression(penalty=penalty, C=C, dual=False, solver='liblinear')
     clf = OneVsRestClassifier(clf)
     clf.fit(X_train, y_train)
