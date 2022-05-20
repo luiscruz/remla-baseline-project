@@ -8,6 +8,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: ls -l
+      - name: Download Docker Image (Artifact)
+        uses: actions/download-artifact@v2
+        with:
+          name: docker-artifact
+          path: path/to/artifacts
+      - name: Run test in Docker
+        run: |
+          cd path/to/artifacts
+      - uses: actions/checkout@v2
+      - name: Run test on Runner
+        run: |
+          sudo ./entrypoint.sh
       - name: mllint analysis
         run: |
           mllint
@@ -19,7 +31,13 @@ jobs:
     container: ngavalas/remlabase:latest
     steps:
       - uses: actions/checkout@v3
+      - run: |
+          mkdir -p path/to/artifacts
       - name: Run tests
         run: |
-          pytest --junitxml=tests-report.xml --cov=. --cov-report=xml
+          pytest --junitxml=path/to/artifacts/tests-report.xml --cov=path/to/artifacts/ --cov-report=xml
       - run: ls -l
+      - uses: actions/upload-artifact@v2
+        with:
+            name: docker-artifact
+            path: path/to/artifacts
