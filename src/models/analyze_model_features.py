@@ -45,7 +45,6 @@ if __name__ == '__main__':
 
     tfidf_reversed_vocab = {i:word for word,i in tfidf_vocab.items()}
     # ALL_WORDS = characteristics['ALL_WORDS']
-
     # print_words_for_tag(classifier, TAG, mlb.classes, tfidf_reversed_vocab, ALL_WORDS)
-	print_words_for_tag(classifier, TAG, mlb.classes, tfidf_reversed_vocab)
+    print_words_for_tag(classifier, TAG, mlb.classes, tfidf_reversed_vocab)
 

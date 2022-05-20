@@ -13,6 +13,7 @@ from src.config.definitions import ROOT_DIR
 
 
 def print_evaluation_scores(y_val_, predicted):
+    """Print the calculated model evaluation metrics."""
     print('Accuracy score: ', accuracy_score(y_val_, predicted))
     print('F1 score: ', f1_score(y_val_, predicted, average='weighted'))
     print('Average precision score: ', average_precision_score(y_val_, predicted, average='macro'))

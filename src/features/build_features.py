@@ -46,7 +46,7 @@ def tfidf_features(X_train_, X_val_, X_test_):
 if __name__ == '__main__':
     train = read_data(ROOT_DIR / 'data/raw/train.tsv')
     validation = read_data(ROOT_DIR / 'data/raw/validation.tsv')
-    test = pd.read_csv(ROOT_DIR / 'data/raw/test.tsv', sep='\t')
+    test = pd.read_csv(ROOT_DIR / 'data/raw/test.tsv', sep='\t', dtype="string")
 
     X_train, y_train = train['title'].values, train['tags'].values
     X_val, y_val = validation['title'].values, validation['tags'].values

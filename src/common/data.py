@@ -5,6 +5,7 @@ import pandas as pd
 
 
 def read_data(infile):
-    data = pd.read_csv(infile, sep='\t').astype("string")
+    """Create dataframe from csv file."""
+    data = pd.read_csv(infile, sep='\t', dtype="string")
     data['tags'] = data['tags'].apply(literal_eval)
     return data
