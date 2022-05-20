@@ -1,3 +1,9 @@
+"""
+    Main logic of this stage:
+    * loads the loblibs
+    * trains two classifiers; one for bag-of-words and one for tf-idf
+    * dumps the models in a joblib
+"""
 import joblib
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
@@ -22,6 +28,12 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 
 def main():
+    """
+        Main logic of this stage:
+        * loads the loblibs
+        * trains two classifiers; one for bag-of-words and one for tf-idf
+        * dumps the models in a joblib
+    """
     tags_counts = joblib.load(output_directory + "/tags_counts.joblib")
     X_train_mybag, X_train_tfidf, _, _ = joblib.load(output_directory + "/vectorized_x.joblib")
     y_train, y_val = joblib.load(output_directory + "/y_preprocessed.joblib")

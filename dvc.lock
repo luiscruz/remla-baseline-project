@@ -9,14 +9,14 @@ stages:
       nfiles: 4
     outs:
     - path: output/X_preprocessed.joblib
-      md5: dc5a95d229ea8da51a7fdd84f947ce2a
-      size: 6493376
+      md5: d6792fcfe62e567d237b5bb54fa69a30
+      size: 6493018
     - path: output/tags_counts.joblib
       md5: 21aab886c6d07d562f632c77a4b6fd52
       size: 1297
     - path: output/words_counts.joblib
-      md5: aeda02c33039b1d40325848b3521dcb8
-      size: 494710
+      md5: 68613fb279c5d5b4cd89c2fe78736998
+      size: 498217
     - path: output/y_preprocessed.joblib
       md5: 5c7da8d6c84b1cb80bd8b987cc7d0638
       size: 4906143
@@ -24,15 +24,15 @@ stages:
     cmd: python src/vectorization.py
     deps:
     - path: output/X_preprocessed.joblib
-      md5: dc5a95d229ea8da51a7fdd84f947ce2a
-      size: 6493376
+      md5: d6792fcfe62e567d237b5bb54fa69a30
+      size: 6493018
     - path: output/words_counts.joblib
-      md5: aeda02c33039b1d40325848b3521dcb8
-      size: 494710
+      md5: 68613fb279c5d5b4cd89c2fe78736998
+      size: 498217
     outs:
     - path: output/vectorized_x.joblib
-      md5: 05cbec0a4bc6d1bfb442edbfa625f108
-      size: 19498553
+      md5: 2e7aa7665ef41a982b542b27f6c7af61
+      size: 19480205
   model_training:
     cmd: python src/model_training.py
     deps:
@@ -40,18 +40,40 @@ stages:
       md5: 21aab886c6d07d562f632c77a4b6fd52
       size: 1297
     - path: output/vectorized_x.joblib
-      md5: 05cbec0a4bc6d1bfb442edbfa625f108
-      size: 19498553
+      md5: 2e7aa7665ef41a982b542b27f6c7af61
+      size: 19480205
     - path: output/y_preprocessed.joblib
       md5: 5c7da8d6c84b1cb80bd8b987cc7d0638
       size: 4906143
     outs:
     - path: output/classifiers.joblib
-      md5: b56b4b38ba17661ddf6e4faf85876d70
-      size: 18696746
+      md5: 1c4be4866a38fb0b459ea63fcd84c0e2
+      size: 18680746
     - path: output/fitted_y_val.joblib
       md5: 5f0321ea7c81661799dc9f85d7253600
       size: 12000186
     - path: output/mlb.joblib
       md5: f7dd62e29d932f4872b18260b62f7aa8
       size: 3300
+  evaluation:
+    cmd: python src/evaluation.py
+    deps:
+    - path: output/X_preprocessed.joblib
+      md5: d6792fcfe62e567d237b5bb54fa69a30
+      size: 6493018
+    - path: output/classifiers.joblib
+      md5: 1c4be4866a38fb0b459ea63fcd84c0e2
+      size: 18680746
+    - path: output/fitted_y_val.joblib
+      md5: 5f0321ea7c81661799dc9f85d7253600
+      size: 12000186
+    - path: output/mlb.joblib
+      md5: f7dd62e29d932f4872b18260b62f7aa8
+      size: 3300
+    - path: output/vectorized_x.joblib
+      md5: 2e7aa7665ef41a982b542b27f6c7af61
+      size: 19480205
+    outs:
+    - path: output/accuracies.txt
+      md5: de346a6ed8f85ae1dbe38438814a4b65
+      size: 113

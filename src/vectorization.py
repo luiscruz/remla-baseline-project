@@ -10,6 +10,7 @@ from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 output_directory = "output"
+np.random.seed(seed=0)
 
 
 def my_bag_of_words(text, words_to_index, dict_size):
@@ -37,7 +38,7 @@ def tfidf_features(X_train, X_val, X_test):
     # Transform the train, test, and val sets and return the result
 
     tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2),
-                                       token_pattern='(\S+)')  ####### YOUR CODE HERE #######
+                                       token_pattern='(\S+)')  # pylint: disable=anomalous-backslash-in-string
 
     X_train = tfidf_vectorizer.fit_transform(X_train)
     X_val = tfidf_vectorizer.transform(X_val)

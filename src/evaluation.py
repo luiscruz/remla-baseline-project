@@ -20,11 +20,11 @@ def print_evaluation_scores(y_val, predicted):
 
         Prints the evaluation results to an output file
     """
-    f = open(output_directory + "/accuracies.txt", "w")
-    f.write(f"Accuracy score: {accuracy_score(y_val, predicted)} \n"
-            f"F1 score: {f1_score(y_val, predicted, average='weighted')} \n"
-            f"Average precision score: {average_precision_score(y_val, predicted, average='macro')}")
-    f.close()
+    with open(output_directory + "/accuracies.txt", "w", encoding='utf-8') as f:
+        f.write(f"Accuracy score: {accuracy_score(y_val, predicted)} \n"
+                f"F1 score: {f1_score(y_val, predicted, average='weighted')} \n"
+                f"Average precision score: {average_precision_score(y_val, predicted, average='macro')}")
+        f.close()
 
 
 def main():

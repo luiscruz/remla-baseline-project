@@ -1,7 +1,7 @@
 """
     Main logic of this stage:
     * reads the data
-    * splits the data into features and labels, and train, test and validation data
+    * splits the data into features and labels
     * preprocesses the data by:
         * ensuring all lowercase letters
         * replacing some symbols by spaces
@@ -22,12 +22,25 @@ output_directory = "output"
 
 
 def read_data(filename):
-    data = pd.read_csv(filename, sep='\t')
+    """
+        filename: string representation of path + file
+
+        reads the data in the file and returns it as a dataframe
+    """
+    data = pd.read_csv(filename, sep='\t', dtype={'title': 'str', 'tags': 'str'})
+    data = data[['title', 'tags']]
     data['tags'] = data['tags'].apply(literal_eval)
     return data
 
 
 def split_data(train, validation, test):
+    """
+        train: training data (dataframe)
+        validation: validation data (dataframe)
+        test: test data (dataframe)
+
+        Splits the data into features and labels
+    """
     X_train, y_train = train['title'].values, train['tags'].values
     X_val, y_val = validation['title'].values, validation['tags'].values
     X_test = test['title'].values
@@ -40,7 +53,7 @@ def text_prepare(text):
 
         return: modified initial string
     """
-    REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
+    REPLACE_BY_SPACE_RE = re.compile(r'[/(){}[]|@,;]')
     BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
     STOPWORDS = set(stopwords.words('english'))
     text = text.lower()  # lowercase text
@@ -54,7 +67,7 @@ def main():
     """
         Main logic of this stage:
         * reads the data
-        * splits the data into features and labels, and train, test and validation data
+        * splits the data into features and labels
         * preprocesses the data by:
             * ensuring all lowercase letters
             * replacing some symbols by spaces
@@ -66,16 +79,18 @@ def main():
     # Read data
     train = read_data(data_directory + '/train.tsv')
     validation = read_data(data_directory + '/validation.tsv')
-    test = pd.read_csv(data_directory + '/test.tsv', sep='\t')
+    test = pd.read_csv(data_directory + '/test.tsv', sep='\t', dtype={'title': 'str'})
+    test = test[['title']]
 
     # Split data
     X_train, y_train, X_val, y_val, X_test = split_data(train, validation, test)
 
     # Prepare tests
     prepared_questions = []
-    for line in open(data_directory + '/text_prepare_tests.tsv', encoding='utf-8'):
-        line = text_prepare(line.strip())
-        prepared_questions.append(line)
+    with open(data_directory + '/text_prepare_tests.tsv', encoding='utf-8') as file:
+        for line in file:
+            line = text_prepare(line.strip())
+            prepared_questions.append(line)
 
     # text_prepare_results = '\n'.join(prepared_questions)
     X_train = [text_prepare(x) for x in X_train]
