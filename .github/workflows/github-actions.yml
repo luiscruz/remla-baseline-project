@@ -7,15 +7,12 @@ jobs:
     needs: tests
     steps:
       - uses: actions/checkout@v3
-      - run: ls -l
       - name: Download Docker Image (Artifact)
         uses: actions/download-artifact@v2
         with:
           name: docker-artifact
           path: path/to/artifacts
-      - name: Run test in Docker
-        run: |
-          cd path/to/artifacts
+      - run: ls path/to/artifacts
       - uses: actions/checkout@v2
       - name: mllint analysis
         run: |
