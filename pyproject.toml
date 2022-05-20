@@ -2,3 +2,8 @@
 pythonpath = [
   ".", "src",
 ]
+
+[tool.mllint]
+pythonpath = [
+  ".", "src",
+]
