@@ -1,0 +1,47 @@
+name: linter
+
+# Build on every branch every push and pull request change.
+on:
+  pull_request:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  lint:
+    name: Check project quality with `mllint`
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Clone project
+        uses: actions/checkout@v2
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.1.6
+        with:
+          virtualenvs-in-project: true
+
+      - name: Download Poetry dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: ubuntu-20.04-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ubuntu-20.04-poetry-
+
+      - name: Install Poetry dependencies
+        run: poetry install --no-interaction
+
+      - name: Run `mllint`
+        run: poetry run mllint -o mllint-report.md
+
+      - name: Upload `mllint` report
+        uses: actions/upload-artifact@v2
+        with:
+          name: mllint-report.md
+          path: mllint-report.md
