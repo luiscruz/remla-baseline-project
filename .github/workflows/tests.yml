@@ -1,0 +1,37 @@
+name: Test
+on:
+  pull_request:
+  push: { branches: main }
+
+jobs:
+  test:
+    name: Run test suite
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v2
+      
+      - name: Login to registry
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: |
+            IMG=ghcr.io/${{ github.repository }}
+            docker build \
+              -t ${IMG}:latest \
+              -t ${IMG}:${{ env.version_major }}-latest \
+              -t ${IMG}:${{ env.version_major }}.${{ env.version_minor }}-latest \
+              -t ${IMG}:${{ env.version }} \
+              .
+      - name: Run image
+        run:  docker run -it -v ${PWD}:/root ${IMG}
+
+      - name: Install pytest
+        run:  pip3 install pytest
+
+      - name: Run tests
+        run: |
+            pytest tests/bag_test.py 
+            pytest tests/processing_test.py
+            
