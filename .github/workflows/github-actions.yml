@@ -12,7 +12,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: docker-artifact
-          path: path/to/artifacts
+          path: /path/to/artifacts
       - run: ls path/to/artifacts
       - uses: actions/checkout@v2
       - name: mllint analysis
@@ -31,7 +31,8 @@ jobs:
       - name: Run tests
         run: |
           pytest --junitxml=/path/to/artifacts/tests-report.xml --cov=/path/to/artifacts/coverage.xml --cov-report=xml
-      - run: ls -l
+      - run: cat /path/to/artifacts/tests-report.xml
+      - run: cat /path/to/artifacts/coverage.xml
       - uses: actions/upload-artifact@v2
         with:
             name: docker-artifact
