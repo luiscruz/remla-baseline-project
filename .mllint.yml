@@ -12,5 +12,4 @@ code-quality:
         - bandit
 testing:
     report: "tests-report.xml"
-    coverage:
-        report: "coverage.xml"
+    coverage: "coverage.xml"
