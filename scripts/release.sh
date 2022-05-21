@@ -4,14 +4,17 @@ set -x
 set -e
 
 release_type=${1}
+echo "${release_type}"
 
 version=$(./scripts/version.py get)
 version_file=VERSION
 
 commit=${GITHUB_SHA:-$(git rev-parse HEAD)}
+echo "${commit}"
 # commit=${BITBUCKET_COMMIT:-$(git rev-parse HEAD)}
 # or commit=${CI_COMMIT_SHA:-$(git rev-parse HEAD)}
 branch=${ALLOWED_RELEASE_BRANCH:-main}
+echo "${branch}"
 
 if ! git branch -a --contains "${commit}" | grep -e "^[* ]*remotes/origin/${branch}\$"
 then

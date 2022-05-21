@@ -1,0 +1,30 @@
+name: Increment patch version
+
+on: workflow_dispatch
+
+jobs:
+  versioning:
+    runs-on: python:3.7.6-slim-buster
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Release current version and increment patch version
+        run: |
+          apt-get update && apt-get install -y git
+          pip install fire==0.2.1
+          ./scripts/release.sh patch
+
+# release-inc-patch:
+#   stage: deploy
+#   image: python:3.7.6-slim-buster
+#   caches:
+#     - pip
+#   name: Release current version and increment patch version
+#   script:
+#     - apt-get update && apt-get install -y git
+#     - pip install fire==0.2.1
+#     - ./scripts/release.sh patch
+#   when: manual
+#   only:
+#     - main
