@@ -12,16 +12,14 @@ jobs:
         with:
           name: test-report
           path: tests-report.xml
-      uses: actions/download-artifact@v2
-      with:
-        name: coverage-report
-        path: coverage.xml
-       - name: mllint analysis
-        run: |
-            mllint
+      - uses: actions/download-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage.xml
+      - name: mllint analysis
+        run: mllint
       - name: pylint analysis
-          run: |
-            find . -name '*.py' -exec pylint {} \;
+        run: find . -name '*.py' -exec pylint {} \;
   tests:
     runs-on: ubuntu-latest
     container: ngavalas/remlabase:latest
