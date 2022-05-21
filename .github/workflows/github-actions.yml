@@ -16,6 +16,7 @@ jobs:
         with:
           name: coverage-report
           path: coverage.xml
+      - run: ls
       - name: mllint analysis
         run: mllint
       - name: pylint analysis
