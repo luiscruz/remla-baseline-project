@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          mkdir -p path/to/artifacts
+          mkdir -p /path/to/artifacts
       - name: Run tests
         run: |
           pytest --junitxml=/path/to/artifacts/tests-report.xml --cov=/path/to/artifacts/ --cov-report=xml
