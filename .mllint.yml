@@ -11,13 +11,13 @@ code-quality:
         - isort
         - bandit
 testing:
-    report: "tests-report.xml"
+    report: "."
     targets:
         minimum: 1
         ratio:
             tests: 1
             other: 4
     coverage:
-        report: "coverage.xml"
+        report: "."
         targets:
             line: 80
