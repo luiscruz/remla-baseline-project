@@ -1,0 +1,12 @@
+FROM ngavalas/remlabase:latest as base
+
+COPY ./src ./src
+COPY ./data ./data
+
+RUN python ./src/train_and_save.py --data-dir=/data
+
+COPY ./start-server.sh ./start-server.sh
+
+EXPOSE 8000
+
+CMD ["./start-server.sh"]

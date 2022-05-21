@@ -12,10 +12,12 @@ REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
 BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
 STOPWORDS = set(stopwords.words('english'))
 
+
 def read_data(filename):
     data = pd.read_csv(filename, sep='\t')
     data['tags'] = data['tags'].apply(literal_eval)
     return data
+
 
 def text_prepare(text):
     """
@@ -28,6 +30,7 @@ def text_prepare(text):
     text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
     text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
     return text
+
 
 def get_word_tags_counts(X_train, y_train):
     # Dictionary of all tags from train corpus with their counts.
@@ -68,8 +71,6 @@ def my_bag_of_words(text, words_to_index, dict_size):
     return result_vector
 
 
-
-
 def tfidf_features(X_train, X_val, X_test):
     """
         X_train, X_val, X_test — samples
@@ -89,21 +90,22 @@ def tfidf_features(X_train, X_val, X_test):
     return X_train, X_val, X_test, tfidf_vectorizer
 
 
-def get_train_test_data(data):
+def get_train_test_data(data_dir, mode=3):
     '''
-    :param data: 1 for just the data, 2 for including the bag-of-words representation, 3 for including the tf-idf representation
+    :param mode: 1 for just the data, 2 for including the bag-of-words representation, 3 for including the tf-idf representation
     :return: partial or all data
     '''
-    train = read_data('../data/raw/train/train.tsv')
-    validation = read_data('../data/raw/eval/validation.tsv')
-    test = pd.read_csv('../data/raw/eval/test.tsv', sep='\t')
+    train = read_data(data_dir + '/raw/train/train.tsv')
+    validation = read_data(data_dir + '/raw/eval/validation.tsv')
+    test = pd.read_csv(data_dir + '/raw/eval/test.tsv', sep='\t')
+
     X_train, y_train = train['title'].values, train['tags'].values
     X_val, y_val = validation['title'].values, validation['tags'].values
     X_test = test['title'].values
     X_train = [text_prepare(x) for x in X_train]
     X_val = [text_prepare(x) for x in X_val]
     X_test = [text_prepare(x) for x in X_test]
-    if data == 1:
+    if mode == 1:
         return X_train, y_train, X_val, y_val, X_test
 
     DICT_SIZE = 5000
@@ -115,11 +117,12 @@ def get_train_test_data(data):
     X_val_mybag = sp_sparse.vstack([sp_sparse.csr_matrix(my_bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_val])
     X_test_mybag = sp_sparse.vstack([sp_sparse.csr_matrix(my_bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_test])
 
-    if data == 2:
+    if mode == 2:
         return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag
 
     X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vectorizer = tfidf_features(X_train, X_val, X_test)
-    return X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vectorizer, tags_counts, WORDS_TO_INDEX, DICT_SIZE
+    return (X_train, y_train, X_val, y_val, X_test, X_train_mybag, X_val_mybag, X_test_mybag, X_train_tfidf,
+            X_val_tfidf, X_test_tfidf, tfidf_vectorizer, tags_counts, WORDS_TO_INDEX, DICT_SIZE)
 
 
 def process_for_inference(data, words_to_index, dict_size, tfidf_vectorizer):
