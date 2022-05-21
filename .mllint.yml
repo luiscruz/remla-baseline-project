@@ -11,6 +11,6 @@ code-quality:
         - isort
         - bandit
 testing:
-    report: "./tests-report.xml"
+    report: "tests-report.xml"
     coverage:
-        report: "./coverage-report.xml"
+        report: "coverage.xml"
