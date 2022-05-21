@@ -19,6 +19,8 @@ jobs:
       - run: ls
       - name: mllint analysis
         run: mllint
+      - run: cat tests-report.xml
+      - run: cat coverage.xml
       - name: pylint analysis
         run: find . -name '*.py' -exec pylint {} \;
   tests:
