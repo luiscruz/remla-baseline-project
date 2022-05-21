@@ -10,3 +10,5 @@ code-quality:
         - black
         - isort
         - bandit
+testing:
+    report="./tests-report.xml"
