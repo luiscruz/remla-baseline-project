@@ -11,11 +11,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: test-report
-          path: tests-report.xml
       - uses: actions/download-artifact@v2
         with:
           name: coverage-report
-          path: coverage.xml
       - run: ls
       - name: mllint analysis
         run: mllint
