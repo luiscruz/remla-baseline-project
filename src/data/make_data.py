@@ -23,9 +23,9 @@ def _split_data():
     """
     :return: Dataframe split into train, validation and test set.
     """
-    train = _read_data('../../data/train.tsv')
-    validation = _read_data('../../data/validation.tsv')
-    test = pd.read_csv('../../data/test.tsv', sep='\t')
+    train = _read_data('../../data/raw/train.tsv')
+    validation = _read_data('../../data/raw/validation.tsv')
+    test = pd.read_csv('../../data/raw/test.tsv', sep='\t')
     return train, validation, test
 
 

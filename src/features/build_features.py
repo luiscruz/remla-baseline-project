@@ -1,12 +1,13 @@
 import re
 import numpy as np
+from scipy import sparse as sp_sparse
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 # For this project we will need to use a list of stop words. It can be downloaded from nltk:
 import nltk
-from scipy import sparse as sp_sparse
 
 nltk.download('stopwords')
 from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 # One of the most known difficulties when working with natural data is that it's unstructured.
 # For example, if you use it "as is" and extract tokens just by splitting the titles by whitespaces,
@@ -16,7 +17,6 @@ REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
 BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
 STOPWORDS = set(stopwords.words('english'))
 DICT_SIZE = 5000
-
 
 """
 Task 1 - TextPrepare
@@ -35,6 +35,7 @@ def text_prepare(text):
     text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
     return text
 
+
 def preprocess_text_prepare(X_train, X_val, X_test):
     """
 
@@ -48,6 +49,7 @@ def preprocess_text_prepare(X_train, X_val, X_test):
     X_val = [text_prepare(x) for x in X_val]
     X_test = [text_prepare(x) for x in X_test]
     return X_train, X_val, X_test
+
 
 def text_prepare_tests():
     prepared_questions = []
@@ -95,8 +97,9 @@ def word_tags_count(X_train, y_train):
     # print(words_counts)
 
     print(sorted(words_counts, key=words_counts.get, reverse=True)[:3])
-    # We are assuming that tags_counts and words_counts are dictionaries like {'some_word_or_tag': frequency}.
-    # After applying the sorting procedure, results will be look like this: [('most_popular_word_or_tag', frequency), ('less_popular_word_or_tag', frequency), ...]
+    # We are assuming that tags_counts and words_counts are dictionaries like {'some_word_or_tag': frequency}. After
+    # applying the sorting procedure, results will be look like this: [('most_popular_word_or_tag', frequency),
+    # ('less_popular_word_or_tag', frequency), ...]
 
     return tags_counts, words_counts
 
@@ -120,7 +123,8 @@ One of the well-known approaches is a bag-of-words representation. To create thi
     For each title in the corpora create a zero vector with the dimension equals to N.
     For each text in the corpora iterate over words which are in the dictionary and increase by 1 the corresponding coordinate.
 
-Let's try to do it for a toy example. Imagine that we have N = 4 and the list of the most popular words is ['hi', 'you', 'me', 'are']
+Let's try to do it for a toy example. Imagine that we have N = 4 and the list of the most popular words is ['hi', 
+'you', 'me', 'are'] 
 
 Then we need to numerate them, for example, like this: {'hi': 0, 'you': 1, 'me': 2, 'are': 3}
 
@@ -128,11 +132,9 @@ And we have the text, which we want to transform to the vector: 'hi how are you'
 
 For this text we create a corresponding zero vector: [0, 0, 0, 0]
 
-And iterate over all words, and if the word is in the dictionary, we increase the value of the corresponding position in the vector:
-'hi':  [1, 0, 0, 0]
-'how': [1, 0, 0, 0] # word 'how' is not in our dictionary
-'are': [1, 0, 0, 1]
-'you': [1, 1, 0, 1]
+And iterate over all words, and if the word is in the dictionary, we increase the value of the corresponding position 
+in the vector: 'hi':  [1, 0, 0, 0] 'how': [1, 0, 0, 0] # word 'how' is not in our dictionary 'are': [1, 0, 0, 
+1] 'you': [1, 1, 0, 1] 
 
 The resulting vector will be: [1, 1, 0, 1]
 """
@@ -154,10 +156,15 @@ def my_bag_of_words(text, words_to_index, dict_size):
 
 
 """
-Task 3 - BagOfWords
+TF-IDF
 
-row = X_train_mybag[10].toarray()[0]
-non_zero_elements_count = (row>0).sum()
+The second approach extends the bag-of-words framework by taking into account total frequencies of words in the corpora. 
+It helps to penalize too frequent words and provide better features space.
+Implement function tfidf_features using class TfidfVectorizer from scikit-learn. 
+Use train corpus to train a vectorizer. 
+Suggested: filter out too rare words (occur less than in 5 titles) and 
+too frequent words (occur more than in 90% of the titles). 
+Also, use bigrams along with unigrams in your vocabulary.
 """
 
 
@@ -178,4 +185,3 @@ def tfidf_features(X_train, X_val, X_test):
     X_test = tfidf_vectorizer.transform(X_test)
 
     return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
-
