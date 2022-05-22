@@ -1,6 +1,7 @@
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 import nltk
 from nltk.corpus import wordnet as wn
+from nltk.corpus.reader import Synset
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import re
@@ -43,6 +44,46 @@ class Word:
         self.pos_tag = convert_pos_tag(pos_tag)
         self.is_stopword: bool = value.lower() in _stopwords
 
+    def __repr__(self):
+        return f"Word(\"{self.value}\", tag: {self.pos_tag}, stopword: {self.is_stopword})"
+
+    def get_variations(self) -> Dict[str, int]:
+        """
+        TODO
+        returns dict. key: synonym/hypernym, count: how many times was this suggested by nltk
+        """
+        result: Dict[str, int] = {}
+
+        if not self.is_variation_candidate:
+            return result
+
+        synsets = wn.synsets(self.value, pos=self.pos_tag)
+
+        synonyms = Word._get_synonyms(synsets)
+
+
+        return result
+
+    @property
+    def is_variation_candidate(self):
+        return not self.is_stopword and not self.pos_tag == ''
+
+    @staticmethod
+    def _get_synonyms(synsets: List[Synset]) -> List[str]:
+        """
+        TODO
+        returns list of synonyms
+        """
+        result: List[str] = []
+        for synset in synsets:
+            for lemma in synset.lemmas():
+                substrings = lemma.name().split('.')
+                synonym = substrings[-1]
+                synonym_without_underscore = re.sub(r'_', ' ', synonym)
+                result.append(synonym_without_underscore)
+
+        return result
+
     @staticmethod
     def from_tuple(tuple: Tuple[str, str]):
         '''
@@ -65,6 +106,8 @@ def generate_variants(input_sentence: str,
     tokens = word_tokenize(input_sentence)
     tokens_with_pos_tags = nltk.pos_tag(tokens)
     words = [Word.from_tuple(t) for t in tokens_with_pos_tags]
+
+    variations = [x.get_variations() for x in words]
 
 
     return [] # TODO
