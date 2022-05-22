@@ -19,8 +19,8 @@ import re
 
 # Compare the results
 
-_stopwords = stopwords.words('english')
-_pos_tag_map = {
+STOPWORDS = stopwords.words('english')
+POST_TAG_MAP = {
     'NN': [wn.NOUN],
     'JJ': [wn.ADJ, wn.ADJ_SAT],
     'RB': [wn.ADV],
@@ -28,28 +28,20 @@ _pos_tag_map = {
 }
 
 
-def convert_pos_tag(nltk_pos_tag):
-    root_tag = nltk_pos_tag[0:2]
-    try:
-        _pos_tag_map[root_tag]
-        return _pos_tag_map[root_tag]
-    except KeyError:
-        return ''
-
-
 class Word:
 
     def __init__(self, value: str, pos_tag: str):
         self.value = value.lower()
-        self.pos_tag = convert_pos_tag(pos_tag)
-        self.is_stopword: bool = value.lower() in _stopwords
-        self.variants = self.get_variations()
+        self.pos_tag = Word.convert_pos_tag(pos_tag)
+        self.is_stopword: bool = value.lower() in STOPWORDS
+        self.variants = self._get_variations()
 
     @property
     def is_variation_candidate(self):
         return not self.is_stopword and not self.pos_tag == ''
+    
 
-    def get_variations(self) -> Dict[str, int]:
+    def _get_variations(self) -> Dict[str, int]:
         """
         TODO
         returns dict. key: synonym/hypernym, count: how many times was this suggested by nltk
@@ -98,6 +90,15 @@ class Word:
                         result.append(hypernym_without_underscore)
 
         return result
+
+    @staticmethod
+    def convert_pos_tag(nltk_pos_tag):
+        root_tag = nltk_pos_tag[0:2]
+        try:
+            POST_TAG_MAP[root_tag]
+            return POST_TAG_MAP[root_tag]
+        except KeyError:
+            return ''
 
     @staticmethod
     def _count_variants(*args: Iterable[str]) -> Dict[str, int]:
