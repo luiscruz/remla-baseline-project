@@ -12,3 +12,4 @@ dvc[gdrive]
 mllint 
 pylint
 codecarbon==1.2.0
+tensorflow-data-validation

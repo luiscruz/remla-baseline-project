@@ -2,7 +2,8 @@ from joblib import dump, load
 import os
 import json
 
-RESULTS_DIRECTION = "results/popular_words.json"
+RESULTS_DIRECTION_BAG = "results/popular_words_bag.json"
+RESULTS_DIRECTION_TFIDF = "results/popular_words_tfidf.json"
 
 
 def get_list_words(tuple_list):
@@ -12,43 +13,47 @@ def get_list_words(tuple_list):
     return words
 
 
-def dump_feat_results(results):
-
-    if os.path.exists(RESULTS_DIRECTION):
-        creation_time = int(os.path.getctime(RESULTS_DIRECTION)*10e5)
-        os.rename(RESULTS_DIRECTION, RESULTS_DIRECTION.replace("popular_words.", f"popular_words-{creation_time}.json"))
-    with open(f"{RESULTS_DIRECTION}", "w") as file_write:
-        file_write.write(json.dumps(results, indent=4))
-
-
-def print_words_for_tag(classifier, tag, tags_classes, index_to_words, all_words):
-    """
-        classifier: trained classifier
-        tag: particular tag
-        tags_classes: a list of classes names from MultiLabelBinarizer
-        index_to_words: index_to_words transformation
-        all_words: all words in the dictionary
-
-        return nothing, just print top 5 positive and top 5 negative words for current tag
-    """
-    print('Tag:\t{}'.format(tag))
-
-    # Extract an estimator from the classifier for the given tag.
-    # Extract feature coefficients from the estimator.
+def dump_feat_results_bag(classifier, tag, tags_classes, index_to_words):
 
     model = classifier.estimators_[tags_classes.index(tag)]
 
     most_seen = [index_to_words[x][0] for x in model.coef_.argsort().tolist()[0][:5]]
     less_seen = [index_to_words[x][0] for x in model.coef_.argsort().tolist()[0][-5:]]
 
-    print('Top 5 most seen words words:\t{}'.format(', '.join(most_seen)))
-    print('Top 5 least seen word words:\t{}\n'.format(', '.join(less_seen)))
+    if os.path.exists(RESULTS_DIRECTION_BAG):
+        creation_time = int(os.path.getctime(RESULTS_DIRECTION_BAG)*10e5)
+        os.rename(RESULTS_DIRECTION_BAG, RESULTS_DIRECTION_BAG.replace(".json", f"-{creation_time}.json"))
 
-    dump_feat_results({"most_seen": most_seen, "least_seen": less_seen})
+    with open(f"{RESULTS_DIRECTION_BAG}", "w") as file_write:
+        file_write.write(json.dumps({"most_seen": most_seen, "least_seen": less_seen}, indent=4))
+
+
+def dump_feat_results_tfidf(classifier, tag, tags_classes, tfidf_vocab):
+
+    model = classifier.estimators_[tags_classes.index(tag)]
+
+    top_negative_words = [tfidf_vocab[x] for x in model.coef_.argsort().tolist()[0][:5]]
+    top_positive_words = [tfidf_vocab[x] for x in model.coef_.argsort().tolist()[0][-5:]]
+
+    if os.path.exists(RESULTS_DIRECTION_TFIDF):
+        creation_time = int(os.path.getctime(RESULTS_DIRECTION_TFIDF)*10e5)
+        os.rename(RESULTS_DIRECTION_TFIDF, RESULTS_DIRECTION_TFIDF.replace(
+            ".json", f"{creation_time}.json"))
+    with open(f"{RESULTS_DIRECTION_TFIDF}", "w") as file_write:
+        file_write.write(json.dumps({"top_positive_words": top_positive_words,
+                         "top_negative_words": top_negative_words}, indent=4))
 
 
 mlb = load("output/multi_label_binarizer.joblib")
 words_dictionaries = load("output/words_dictionaries.joblib")
-classifier = load("output/classifier.joblib")
+classifiers = load("output/classifiers.joblib")
+tfidf_vocab = load("output/text_processor_data.joblib")["tfidf"]["tfidf_vocab"]
+tfidf_reversed_vocab = {i: word for word, i in tfidf_vocab.items()}
 
-print_words_for_tag(classifier, 'c', mlb.classes, words_dictionaries["vocabulary"], words_dictionaries["all_words"])
+classifier_bag = classifiers["bag"]
+dump_feat_results_bag(classifier_bag, 'c', mlb.classes,
+                      words_dictionaries["vocabulary"])
+
+classifier_tfidf = classifiers["tfidf"]
+dump_feat_results_tfidf(classifier_tfidf, 'c', mlb.classes,
+                        tfidf_reversed_vocab)

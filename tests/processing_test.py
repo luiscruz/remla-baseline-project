@@ -1,10 +1,4 @@
-from common_tools import delete_import, copy_file_import
-
-
-if copy_file_import("src/1_preprocessing.py"):
-    from testing_file import text_prepare
-
-delete_import()
+from dependencies.preprocessing import text_prepare
 
 
 def test_text_prepare():

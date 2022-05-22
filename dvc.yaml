@@ -5,39 +5,42 @@ stages:
             - src/1_preprocessing.py
         outs:
             - output/preprocessed_data.joblib
-    createBag:
-        cmd: python src/2_bag_of_words.py
+    processText:
+        cmd: python src/2_text_processors.py
         deps:
-            - src/2_bag_of_words.py
+            - src/2_text_processors.py
             - output/preprocessed_data.joblib
         outs:
-            - output/bag_of_words.joblib
+            - output/text_processor_data.joblib
             - output/words_dictionaries.joblib
     train:
         cmd: python src/3_train.py
         deps:
             - src/3_train.py
-            - output/bag_of_words.joblib
+            - output/text_processor_data.joblib
         outs:
             - output/multi_label_binarizer.joblib
-            - output/classifier.joblib
+            - output/classifiers.joblib
             - output/val_data.joblib
     predict:
         cmd: python src/4_predict.py
         deps:
             - src/4_predict.py
-            - output/bag_of_words.joblib
-            - output/classifier.joblib
+            - output/text_processor_data.joblib
+            - output/classifiers.joblib
         outs:
-            - output/prediction_results.joblib
+            - output/predictions.joblib
     evaluation:
         cmd: python src/5_evaluation.py
         deps:
             - src/5_evaluation.py
-            - output/prediction_results.joblib
+            - output/predictions.joblib
+            - output/val_data.joblib
 
         metrics:
-            - results/metrics.json:
+            - results/metrics-bag.json:
+                  cache: false
+            - results/metrics-tfidf.json:
                   cache: false
     analyze:
         cmd: python src/6_analyze_features.py
@@ -45,4 +48,4 @@ stages:
             - src/6_analyze_features.py
             - output/multi_label_binarizer.joblib
             - output/words_dictionaries.joblib
-            - output/classifier.joblib
+            - output/classifiers.joblib
