@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Iterable
 import nltk
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader import Synset
@@ -40,36 +40,33 @@ def convert_pos_tag(nltk_pos_tag):
 class Word:
 
     def __init__(self, value: str, pos_tag: str):
-        self.value = value
+        self.value = value.lower()
         self.pos_tag = convert_pos_tag(pos_tag)
         self.is_stopword: bool = value.lower() in _stopwords
+        self.variants = self.get_variations()
 
-    def __repr__(self):
-        return f"Word(\"{self.value}\", tag: {self.pos_tag}, stopword: {self.is_stopword})"
+    @property
+    def is_variation_candidate(self):
+        return not self.is_stopword and not self.pos_tag == ''
 
     def get_variations(self) -> Dict[str, int]:
         """
         TODO
         returns dict. key: synonym/hypernym, count: how many times was this suggested by nltk
         """
-        result: Dict[str, int] = {}
-
         if not self.is_variation_candidate:
-            return result
+            return dict()
 
         synsets = wn.synsets(self.value, pos=self.pos_tag)
 
-        synonyms = Word._get_synonyms(synsets)
-        hypernyms = Word._get_hypernyms(synsets)
+        synonyms = self._get_synonyms(synsets)
+        hypernyms = self._get_hypernyms(synsets)
+
+        result = Word._count_variants(synonyms, hypernyms)
 
         return result
 
-    @property
-    def is_variation_candidate(self):
-        return not self.is_stopword and not self.pos_tag == ''
-
-    @staticmethod
-    def _get_synonyms(synsets: List[Synset]) -> List[str]:
+    def _get_synonyms(self, synsets: List[Synset]) -> List[str]:
         """
         TODO
         returns list of synonym suggestions
@@ -80,12 +77,12 @@ class Word:
                 substrings = lemma.name().split('.')
                 synonym = substrings[-1]
                 synonym_without_underscore = re.sub(r'_', ' ', synonym)
-                result.append(synonym_without_underscore)
+                if self.value != synonym_without_underscore:
+                    result.append(synonym_without_underscore)
 
         return result
 
-    @staticmethod
-    def _get_hypernyms(synsets: List[Synset]) -> List[str]:
+    def _get_hypernyms(self, synsets: List[Synset]) -> List[str]:
         """
         TODO
         returns list of hypernym suggestions
@@ -97,7 +94,25 @@ class Word:
                     substrings = lemma.name().split('.')
                     hypernym = substrings[-1]
                     hypernym_without_underscore = re.sub(r'_', ' ', hypernym)
-                    result.append(hypernym_without_underscore)
+                    if self.value != hypernym_without_underscore:
+                        result.append(hypernym_without_underscore)
+
+        return result
+
+    @staticmethod
+    def _count_variants(*args: Iterable[str]) -> Dict[str, int]:
+        """
+        TODO
+        counts occurences of variation suggestions
+        """
+        result: Dict[str, int] = dict()
+
+        for variants in args:
+            for variant in variants:
+                if variant not in result.keys():
+                    result[variant] = 1
+                else:
+                    result[variant] += 1
 
         return result
 
@@ -116,6 +131,9 @@ class Word:
         '''
         return Word(tuple[0], tuple[1])
 
+    def __repr__(self):
+        return f"Word(\"{self.value}\", tag: {self.pos_tag}, stopword: {self.is_stopword})"
+
 
 def generate_variants(input_sentence: str,
                       num_variants: int = 5,
@@ -124,11 +142,8 @@ def generate_variants(input_sentence: str,
     tokens_with_pos_tags = nltk.pos_tag(tokens)
     words = [Word.from_tuple(t) for t in tokens_with_pos_tags]
 
-    variations = [x.get_variations() for x in words]
+    return []  # TODO
 
 
-    return [] # TODO
-
-
-
-print(generate_variants("Uploading files via JSON Post request to a Web Service provided by Teambox"))
+print(
+    generate_variants("Uploading files via JSON Post request to a Web Service provided by Teambox"))
