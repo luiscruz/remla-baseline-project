@@ -31,7 +31,7 @@ Note: this sample project was originally created by @partoftheorigin
 
 ## Project setup
 
-Create a virtual environment and install both the `requirements.txt` and the `dev_requirements.txt`.
+Create a virtual environment and install both the `requirements.txt` and the `requirements_dev.txt`.
 
 ## Linting
 
