@@ -1,6 +1,6 @@
 from src.features.build_features import *
 from src.models.train_model import *
-from src.models.predict_model import *
+from src.models.evaluate_model import *
 
 import unittest
 
