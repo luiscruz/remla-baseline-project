@@ -2,17 +2,16 @@ FROM python:3.9.12-slim
 
 WORKDIR /root/
 
+RUN apt-get update &&\
+    apt-get install -y gcc
+
 COPY requirements.txt .
 COPY setup.py .
+COPY .pylintrc .
 COPY src src
-COPY models models
-COPY data data
 
 RUN python -m pip install --upgrade pip &&\
     pip install -r requirements.txt &&\
-    pip install -e .
+    pip install -e .[linter]
 
-# Seperate RUN commands to enable caching the different stages
-RUN python src/data/make_dataset.py
-RUN python src/features/build_features.py
-RUN python src/models/train_model.py
+# TODO: Add entrypoint to ML application here

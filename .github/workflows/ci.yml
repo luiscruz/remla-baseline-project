@@ -1,0 +1,18 @@
+name: ci
+
+on: [push]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build docker image
+      run: |
+        docker build . -t app  
+    - name: Run Pylint with Dslinter plugin
+      run: |
+        docker run --rm app  pylint \
+          --load-plugins=dslinter \
+          --reports=y \
+          src
