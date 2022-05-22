@@ -1,2 +1,4 @@
-mllint==0.12.1
-flake8==4.0.1
+nltk
+pandas
+numpy
+sklearn
