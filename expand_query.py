@@ -61,10 +61,11 @@ def get_tokens_from_synsets(synsets):
     tokens = {}
     for synset in synsets:
         for s in synset:
-            if s.name() in tokens:
-                tokens[s.name().split('.')[0]] += 1
+            name = s.name().split('.')[0]
+            if name in tokens:
+                tokens[name] += 1
             else:
-                tokens[s.name().split('.')[0]] = 1
+                tokens[name] = 1
     return tokens
 
 
@@ -79,13 +80,13 @@ def get_hypernyms(synsets):
 
 def get_tokens_from_hypernyms(synsets):
     tokens = {}
-    for synset in synsets:
-        for s in synsets:
-            for ss in s:
-                if ss.name().split('.')[0] in tokens:
-                    tokens[(ss.name().split('.')[0])] += 1
+    for synset_list in synsets:
+        for synset in synset_list:
+            for lemma in synset.lemmas():
+                if lemma.name().split('.')[0] in tokens:
+                    tokens[(lemma.name().split('.')[0])] += 1
                 else:
-                    tokens[(ss.name().split('.')[0])] = 1
+                    tokens[(lemma.name().split('.')[0])] = 1
     return tokens
 
 
