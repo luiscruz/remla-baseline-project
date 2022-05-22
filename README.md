@@ -28,3 +28,16 @@ Results evaluated using several classification metrics:
 - [NLTK](http://www.nltk.org/) — a platform to work with natural language.
 
 Note: this sample project was originally created by @partoftheorigin
+
+## Project setup
+
+Create a virtual environment and install both the `requirements.txt` and the `dev_requirements.txt`.
+
+## Linting
+
+Find the commands per tool below:
+
+- `mllint`: `mllint .`
+- `flake8`: `flake8 .`
+- `pylint`: `pylint .`
+- `mypy`: `mypy .`
