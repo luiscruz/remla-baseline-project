@@ -60,7 +60,7 @@ class Word:
         synsets = wn.synsets(self.value, pos=self.pos_tag)
 
         synonyms = Word._get_synonyms(synsets)
-
+        hypernyms = Word._get_hypernyms(synsets)
 
         return result
 
@@ -72,7 +72,7 @@ class Word:
     def _get_synonyms(synsets: List[Synset]) -> List[str]:
         """
         TODO
-        returns list of synonyms
+        returns list of synonym suggestions
         """
         result: List[str] = []
         for synset in synsets:
@@ -81,6 +81,23 @@ class Word:
                 synonym = substrings[-1]
                 synonym_without_underscore = re.sub(r'_', ' ', synonym)
                 result.append(synonym_without_underscore)
+
+        return result
+
+    @staticmethod
+    def _get_hypernyms(synsets: List[Synset]) -> List[str]:
+        """
+        TODO
+        returns list of hypernym suggestions
+        """
+        result: List[str] = []
+        for synset in synsets:
+            for hypernym in synset.hypernyms():
+                for lemma in hypernym.lemmas():
+                    substrings = lemma.name().split('.')
+                    hypernym = substrings[-1]
+                    hypernym_without_underscore = re.sub(r'_', ' ', hypernym)
+                    result.append(hypernym_without_underscore)
 
         return result
 
