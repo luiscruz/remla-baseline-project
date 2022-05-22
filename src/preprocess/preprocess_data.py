@@ -1,7 +1,8 @@
 from ast import literal_eval
 import pandas as pd
 import re
-import sys
+import yaml
+from dvclive import Live
 
 # For this project we will need to use a list of stop words. It can be downloaded from nltk:
 import nltk
@@ -17,9 +18,16 @@ REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
 BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
 STOPWORDS = set(stopwords.words('english'))
 
-OUT_PATH_TRAIN = 'data/processed/train_preprocessed.tsv'
-OUT_PATH_VAL = 'data/processed/validation_preprocessed.tsv'
-OUT_PATH_TEST = 'data/processed/test_preprocessed.tsv'
+# Fetch params from yaml params file
+params = yaml.safe_load(open("params.yaml"))['preprocess']
+
+INPUT_TRAIN_PATH =  params.input_train
+INPUT_VAL_PATH = params.input_val
+INPUT_TEST_PATH = params.input_test
+
+OUT_PATH_TRAIN = params.output_train
+OUT_PATH_VAL = params.output_val
+OUT_PATH_TEST = params.output_test
 
 """
 In this task you will deal with a dataset of post titles from StackOverflow. 
@@ -89,12 +97,11 @@ def preprocess_text_prepare(X_train, X_val, X_test):
 
 
 def main():
-    if len(sys.argv) != 4:
-        sys.stderr.write("Arguments error. Usage:\n")
-        sys.stderr.write("\tpython src/preprocess/preprocess_data.py train-file-path validation-file-path test-file-path\n")
-        sys.exit(1)
-
-    X_train, X_val, X_test, y_train, y_val = init_data(sys.argv[1], sys.argv[2], sys.argv[3])
+    X_train, X_val, X_test, y_train, y_val = init_data(
+        INPUT_TRAIN_PATH,
+        INPUT_VAL_PATH,
+        INPUT_TEST_PATH
+    )
     X_train, X_val, X_test = preprocess_text_prepare(X_train, X_val, X_test)
     
     train_data_out = pd.DataFrame.from_dict({'X_train': X_train, 'y_train': y_train})

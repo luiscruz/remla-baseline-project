@@ -1,48 +1,63 @@
 stages:
   preprocess:
-    cmd: |
-      python src/preprocess/preprocess_data.py \
-        data/raw/train.tsv \
-        data/raw/validation.tsv \
-        data/raw/test.tsv
+    cmd: python ${preprocess.script}
+    params:
+      - preprocess
     deps:
-      - src/preprocess/preprocess_data.py
-      - data/raw/train.tsv
-      - data/raw/validation.tsv
-      - data/raw/test.tsv
+      - ${preprocess.script}
+      - ${preprocess.input_train}
+      - ${preprocess.input_val}
+      - ${preprocess.input_test}
     outs:
-      - data/processed/train_preprocessed.tsv
-      - data/processed/validation_preprocessed.tsv
-      - data/processed/test_preprocessed.tsv
+      - ${preprocess.output_train}
+      - ${preprocess.output_val}
+      - ${preprocess.output_test}
   featurize:
-    cmd: |
-      python src/features/build_features.py \
-        data/processed/train_preprocessed.tsv \
-        data/processed/validation_preprocessed.tsv \
-        data/processed/test_preprocessed.tsv
+    cmd: python ${featurize.script}
+    params:
+      - preprocess
+      - featurize
     deps:
-      - src/features/build_features.py
-      - data/processed/train_preprocessed.tsv
-      - data/processed/validation_preprocessed.tsv
-      - data/processed/test_preprocessed.tsv
+      - ${featurize.script}
+      - ${preprocess.output_train}
+      - ${preprocess.output_val}
+      - ${preprocess.output_test}
     outs:
-      - data/interim/train_featurized.tsv
-      - data/interim/validation_featurized.tsv
-      - data/interim/test_featurized.tsv
+      - ${featurize.output_train}
+      - ${featurize.output_val}
+      - ${featurize.output_test}
+      - ${featurize.mlb_out}:
+          cache: true
   train:
-    cmd: python src/models/train_model.py data/interim/train_featurized.tsv
+    cmd: python ${train.script}
+    params:
+      - featurize
+      - train
     deps:
-      - src/models/train_model.py
-      - data/interim/train_featurized.tsv
+      - ${train.script}
+      - ${featurize.output_train}
     outs:
-      - models/model.pkl
-  evaluation:
-    cmd: python src/models/evaluate_model.py models/model.pkl
+      - ${train.model_out}:
+          cache: true
+  evaluate:
+    cmd: python ${evaluate.script}
+    params:
+      - featurize
+      - train
+      - evaluate
     deps:
-      - src/models/evaluate_model.py
-      - models/model.pkl
-      - data/interim/validation_featurized.tsv
-      - data/interim/test_featurized.tsv
-    outs:
-      - reports/figures/
-      - reports/
+      - ${evaluate.script}
+      - ${train.model_out}
+      - ${featurize.output_val}
+      # - ${featurize.output_test}
+    # outs:
+    #   - ${evaluate.prc_img}
+    #   - ${evaluate.roc_img}
+    metrics:
+      - ${evaluate.scores_path}:
+          cache: false
+    plots:
+      - ${evaluate.prc_json}:
+          cache: false
+      - ${evaluate.roc_json}:
+          cache: false

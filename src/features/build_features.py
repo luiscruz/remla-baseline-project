@@ -3,7 +3,22 @@ import pandas as pd
 # from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
-import sys
+import yaml
+import pickle 
+
+# Fetch params from yaml params file
+params = yaml.safe_load(open("params.yaml"))
+preprocess_params = params['preprocess']
+featurize_params = params['featurize']
+
+INPUT_TRAIN_PATH = preprocess_params.output_train
+INPUT_VAL_PATH = preprocess_params.output_val
+INPUT_TEST_PATH = preprocess_params.output_test
+
+OUT_PATH_TRAIN = featurize_params.output_train
+OUT_PATH_VAL = featurize_params.output_val
+OUT_PATH_TEST = featurize_params.output_test
+OUT_MLB_PICKLE = featurize_params.mlb_out
 
 # For this project we will need to use a list of stop words. It can be downloaded from nltk:
 # import nltk
@@ -156,13 +171,7 @@ too frequent words (occur more than in 90% of the titles).
 Also, use bigrams along with unigrams in your vocabulary.
 """
 
-PATH_TO_TRAIN = 'data/processed/train_preprocessed.tsv'
-PATH_TO_VAL = 'data/processed/validation_preprocessed.tsv'
-PATH_TO_TEST = 'data/processed/test_preprocessed.tsv'
 
-OUT_PATH_TRAIN = 'data/interim/train_featurized.tsv'
-OUT_PATH_VAL = 'data/interim/validation_featurized.tsv'
-OUT_PATH_TEST = 'data/interim/test_featurized.tsv'
 
 def tfidf_features(X_train, X_val, X_test):
     """
@@ -186,24 +195,23 @@ def mlb_y_data(y_train, y_val, tags_counts):
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
     y_train = mlb.fit_transform(y_train)
     y_val = mlb.fit_transform(y_val)
-    return y_train, y_val
+    return y_train, y_val, mlb
+
+def pickle_mlb(mlb_obj):
+    with open(OUT_MLB_PICKLE, 'wb') as fd:
+        pickle.dump(mlb_obj, fd, protocol=pickle.HIGHEST_PROTOCOL)
 
 def main():
-    if len(sys.argv) != 4:
-        sys.stderr.write("Arguments error. Usage:\n")
-        sys.stderr.write("\tpython src/features/build_features.py train-file-path validation-file-path test-file-path\n")
-        sys.exit(1)
-
-    train = pd.read_csv(sys.argv[1])
-    val = pd.read_csv(sys.argv[2])
-    test = pd.read_csv(sys.argv[3])
+    train = pd.read_csv(INPUT_TRAIN_PATH, sep='\t')
+    val = pd.read_csv(INPUT_VAL_PATH, sep='\t')
+    test = pd.read_csv(INPUT_TEST_PATH, sep='\t')
 
     X_train, y_train = train[['X_train']], train[['y_train']]
     X_val, y_val = val[['X_val']], val[['y_val']]
     X_test = test[['X_test']]
 
     tags_counts, _ = word_tags_count(X_train=X_train, y_train=y_train)
-    y_train, y_val = mlb_y_data(y_train, y_val, tags_counts)
+    y_train, y_val, mlb = mlb_y_data(y_train, y_val, tags_counts)
 
     X_train, X_val, X_test = tfidf_features(X_train, X_val, X_test)
 
@@ -216,6 +224,8 @@ def main():
     train.to_csv(OUT_PATH_TRAIN, sep='\t', index=False)
     val.to_csv(OUT_PATH_VAL, sep='\t', index=False)
     test.to_csv(OUT_PATH_TEST, sep='\t', index=False)
+
+    pickle_mlb(mlb)
 
 if __name__ == '__main__':
     main()

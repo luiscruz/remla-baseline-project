@@ -1,10 +1,15 @@
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression
 import pickle
-import sys
 import pandas as pd
+import yaml
 
-OUT_PATH_MODEL = 'models/model.pkl'
+params = yaml.safe_load(open("params.yaml"))
+featurize_params = params["featurize"]
+train_params = params["train"]
+
+INPUT_TRAIN_PATH = featurize_params.output_train
+OUT_PATH_MODEL = train_params.model_out
 
 # def train_mybag(X_train, X_val, X_test, y_train):
 #     """
@@ -72,12 +77,7 @@ def pickle_model(clf):
         pickle.dump(clf, fd, protocol=pickle.HIGHEST_PROTOCOL)
 
 def main():
-    if len(sys.argv) != 2:
-        sys.stderr.write("Arguments error. Usage:\n")
-        sys.stderr.write("\tpython src/models/train_model.py train-file-path\n")
-        sys.exit(1)
-
-    train = pd.read_csv(sys.argv[1])
+    train = pd.read_csv(INPUT_TRAIN_PATH, sep='\t')
 
     X_train, y_train = train[['X_train']], train[['y_train']]
     clf = train_classifier_for_transformations(X_train, y_train)
