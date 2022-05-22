@@ -2,8 +2,6 @@ from joblib import dump, load
 import numpy as np
 from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
-from random import randint
-import json
 
 
 def tfidf_features(X_train, X_val, X_test):
@@ -50,18 +48,6 @@ def main():
     X_test = preprocessed_data["X_test"]
     y_train = preprocessed_data["y_train"]
     y_val = preprocessed_data["y_val"]
-
-    nPhrases = 500
-
-    x = randint(0, len(X_train)-nPhrases)
-    test_phrases = {}
-    test_phrases["train"] = (X_train[x:x+nPhrases])
-    x = randint(0, len(X_test)-nPhrases)
-    test_phrases["test"] = X_test[x:x+nPhrases]
-    x = randint(0, len(X_val)-nPhrases)
-    test_phrases["val"] = X_val[x:x+nPhrases]
-    print(json.dumps(test_phrases, indent=4))
-    exit()
 
     # Dictionary of all tags from train corpus with their counts.
     tags_counts = {}
