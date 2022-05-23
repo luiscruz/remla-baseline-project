@@ -1,0 +1,105 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocess/preprocess_data.py
+    deps:
+    - path: data/raw/test.tsv
+      md5: f06925444bd9e4b12b382e0e267345a7
+      size: 1061380
+    - path: data/raw/train.tsv
+      md5: 2502592a16c44c1e33cb827b2a647406
+      size: 7296139
+    - path: data/raw/validation.tsv
+      md5: 508e1de849c33ba2f38f0b118590a4cd
+      size: 2196271
+    - path: src/preprocess/preprocess_data.py
+      md5: 04db51383646d7901c6de89e08eb14fe
+      size: 3985
+    params:
+      params.yaml:
+        preprocess:
+          script: src/preprocess/preprocess_data.py
+          input_train: data/raw/train.tsv
+          input_val: data/raw/validation.tsv
+          input_test: data/raw/test.tsv
+          output_train: data/processed/train_preprocessed.tsv
+          output_val: data/processed/validation_preprocessed.tsv
+          output_test: data/processed/test_preprocessed.tsv
+    outs:
+    - path: data/processed/test_preprocessed.tsv
+      md5: b3c63d723243d92f3a779bb3c8f71e17
+      size: 844665
+    - path: data/processed/train_preprocessed.tsv
+      md5: 3f5c43e7deac43213ebd908fdaca1f59
+      size: 6210455
+    - path: data/processed/validation_preprocessed.tsv
+      md5: 172b26f31cc522833e6641f928ddc131
+      size: 1869917
+  featurize:
+    cmd: python src/features/build_features.py
+    deps:
+    - path: data/processed/test_preprocessed.tsv
+      md5: b3c63d723243d92f3a779bb3c8f71e17
+      size: 844665
+    - path: data/processed/train_preprocessed.tsv
+      md5: 3f5c43e7deac43213ebd908fdaca1f59
+      size: 6210455
+    - path: data/processed/validation_preprocessed.tsv
+      md5: 172b26f31cc522833e6641f928ddc131
+      size: 1869917
+    - path: src/features/build_features.py
+      md5: 9f68fb534afb2f27c3a88d92df16e88c
+      size: 8536
+    params:
+      params.yaml:
+        featurize:
+          script: src/features/build_features.py
+          output_train: data/interim/train_featurized.pkl
+          output_val: data/interim/validation_featurized.pkl
+          output_test: data/interim/test_featurized.pkl
+          mlb_out: models/mlb.pkl
+        preprocess:
+          script: src/preprocess/preprocess_data.py
+          input_train: data/raw/train.tsv
+          input_val: data/raw/validation.tsv
+          input_test: data/raw/test.tsv
+          output_train: data/processed/train_preprocessed.tsv
+          output_val: data/processed/validation_preprocessed.tsv
+          output_test: data/processed/test_preprocessed.tsv
+    outs:
+    - path: data/interim/test_featurized.pkl
+      md5: b0a79cca2675fe19fec0a1764102c1d9
+      size: 1652795
+    - path: data/interim/train_featurized.pkl
+      md5: 9b366342d2ee4d2fe4f3896c285f2f1c
+      size: 24485366
+    - path: data/interim/validation_featurized.pkl
+      md5: d8da4f5947dcb0bc6b4273e5dcc24ec5
+      size: 7287048
+    - path: models/mlb.pkl
+      md5: aa6fde1c77e81ec6461dd923075d257a
+      size: 699
+  train:
+    cmd: python src/models/train_model.py
+    deps:
+    - path: data/interim/train_featurized.pkl
+      md5: 9b366342d2ee4d2fe4f3896c285f2f1c
+      size: 24485366
+    - path: src/models/train_model.py
+      md5: 44798932f227f5b5d9355ecf5a287c81
+      size: 3297
+    params:
+      params.yaml:
+        featurize:
+          script: src/features/build_features.py
+          output_train: data/interim/train_featurized.pkl
+          output_val: data/interim/validation_featurized.pkl
+          output_test: data/interim/test_featurized.pkl
+          mlb_out: models/mlb.pkl
+        train:
+          script: src/models/train_model.py
+          model_out: models/model.pkl
+    outs:
+    - path: models/model.pkl
+      md5: 49a277a042457e393829eaf24675694e
+      size: 5426070

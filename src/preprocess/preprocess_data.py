@@ -2,7 +2,6 @@ from ast import literal_eval
 import pandas as pd
 import re
 import yaml
-from dvclive import Live
 
 # For this project we will need to use a list of stop words. It can be downloaded from nltk:
 import nltk
@@ -21,13 +20,13 @@ STOPWORDS = set(stopwords.words('english'))
 # Fetch params from yaml params file
 params = yaml.safe_load(open("params.yaml"))['preprocess']
 
-INPUT_TRAIN_PATH =  params.input_train
-INPUT_VAL_PATH = params.input_val
-INPUT_TEST_PATH = params.input_test
+INPUT_TRAIN_PATH =  params['input_train']
+INPUT_VAL_PATH = params['input_val']
+INPUT_TEST_PATH = params['input_test']
 
-OUT_PATH_TRAIN = params.output_train
-OUT_PATH_VAL = params.output_val
-OUT_PATH_TEST = params.output_test
+OUT_PATH_TRAIN = params['output_train']
+OUT_PATH_VAL = params['output_val']
+OUT_PATH_TEST = params['output_test']
 
 """
 In this task you will deal with a dataset of post titles from StackOverflow. 

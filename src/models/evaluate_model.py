@@ -16,15 +16,15 @@ train_params = params['train']
 featurize_params = params['featurize']
 evaulate_params = params['evaluate']
 
-MODEL_PATH = train_params.model_out
-VAL_DATA_PATH = featurize_params.output_val
-# TEST_DATA_SET = featurize_params.output_test
+MODEL_PATH = train_params['model_out']
+VAL_DATA_PATH = featurize_params['output_val']
+# TEST_DATA_SET = featurize_params['output_test']
 
-# PRC_IMG_PATH = evaulate_params.prc_img
-# ROC_IMG_PATH = evaulate_params.roc_img
-PRC_JSON_PATH = evaulate_params.prc_json
-ROC_JSON_PATH = evaulate_params.roc_json 
-SCORES_JSON_PATH = evaulate_params.scores_path
+# PRC_IMG_PATH = evaulate_params['prc_img']
+# ROC_IMG_PATH = evaulate_params['roc_img']
+PRC_JSON_PATH = evaulate_params['prc_json']
+ROC_JSON_PATH = evaulate_params['roc_json'] 
+SCORES_JSON_PATH = evaulate_params['scores_path']
 
 def create_all_plots_and_scores(
     classifier_tfidf,
@@ -228,10 +228,14 @@ def load_model():
     with open(MODEL_PATH, 'rb') as fd:
         return pickle.load(fd)
 
+def load_val_data():
+    with open(VAL_DATA_PATH, 'rb') as fd:
+        X_val, y_val = pickle.load(fd)
+    return X_val, y_val
+
 def main():
     clf = load_model()
-    val = pd.read_csv(VAL_DATA_PATH, sep="\t")
-    X_val, y_val = val[['X_val']], val[['y_val']]
+    X_val, y_val = load_val_data()
     create_all_plots_and_scores(clf, X_val, y_val)
 
 if __name__ == '__main__':

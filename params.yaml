@@ -9,9 +9,9 @@ preprocess:
 
 featurize:
   script: src/features/build_features.py
-  output_train: data/interim/train_featurized.tsv
-  output_val: data/interim/validation_featurized.tsv
-  output_test: data/interim/test_featurized.tsv
+  output_train: data/interim/train_featurized.pkl
+  output_val: data/interim/validation_featurized.pkl
+  output_test: data/interim/test_featurized.pkl
   mlb_out: models/mlb.pkl
 
 train:

@@ -5,20 +5,21 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 import yaml
 import pickle 
+import scipy.sparse as sparse
 
 # Fetch params from yaml params file
 params = yaml.safe_load(open("params.yaml"))
 preprocess_params = params['preprocess']
 featurize_params = params['featurize']
 
-INPUT_TRAIN_PATH = preprocess_params.output_train
-INPUT_VAL_PATH = preprocess_params.output_val
-INPUT_TEST_PATH = preprocess_params.output_test
+INPUT_TRAIN_PATH = preprocess_params['output_train']
+INPUT_VAL_PATH = preprocess_params['output_val']
+INPUT_TEST_PATH = preprocess_params['output_test']
 
-OUT_PATH_TRAIN = featurize_params.output_train
-OUT_PATH_VAL = featurize_params.output_val
-OUT_PATH_TEST = featurize_params.output_test
-OUT_MLB_PICKLE = featurize_params.mlb_out
+OUT_PATH_TRAIN = featurize_params['output_train']
+OUT_PATH_VAL = featurize_params['output_val']
+OUT_PATH_TEST = featurize_params['output_test']
+OUT_MLB_PICKLE = featurize_params['mlb_out']
 
 # For this project we will need to use a list of stop words. It can be downloaded from nltk:
 # import nltk
@@ -111,7 +112,7 @@ def word_tags_count(X_train, y_train):
             else:
                 tags_counts[tag] = 1
 
-    print(sorted(words_counts, key=words_counts.get, reverse=True)[:3])
+    # print(sorted(words_counts, key=words_counts.get, reverse=True)[:3])
     # We are assuming that tags_counts and words_counts are dictionaries like {'some_word_or_tag': frequency}. After
     # applying the sorting procedure, results will be look like this: [('most_popular_word_or_tag', frequency),
     # ('less_popular_word_or_tag', frequency), ...]
@@ -183,11 +184,11 @@ def tfidf_features(X_train, X_val, X_test):
     # Transform the train, test, and val sets and return the result
 
     tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2),
-                                       token_pattern='(\S+)')  ####### YOUR CODE HERE #######
+                                       token_pattern='(\S+)')
 
-    X_train = tfidf_vectorizer.fit_transform(X_train)
-    X_val = tfidf_vectorizer.transform(X_val)
-    X_test = tfidf_vectorizer.transform(X_test)
+    X_train = tfidf_vectorizer.fit_transform(X_train.values)
+    X_val = tfidf_vectorizer.transform(X_val.values)
+    X_test = tfidf_vectorizer.transform(X_test.values)
 
     return X_train, X_val, X_test
 
@@ -201,29 +202,30 @@ def pickle_mlb(mlb_obj):
     with open(OUT_MLB_PICKLE, 'wb') as fd:
         pickle.dump(mlb_obj, fd, protocol=pickle.HIGHEST_PROTOCOL)
 
+def pickle_sparse_matrix(csr_matrix, label_csr, output_path):
+    with open(output_path, "wb") as fd:
+        pickle.dump((csr_matrix, label_csr), fd)
+
+def pickle_sparse_test_matrix(csr_matrix, output_path):
+    with open(output_path, "wb") as fd:
+        pickle.dump(csr_matrix, fd)
+
 def main():
     train = pd.read_csv(INPUT_TRAIN_PATH, sep='\t')
     val = pd.read_csv(INPUT_VAL_PATH, sep='\t')
     test = pd.read_csv(INPUT_TEST_PATH, sep='\t')
 
-    X_train, y_train = train[['X_train']], train[['y_train']]
-    X_val, y_val = val[['X_val']], val[['y_val']]
-    X_test = test[['X_test']]
-
+    X_train, y_train = train['X_train'], train['y_train']
+    X_val, y_val = val['X_val'], val['y_val']
+    X_test = test['X_test']
+    
     tags_counts, _ = word_tags_count(X_train=X_train, y_train=y_train)
     y_train, y_val, mlb = mlb_y_data(y_train, y_val, tags_counts)
-
-    X_train, X_val, X_test = tfidf_features(X_train, X_val, X_test)
-
-    train[['X_train']] = X_train
-    train[['y_train']] = y_train
-    val[['X_val']] = X_val
-    val[['y_val']] = y_val
-    test[['X_test']] = X_test
-
-    train.to_csv(OUT_PATH_TRAIN, sep='\t', index=False)
-    val.to_csv(OUT_PATH_VAL, sep='\t', index=False)
-    test.to_csv(OUT_PATH_TEST, sep='\t', index=False)
+    X_train_csr, X_val_csr, X_test_csr = tfidf_features(X_train, X_val, X_test)
+    
+    pickle_sparse_matrix(X_train_csr, y_train, OUT_PATH_TRAIN)
+    pickle_sparse_matrix(X_val_csr, y_val, OUT_PATH_VAL)
+    pickle_sparse_test_matrix(X_test_csr, OUT_PATH_TEST)
 
     pickle_mlb(mlb)
 

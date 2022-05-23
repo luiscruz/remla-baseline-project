@@ -8,8 +8,8 @@ params = yaml.safe_load(open("params.yaml"))
 featurize_params = params["featurize"]
 train_params = params["train"]
 
-INPUT_TRAIN_PATH = featurize_params.output_train
-OUT_PATH_MODEL = train_params.model_out
+INPUT_TRAIN_PATH = featurize_params['output_train']
+OUT_PATH_MODEL = train_params['model_out']
 
 # def train_mybag(X_train, X_val, X_test, y_train):
 #     """
@@ -76,10 +76,13 @@ def pickle_model(clf):
     with open(OUT_PATH_MODEL, 'wb') as fd:
         pickle.dump(clf, fd, protocol=pickle.HIGHEST_PROTOCOL)
 
-def main():
-    train = pd.read_csv(INPUT_TRAIN_PATH, sep='\t')
+def load_pickled_train_data():
+    with open(INPUT_TRAIN_PATH, 'rb') as fd:
+        X_train, y_train = pickle.load(fd)
+    return X_train, y_train
 
-    X_train, y_train = train[['X_train']], train[['y_train']]
+def main():
+    X_train, y_train = load_pickled_train_data()
     clf = train_classifier_for_transformations(X_train, y_train)
 
     pickle_model(clf)
