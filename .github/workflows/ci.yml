@@ -19,10 +19,13 @@ jobs:
           --reports=y \
           src
     - name: Run ML pipeline with DVC
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
       run: |
         docker run \
-          -e AWS_ACCESS_KEY_ID=${{ secrets.DVC_ACCESS_KEY_ID }} \
-          -e AWS_SECRET_ACCESS_KEY=${{ secrets.DVC_SECRET_ACCESS_KEY }} \
+          -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
           app
         docker run app dvc pull && dvc repro  
 
