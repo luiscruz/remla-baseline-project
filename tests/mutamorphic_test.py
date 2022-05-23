@@ -5,6 +5,7 @@ from nltk.corpus.reader import Synset
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import re
+import random
 
 STOPWORDS = stopwords.words('english')
 POST_TAG_MAP = {
@@ -25,14 +26,14 @@ class Word:
 
     @property
     def is_nontrivial(self):
-        return not self.is_stopword and not self.pos_tag == ''
+        return not self.is_stopword and not self.pos_tag == '' and not len(self.variants) == 0
 
     def _get_variations(self) -> Dict[str, int]:
         """
         TODO
         returns dict. key: synonym/hypernym, count: how many times was this suggested by nltk
         """
-        if not self.is_nontrivial:
+        if self.is_stopword or self.pos_tag == '':
             return dict()
 
         synsets = wn.synsets(self.value, pos=self.pos_tag)
@@ -124,12 +125,27 @@ class Word:
 def _select_mutations_random(non_trivial_words: List[Word],
                              num_replacements: int,
                              num_variants: int,
-                             random_seed: int) -> List[List[Tuple[Word, str]]]:
+                             random_seed: int) -> List[List[Tuple[Word, str]]]: #TODO use random seed
     """
     TODO comments
     """
 
-    pass
+    assert num_replacements <= len(non_trivial_words), "not enough nontrivial words to replace"
+
+    choices = set()
+
+    for _ in range(num_variants):
+        while True:
+            words = random.sample(non_trivial_words, num_replacements)
+            mutations = {(word, random.sample(word.variants.keys(), 1)[0]) for word in words}
+            mutations = frozenset(mutations)
+            if mutations not in choices:
+                choices.add(mutations)
+                break
+
+    result = [list(mutations) for mutations in choices]
+
+    return result
 
 
 def _select_mutations_most_common_first(non_trivial_words: List[Word],
@@ -139,8 +155,7 @@ def _select_mutations_most_common_first(non_trivial_words: List[Word],
     """
     TODO comments
     """
-
-    pass
+    raise NotImplementedError
 
 
 MUTATION_SELECTION_STRATEGIES: Dict[str, Callable[[List[Word], int, int, int], List[List[Tuple[Word, str]]]]] = {
@@ -173,7 +188,7 @@ def mutate_by_replacement(input_sentence: str,
     tokens = word_tokenize(input_sentence)
     tokens_with_pos_tags = nltk.pos_tag(tokens)
     words = [Word.from_tuple(t) for t in tokens_with_pos_tags]
-    non_trivial_words = {word: index for (word, index) in enumerate(words) if word.is_nontrivial}
+    non_trivial_words = {word: index for (index, word) in enumerate(words) if word.is_nontrivial}
 
     selection_strategy_func = _get_selection_strategy_func(selection_strategy)
 
@@ -195,4 +210,9 @@ def mutate_by_replacement(input_sentence: str,
     return mutated_sentences
 
 
-print(mutate_by_replacement("Uploading files via JSON Post request to a Web Service provided by Teambox"))
+test_sentence = "Uploading files via JSON Post request to a Web Service provided by Teambox"
+result = mutate_by_replacement(test_sentence, num_replacements=2, num_variants=10)
+print(f"ORIGINAL: \n{test_sentence}")
+print("VARIANTS:")
+for x in result:
+    print(x)
