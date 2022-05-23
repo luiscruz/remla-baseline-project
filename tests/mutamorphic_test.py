@@ -55,7 +55,7 @@ class Word:
                 substrings = lemma.name().split('.')
                 synonym = substrings[-1]
                 synonym_without_underscore = re.sub(r'_', ' ', synonym)
-                if self.value != synonym_without_underscore:
+                if self.value != synonym_without_underscore.lower():
                     result.append(synonym_without_underscore)
 
         return result
@@ -72,7 +72,7 @@ class Word:
                     substrings = lemma.name().split('.')
                     hypernym = substrings[-1]
                     hypernym_without_underscore = re.sub(r'_', ' ', hypernym)
-                    if self.value != hypernym_without_underscore:
+                    if self.value != hypernym_without_underscore.lower():
                         result.append(hypernym_without_underscore)
 
         return result
@@ -150,7 +150,7 @@ MUTATION_SELECTION_STRATEGIES: Dict[str, Callable[[List[Word], int, int, int], L
 
 
 def _get_selection_strategy_func(selection_strategy: str)\
-        -> Callable[[List[Word], int, int], List[List[Tuple[Word, str]]]]:
+        -> Callable[[List[Word], int, int, int], List[List[Tuple[Word, str]]]]:
     """
     TODO comments
     """
@@ -179,7 +179,8 @@ def mutate_by_replacement(input_sentence: str,
 
     mutations_list = selection_strategy_func(list(non_trivial_words.keys()),
                                              num_replacements,
-                                             num_variants)
+                                             num_variants,
+                                             random_seed)
 
     mutated_sentences = []
     for mutations in mutations_list:
