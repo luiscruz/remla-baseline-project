@@ -8,6 +8,9 @@ jobs:
     name: Check project quality with `mllint` and `dslinter` and run pytest
     runs-on: ubuntu-20.04
     steps:
+      - name: Clone project
+        uses: actions/checkout@v3
+
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
@@ -16,9 +19,6 @@ jobs:
 
       - name: install dependencies
         run: pip install -r requirements.txt
-
-      - name: Clone project
-        uses: actions/checkout@v3
 
       - name: Install mllint
         run: pip install --upgrade mllint
