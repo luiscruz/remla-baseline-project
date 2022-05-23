@@ -7,11 +7,19 @@ RUN apt-get update &&\
 
 COPY requirements.txt .
 COPY setup.py .
-COPY .pylintrc .
 COPY src src
 
 RUN python -m pip install --upgrade pip &&\
     pip install -r requirements.txt &&\
     pip install -e .[linter]
+
+COPY .pylintrc .
+
+# Copy necessary files and folders for dvc
+COPY .dvc .dvc
+COPY dvc.yaml .
+COPY dvc.lock .
+COPY .git .git
+COPY data data
 
 # TODO: Add entrypoint to ML application here
