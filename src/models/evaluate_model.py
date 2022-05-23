@@ -95,7 +95,6 @@ def create_evaluation_scores_json(y_val, predicted_labels, decision_function_val
     :param probas:
     :return: Create json file of scores
     """
-    print(y_val)
     with open(SCORES_JSON_PATH, "w") as fd:
         json.dump(
             {

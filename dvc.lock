@@ -48,8 +48,8 @@ stages:
       md5: c6cbd9bc38a543e6f33b3885e2561774
       size: 1922854
     - path: src/features/build_features.py
-      md5: 959b366be40f592bbb002a1019c45ae1
-      size: 8853
+      md5: d1edc144ebf60feb4bb561345c9a3510
+      size: 8498
     params:
       params.yaml:
         featurize:
@@ -101,7 +101,7 @@ stages:
           model_out: models/model.pkl
     outs:
     - path: models/model.pkl
-      md5: b4fce724bfe43425e9b1bc430865229f
+      md5: 3d1465b18851786bf7badc5ea7d7ebbf
       size: 14663131
   evaluate:
     cmd: python src/models/evaluate_model.py
@@ -110,7 +110,7 @@ stages:
       md5: bc0d877f6a51fb4cdecfc190ab6f0acc
       size: 14487048
     - path: models/model.pkl
-      md5: b4fce724bfe43425e9b1bc430865229f
+      md5: 3d1465b18851786bf7badc5ea7d7ebbf
       size: 14663131
     - path: src/models/evaluate_model.py
       md5: 590f4e879f5600b8a9051e0a3cd797bf
@@ -133,5 +133,5 @@ stages:
           model_out: models/model.pkl
     outs:
     - path: reports/scores.json
-      md5: 47e8c9e839e6241cf02be2f245146dc4
-      size: 173
+      md5: 363ce90678943641d8a3c0f268002342
+      size: 175
