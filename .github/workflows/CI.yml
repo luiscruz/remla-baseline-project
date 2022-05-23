@@ -4,18 +4,16 @@ name: CI
 on: push
 
 jobs:
-  ci:
+  build:
     name: Check project quality with `mllint` and `dslinter` and run pytest
     runs-on: ubuntu-20.04
-
     steps:
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
           python-version: 3.9
           cache: 'pip'
-        - run: pip install -r requirements.txt
-        - run: pip test
+        run: pip install -r requirements.txt
 
       - name: Clone project
         uses: actions/checkout@v3
@@ -36,7 +34,4 @@ jobs:
           path: mllint-report.md
 
       - name: Test with pytest
-        run: |
-          pip install pytest
-          pip install pytest-cov
-          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+        run: pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html

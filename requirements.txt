@@ -18,3 +18,4 @@ scipy
 
 # Packages used for testing
 pytest
+pytest-cov
