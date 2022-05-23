@@ -31,4 +31,4 @@ Note: this sample project was originally created by @partoftheorigin
 
 # Testing: PyTest
 ## Structure
-Pytests can be found in the "tests" directory. Newly added test classes should end with "_test.py" and newly added test functions should start with "test"
+Pytests can be found in the "tests" directory. Newly added test classes should end with "test_*.py" and newly added test functions should start with "test"
