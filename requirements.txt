@@ -1,6 +1,9 @@
 # local package
 -e .
 
+# terminal dependencies
+dvc[gdrive]
+
 # external requirements
 click
 Sphinx

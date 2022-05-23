@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.dvc": "yaml",
+        "dvc.lock": "yaml"
+    }
+}

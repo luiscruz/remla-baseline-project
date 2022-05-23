@@ -1,0 +1,27 @@
+preprocess:
+  script: src/preprocess/preprocess_data.py
+  input_train: data/raw/train.tsv
+  input_val: data/raw/validation.tsv
+  input_test: data/raw/test.tsv
+  output_train: data/processed/train_preprocessed.pkl
+  output_val: data/processed/validation_preprocessed.pkl
+  output_test: data/processed/test_preprocessed.pkl
+
+featurize:
+  script: src/features/build_features.py
+  output_train: data/interim/train_featurized.pkl
+  output_val: data/interim/validation_featurized.pkl
+  output_test: data/interim/test_featurized.pkl
+  mlb_out: models/mlb.pkl
+
+train:
+  script: src/models/train_model.py
+  model_out: models/model.pkl
+
+evaluate:
+  script: src/models/evaluate_model.py
+  scores_path: reports/scores.json
+  roc_json: reports/roc_plot.json
+  prc_json: reports/prc_plot.json
+  # roc_img: reports/figures/roc_img
+  # prc_img: reports/figures/prc_img
