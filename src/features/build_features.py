@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 import yaml
 import pickle 
-import scipy.sparse as sparse
+# import scipy.sparse as sparse
 
 # Fetch params from yaml params file
 params = yaml.safe_load(open("params.yaml"))
@@ -186,9 +186,9 @@ def tfidf_features(X_train, X_val, X_test):
     tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2),
                                        token_pattern='(\S+)')
 
-    X_train = tfidf_vectorizer.fit_transform(X_train.values)
-    X_val = tfidf_vectorizer.transform(X_val.values)
-    X_test = tfidf_vectorizer.transform(X_test.values)
+    X_train = tfidf_vectorizer.fit_transform(X_train)
+    X_val = tfidf_vectorizer.transform(X_val)
+    X_test = tfidf_vectorizer.transform(X_test)
 
     return X_train, X_val, X_test
 
@@ -210,19 +210,20 @@ def pickle_sparse_test_matrix(csr_matrix, output_path):
     with open(output_path, "wb") as fd:
         pickle.dump(csr_matrix, fd)
 
-def main():
-    train = pd.read_csv(INPUT_TRAIN_PATH, sep='\t')
-    val = pd.read_csv(INPUT_VAL_PATH, sep='\t')
-    test = pd.read_csv(INPUT_TEST_PATH, sep='\t')
+def load_pickled_data(input_path):
+    with open(input_path, 'rb') as fd:
+        return pickle.load(fd)
 
-    X_train, y_train = train['X_train'], train['y_train']
-    X_val, y_val = val['X_val'], val['y_val']
-    X_test = test['X_test']
+def main():
+    X_train, y_train = load_pickled_data(INPUT_TRAIN_PATH)
+    X_val, y_val = load_pickled_data(INPUT_VAL_PATH)
+    X_test = load_pickled_data(INPUT_TEST_PATH)
     
     tags_counts, _ = word_tags_count(X_train=X_train, y_train=y_train)
     y_train, y_val, mlb = mlb_y_data(y_train, y_val, tags_counts)
+
     X_train_csr, X_val_csr, X_test_csr = tfidf_features(X_train, X_val, X_test)
-    
+
     pickle_sparse_matrix(X_train_csr, y_train, OUT_PATH_TRAIN)
     pickle_sparse_matrix(X_val_csr, y_val, OUT_PATH_VAL)
     pickle_sparse_test_matrix(X_test_csr, OUT_PATH_TEST)

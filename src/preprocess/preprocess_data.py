@@ -1,7 +1,8 @@
 from ast import literal_eval
-import pandas as pd
 import re
 import yaml
+import pickle
+import pandas as pd
 
 # For this project we will need to use a list of stop words. It can be downloaded from nltk:
 import nltk
@@ -94,6 +95,13 @@ def preprocess_text_prepare(X_train, X_val, X_test):
     X_test = [text_prepare(x) for x in X_test]
     return X_train, X_val, X_test
 
+def pickle_train_val_data(X_data, y_data, out_path):
+    with open(out_path,'wb') as fd:
+        pickle.dump((X_data, y_data), fd,protocol=pickle.HIGHEST_PROTOCOL)
+
+def pickle_test_data(X_data, out_path):
+    with open(out_path,'wb') as fd:
+        pickle.dump(X_data, fd, protocol=pickle.HIGHEST_PROTOCOL)
 
 def main():
     X_train, X_val, X_test, y_train, y_val = init_data(
@@ -101,16 +109,12 @@ def main():
         INPUT_VAL_PATH,
         INPUT_TEST_PATH
     )
+
     X_train, X_val, X_test = preprocess_text_prepare(X_train, X_val, X_test)
     
-    train_data_out = pd.DataFrame.from_dict({'X_train': X_train, 'y_train': y_train})
-    train_data_out.to_csv(OUT_PATH_TRAIN, sep='\t', index=False)
-        
-    val_data_out = pd.DataFrame.from_dict({'X_val': X_val, 'y_val': y_val})
-    val_data_out.to_csv(OUT_PATH_VAL, sep='\t', index=False)
-
-    test_data_out = pd.DataFrame.from_dict({'X_test': X_test})
-    test_data_out.to_csv(OUT_PATH_TEST, sep='\t', index=False)
+    pickle_train_val_data(X_train, y_train, OUT_PATH_TRAIN)
+    pickle_train_val_data(X_val, y_val, OUT_PATH_VAL)
+    pickle_test_data(X_test, OUT_PATH_TEST)
 
 if __name__ == '__main__':
     main()

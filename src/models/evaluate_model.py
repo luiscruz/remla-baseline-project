@@ -8,7 +8,6 @@ import math
 import pickle
 import json
 import yaml
-import pandas as pd
 
 # Fetch params from yaml params file
 params = yaml.safe_load(open("params.yaml"))
@@ -36,17 +35,15 @@ def create_all_plots_and_scores(
 
     y_val_predicted_labels_tfidf = classifier_tfidf.predict(X_val_tfidf)
     y_val_predicted_scores_tfidf = classifier_tfidf.decision_function(X_val_tfidf)
-    predicted_probas_tfidf = classifier_tfidf.predict_proba(X_val_tfidf)[:, 1]
 
     create_evaluation_scores_json(
         y_val_tdidf,
         y_val_predicted_labels_tfidf,
-        predicted_probas_tfidf, 
         y_val_predicted_scores_tfidf
     )
 
-    create_prc_curve_json(y_val_tdidf, predicted_probas_tfidf)
-    create_roc_curve_json(y_val_tdidf, predicted_probas_tfidf)
+    # create_prc_curve_json(y_val_tdidf, y_val_predicted_scores_tfidf)
+    # create_roc_curve_json(y_val_tdidf, predicted_probas_tfidf)
 
     # A look at how classifier, which uses TF-IDF, works for a few examples:
     # y_val_pred_inversed = mlb.inverse_transform(y_val_predicted_labels_tfidf)
@@ -90,7 +87,7 @@ Print out scores
 """
 
 
-def create_evaluation_scores_json(y_val, predicted_labels, probas, decision_function_vals):
+def create_evaluation_scores_json(y_val, predicted_labels, decision_function_vals):
     """
 
     :param y_val:
@@ -98,55 +95,56 @@ def create_evaluation_scores_json(y_val, predicted_labels, probas, decision_func
     :param probas:
     :return: Create json file of scores
     """
+    print(y_val)
     with open(SCORES_JSON_PATH, "w") as fd:
         json.dump(
             {
                 'accuracy_score': accuracy_score(y_val, predicted_labels),
                 'f1_score': f1_score(y_val, predicted_labels, average='weighted'),
-                'avg_precision_score': average_precision_score(y_val, decision_function_vals, average='macro'),
-                'roc_auc_score': roc_auc(y_val, probas, multi_class='ovo'),
+                'avg_precision_score': average_precision_score(y_val, predicted_labels, average='macro'),
+                'roc_auc_score': roc_auc(y_val, decision_function_vals, multi_class='ovo'),
             },
             fd,
             indent=4,
         )
     
 
-def create_prc_curve_json(y_val, probas_pred):
-    """
-    Create json file of prc points
-    """
-    precision, recall, prc_thresholds = precision_recall_curve(y_val, probas_pred)
-    nth_point = math.ceil(len(prc_thresholds) / 1000)
-    prc_points = list(zip(precision, recall, prc_thresholds))[::nth_point]
-    with open(PRC_JSON_PATH, "w") as fd:
-        json.dump(
-            {
-                "prc": [
-                    {"precision": p, "recall": r, "threshold": t}
-                    for p, r, t in prc_points
-                ]
-            },
-            fd,
-            indent=4,
-        )
+# def create_prc_curve_json(y_val, probas_pred):
+#     """
+#     Create json file of prc points
+#     """
+#     precision, recall, prc_thresholds = precision_recall_curve(y_val, probas_pred)
+#     nth_point = math.ceil(len(prc_thresholds) / 1000)
+#     prc_points = list(zip(precision, recall, prc_thresholds))[::nth_point]
+#     with open(PRC_JSON_PATH, "w") as fd:
+#         json.dump(
+#             {
+#                 "prc": [
+#                     {"precision": p, "recall": r, "threshold": t}
+#                     for p, r, t in prc_points
+#                 ]
+#             },
+#             fd,
+#             indent=4,
+#         )
 
-def create_roc_curve_json(y_val, probas_pred):
-    """
-    Create json file of roc points
-    """
-    fpr, tpr, roc_thresholds = roc_curve(y_val, probas_pred)
-    roc_points = list(zip(fpr, tpr, roc_thresholds))
-    with open(ROC_JSON_PATH, "w") as fd:
-        json.dump(
-            {
-                "roc": [
-                    {"fpr": fpr, "tpr": tpr, "threshold": t}
-                    for fpr, tpr, t in roc_points
-                ]
-            },
-            fd,
-            indent=4,
-        )
+# def create_roc_curve_json(y_val, probas_pred):
+#     """
+#     Create json file of roc points
+#     """
+#     fpr, tpr, roc_thresholds = roc_curve(y_val, probas_pred)
+#     roc_points = list(zip(fpr, tpr, roc_thresholds))
+#     with open(ROC_JSON_PATH, "w") as fd:
+#         json.dump(
+#             {
+#                 "roc": [
+#                     {"fpr": fpr, "tpr": tpr, "threshold": t}
+#                     for fpr, tpr, t in roc_points
+#                 ]
+#             },
+#             fd,
+#             indent=4,
+#         )
 
 # def print_eval_scores(
 #     y_val,

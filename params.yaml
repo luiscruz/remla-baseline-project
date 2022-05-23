@@ -3,9 +3,9 @@ preprocess:
   input_train: data/raw/train.tsv
   input_val: data/raw/validation.tsv
   input_test: data/raw/test.tsv
-  output_train: data/processed/train_preprocessed.tsv
-  output_val: data/processed/validation_preprocessed.tsv
-  output_test: data/processed/test_preprocessed.tsv
+  output_train: data/processed/train_preprocessed.pkl
+  output_val: data/processed/validation_preprocessed.pkl
+  output_test: data/processed/test_preprocessed.pkl
 
 featurize:
   script: src/features/build_features.py

@@ -133,3 +133,6 @@ dmypy.json
 
 .DS_STORE
 
+# Gitignore models and data which is tracked by DVC
+data/*
+models/*
