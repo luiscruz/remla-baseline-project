@@ -25,6 +25,9 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.txt
+!requirements.txt
+tests/dependencies
 MANIFEST
 validation
 # PyInstaller
