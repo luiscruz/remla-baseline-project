@@ -56,8 +56,8 @@ stages:
     metrics:
       - ${evaluate.scores_path}:
           cache: false
-    plots:
-      - ${evaluate.prc_json}:
-          cache: false
-      - ${evaluate.roc_json}:
-          cache: false
+    # plots:
+    #   - ${evaluate.prc_json}:
+    #       cache: false
+    #   - ${evaluate.roc_json}:
+    #       cache: false
