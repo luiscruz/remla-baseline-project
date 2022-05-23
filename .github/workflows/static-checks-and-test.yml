@@ -1,0 +1,61 @@
+name: REMLA Workflow
+on:
+  push:
+  pull_request: {}
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v3
+    - name: Set up python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.8'
+    - name: build environment
+      run: make requirements
+    - name: check black
+      if: always()
+      run: make check-black
+    - name: check isort
+      if: always()
+      run: make check-isort
+    - name: check flake8
+      if: always()
+      run: make check-flake8
+    - name: check bandit
+      if: always()
+      run: make check-bandit
+    - name: check mllint
+      if: always()
+      run: make check-mllint
+    - name: Publish mllint report to actions page
+      uses: LouisBrunner/checks-action@v1.2.0
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: MLLint report
+        conclusion: ${{ job.status }}
+        output: "{\"summary\":\"mllint report\"}"
+        output_text_description_file: reports/mllint_report.md
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+      - name: Set up python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8'
+      - name: build environment
+        run: make requirements
+      - name: Test with pytest
+        run: |
+          make test
