@@ -1,3 +1,6 @@
+"""
+Module for definitions used across modules.
+"""
 import os
 from pathlib import Path
 
