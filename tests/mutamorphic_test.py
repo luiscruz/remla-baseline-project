@@ -1,23 +1,10 @@
-from typing import Tuple, List, Dict, Iterable
+from typing import Tuple, List, Dict, Iterable, Callable
 import nltk
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader import Synset
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import re
-
-# Input phrases
-
-# Function to change it with
-# synonyms
-# hypernyms
-# hyponyms
-
-# options: random seed
-
-# Obtain results for set of phrases
-
-# Compare the results
 
 STOPWORDS = stopwords.words('english')
 POST_TAG_MAP = {
@@ -37,16 +24,15 @@ class Word:
         self.variants = self._get_variations()
 
     @property
-    def is_variation_candidate(self):
+    def is_nontrivial(self):
         return not self.is_stopword and not self.pos_tag == ''
-    
 
     def _get_variations(self) -> Dict[str, int]:
         """
         TODO
         returns dict. key: synonym/hypernym, count: how many times was this suggested by nltk
         """
-        if not self.is_variation_candidate:
+        if not self.is_nontrivial:
             return dict()
 
         synsets = wn.synsets(self.value, pos=self.pos_tag)
@@ -94,10 +80,9 @@ class Word:
     @staticmethod
     def convert_pos_tag(nltk_pos_tag):
         root_tag = nltk_pos_tag[0:2]
-        try:
-            POST_TAG_MAP[root_tag]
+        if root_tag in POST_TAG_MAP.keys():
             return POST_TAG_MAP[root_tag]
-        except KeyError:
+        else:
             return ''
 
     @staticmethod
@@ -136,15 +121,77 @@ class Word:
         return f"Word(\"{self.value}\", tag: {self.pos_tag}, stopword: {self.is_stopword})"
 
 
-def generate_variants(input_sentence: str,
-                      num_variants: int = 5,
-                      num_replacements: int = 1) -> List[str]:
+def _select_mutations_random(non_trivial_words: List[Word],
+                             num_replacements: int,
+                             num_variants: int,
+                             random_seed: int) -> List[List[Tuple[Word, str]]]:
+    """
+    TODO comments
+    """
+
+    pass
+
+
+def _select_mutations_most_common_first(non_trivial_words: List[Word],
+                                        num_replacements: int,
+                                        num_variants: int,
+                                        random_seed: int) -> List[List[Tuple[Word, str]]]:
+    """
+    TODO comments
+    """
+
+    pass
+
+
+MUTATION_SELECTION_STRATEGIES: Dict[str, Callable[[List[Word], int, int, int], List[List[Tuple[Word, str]]]]] = {
+    "random": _select_mutations_random,
+    "most_common_first": _select_mutations_most_common_first,
+}
+
+
+def _get_selection_strategy_func(selection_strategy: str)\
+        -> Callable[[List[Word], int, int], List[List[Tuple[Word, str]]]]:
+    """
+    TODO comments
+    """
+
+    assert selection_strategy in MUTATION_SELECTION_STRATEGIES\
+        , "Unknown mutation selection strategy."
+
+    return MUTATION_SELECTION_STRATEGIES[selection_strategy]
+
+
+def mutate_by_replacement(input_sentence: str,
+                          num_replacements: int = 1,
+                          num_variants: int = 5,
+                          selection_strategy: str = "random",
+                          random_seed: int = 13) -> List[str]:
+    """
+    TODO comments
+    """
+
     tokens = word_tokenize(input_sentence)
     tokens_with_pos_tags = nltk.pos_tag(tokens)
     words = [Word.from_tuple(t) for t in tokens_with_pos_tags]
+    non_trivial_words = {word: index for (word, index) in enumerate(words) if word.is_nontrivial}
 
-    return []  # TODO
+    selection_strategy_func = _get_selection_strategy_func(selection_strategy)
+
+    mutations_list = selection_strategy_func(list(non_trivial_words.keys()),
+                                             num_replacements,
+                                             num_variants)
+
+    mutated_sentences = []
+    for mutations in mutations_list:
+        sentence = [word.value for word in words]
+        for mutation in mutations:
+            word = mutation[0]
+            replacement = mutation[1]
+            index = non_trivial_words[word]
+            sentence[index] = replacement
+        mutated_sentences.append(" ".join(sentence))
+
+    return mutated_sentences
 
 
-print(
-    generate_variants("Uploading files via JSON Post request to a Web Service provided by Teambox"))
+print(mutate_by_replacement("Uploading files via JSON Post request to a Web Service provided by Teambox"))
