@@ -7,12 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
     - name: Build docker image
       run: |
         docker build . -t app  
+    
     - name: Run Pylint with Dslinter plugin
       run: |
-        docker run --rm app  pylint \
+        docker run app pylint \
           --load-plugins=dslinter \
           --reports=y \
           src
+    - name: Run ML pipeline with DVC
+      run: |
+       docker run app dvc pull && dvc repro  
+
