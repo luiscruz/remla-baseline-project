@@ -5,6 +5,7 @@ from scipy import sparse as sp_sparse
 ALL_WORDS = []
 
 def initialize(words_counts, X_train, X_val, X_test):
+    global ALL_WORDS
     DICT_SIZE = 5000
     INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[
         :DICT_SIZE]  # YOUR CODE HERE #######
