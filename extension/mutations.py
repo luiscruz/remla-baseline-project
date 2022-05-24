@@ -1,0 +1,139 @@
+from typing import Tuple, List, Dict, Callable
+from extension.Word import Word
+from nltk.tokenize import word_tokenize
+import nltk
+import random
+
+
+def _select_mutations_random(non_trivial_words: List[Word],
+                             num_replacements: int,
+                             num_variants: int,
+                             random_seed: int) -> List[List[Tuple[Word, str]]]: #TODO use random seed
+    """
+    TODO comments
+    """
+
+    assert num_replacements <= len(non_trivial_words), "not enough nontrivial words to replace"
+
+    choices = set()
+
+    for _ in range(num_variants):
+        while True:
+            words = random.sample(non_trivial_words, num_replacements)
+            mutations = {(word, random.choice(word.variants.keys())) for word in words}
+            mutations = frozenset(mutations)
+            if mutations not in choices:
+                choices.add(mutations)
+                break
+
+    mutations_list = [list(mutations) for mutations in choices]
+
+    return mutations_list
+
+
+def _select_mutations_most_common_first(non_trivial_words: List[Word],
+                                        num_replacements: int,
+                                        num_variants: int,
+                                        random_seed: int) -> List[List[Tuple[Word, str]]]:
+    """
+    TODO comments
+    """
+
+    # Some preparations: group mutations by the number of times it is suggested by WordNet
+    grouped_by_counts = dict()
+    for word in non_trivial_words:
+        for variant, count in word.variants.items():
+            if count not in grouped_by_counts.keys():
+                grouped_by_counts[count] = {(word, variant)}
+            else:
+                grouped_by_counts[count].add((word, variant))
+
+    groups = list(grouped_by_counts.keys())
+    groups.sort(reverse=True)
+
+    # Choose the mutations. The mutations with the highest counts are chosen first. But for a single
+    # word, only one mutation is chosen at a time. So if for a sentence, a mutation is chosen for
+    # word X, if more mutations still need to be chosen, the mutation with the highest count for
+    # word Y is chosen, where X =/= Y.
+    mutations_list = []
+    for _ in range(num_variants):
+        mutations = []
+        chosen_words = set()
+        current_group_number = 0
+        while len(chosen_words) < num_replacements:
+            group = grouped_by_counts[groups[current_group_number]]
+            candidates = [x for x in group if x[0] not in chosen_words]
+            if len(candidates) > 0:
+                mutation = random.choice(candidates)
+                chosen_words.add(mutation[0])
+                mutations.append(mutation)
+                group.remove(mutation)
+            else:
+                current_group_number += 1
+        mutations_list.append(mutations)
+
+    return mutations_list
+
+
+MUTATION_SELECTION_STRATEGIES: Dict[str, Callable[[List[Word], int, int, int], List[List[Tuple[Word, str]]]]] = {
+    "random": _select_mutations_random,
+    "most_common_first": _select_mutations_most_common_first,
+}
+
+
+def _get_selection_strategy_func(selection_strategy: str)\
+        -> Callable[[List[Word], int, int, int], List[List[Tuple[Word, str]]]]:
+    """
+    TODO comments
+    """
+
+    assert selection_strategy in MUTATION_SELECTION_STRATEGIES\
+        , "Unknown mutation selection strategy."
+
+    return MUTATION_SELECTION_STRATEGIES[selection_strategy]
+
+
+def mutate_by_replacement(input_sentence: str,
+                          num_replacements: int = 1,
+                          num_variants: int = 5,
+                          selection_strategy: str = "random",
+                          random_seed: int = 13) -> List[str]:
+    """
+    TODO comments
+    """
+
+    tokens = word_tokenize(input_sentence)
+    tokens_with_pos_tags = nltk.pos_tag(tokens)
+    words = [Word.from_tuple(t) for t in tokens_with_pos_tags]
+    non_trivial_words = {word: index for (index, word) in enumerate(words) if word.is_nontrivial}
+
+    selection_strategy_func = _get_selection_strategy_func(selection_strategy)
+
+    mutations_list = selection_strategy_func(list(non_trivial_words.keys()),
+                                             num_replacements,
+                                             num_variants,
+                                             random_seed)
+
+    mutated_sentences = []
+    for mutations in mutations_list:
+        sentence = [word.value for word in words]
+        for mutation in mutations:
+            word = mutation[0]
+            replacement = mutation[1]
+            index = non_trivial_words[word]
+            sentence[index] = replacement
+        mutated_sentences.append(" ".join(sentence))
+
+    return mutated_sentences
+
+
+if __name__ == "__main__":
+    test_sentence = "Uploading files via JSON Post request to a Web Service provided by Teambox"
+    result = mutate_by_replacement(test_sentence,
+                                   num_replacements=2,
+                                   num_variants=10,
+                                   selection_strategy="most_common_first")
+    print(f"ORIGINAL: \n{test_sentence}")
+    print("VARIANTS:")
+    for x in result:
+        print(x)
