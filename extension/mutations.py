@@ -2,13 +2,14 @@ from typing import Tuple, List, Dict, Callable
 from extension.Word import Word
 from nltk.tokenize import word_tokenize
 import nltk
-import random
+import random as random_pkg
+from random import Random
 
 
 def _select_mutations_random(non_trivial_words: List[Word],
                              num_replacements: int,
                              num_variants: int,
-                             random_seed: int) -> List[List[Tuple[Word, str]]]: #TODO use random seed
+                             rng: Random) -> List[List[Tuple[Word, str]]]:
     """
     TODO comments
     """
@@ -19,8 +20,8 @@ def _select_mutations_random(non_trivial_words: List[Word],
 
     for _ in range(num_variants):
         while True:
-            words = random.sample(non_trivial_words, num_replacements)
-            mutations = {(word, random.choice(word.variants.keys())) for word in words}
+            words = rng.sample(non_trivial_words, num_replacements)
+            mutations = {(word, rng.choice(word.variants.keys())) for word in words}
             mutations = frozenset(mutations)
             if mutations not in choices:
                 choices.add(mutations)
@@ -34,7 +35,7 @@ def _select_mutations_random(non_trivial_words: List[Word],
 def _select_mutations_most_common_first(non_trivial_words: List[Word],
                                         num_replacements: int,
                                         num_variants: int,
-                                        random_seed: int) -> List[List[Tuple[Word, str]]]:
+                                        rng: Random) -> List[List[Tuple[Word, str]]]:
     """
     TODO comments
     """
@@ -64,7 +65,7 @@ def _select_mutations_most_common_first(non_trivial_words: List[Word],
             group = grouped_by_counts[groups[current_group_number]]
             candidates = [x for x in group if x[0] not in chosen_words]
             if len(candidates) > 0:
-                mutation = random.choice(candidates)
+                mutation = rng.choice(candidates)
                 chosen_words.add(mutation[0])
                 mutations.append(mutation)
                 group.remove(mutation)
@@ -75,14 +76,14 @@ def _select_mutations_most_common_first(non_trivial_words: List[Word],
     return mutations_list
 
 
-MUTATION_SELECTION_STRATEGIES: Dict[str, Callable[[List[Word], int, int, int], List[List[Tuple[Word, str]]]]] = {
+MUTATION_SELECTION_STRATEGIES = {
     "random": _select_mutations_random,
     "most_common_first": _select_mutations_most_common_first,
 }
 
 
 def _get_selection_strategy_func(selection_strategy: str)\
-        -> Callable[[List[Word], int, int, int], List[List[Tuple[Word, str]]]]:
+        -> Callable[[List[Word], int, int, Random], List[List[Tuple[Word, str]]]]:
     """
     TODO comments
     """
@@ -101,6 +102,9 @@ def mutate_by_replacement(input_sentence: str,
     """
     TODO comments
     """
+    # Set thread safe seed for reproducibility
+    rng = random_pkg.Random()
+    rng.seed(a=random_seed)
 
     tokens = word_tokenize(input_sentence)
     tokens_with_pos_tags = nltk.pos_tag(tokens)
@@ -112,7 +116,7 @@ def mutate_by_replacement(input_sentence: str,
     mutations_list = selection_strategy_func(list(non_trivial_words.keys()),
                                              num_replacements,
                                              num_variants,
-                                             random_seed)
+                                             rng)
 
     mutated_sentences = []
     for mutations in mutations_list:
