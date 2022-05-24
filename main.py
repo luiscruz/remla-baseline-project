@@ -23,7 +23,6 @@ def main():
 	words_counts, tags_counts = corpus_counts.get_corpus_counts(X_train, y_train)
 	print(sorted(words_counts, key=words_counts.get, reverse=True)[:3])
 
-	print(bag_of_words.test_my_bag_of_words())
 	X_train_mybag, X_val_mybag = bag_of_words.initialize(words_counts, X_train, X_val, X_test)
 
 	X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tf_idf.tfidf_features(X_train, X_val, X_test)
