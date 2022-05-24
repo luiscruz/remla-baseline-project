@@ -37,6 +37,9 @@
         - name: Login to registry
           run: echo "${{ secrets.GITHUB_TOKEN }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
  
+    build:
+      runs-on: ubuntu-latest
+      steps:
         - name: Create environment
           run: pyenv local 3.8.6 && python -mvenv .venv386
 
