@@ -26,7 +26,6 @@
           run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/
 
         - name: 9-remla-multilabel
-          run: echo $VERSION
-
-        - name: 9-remla-multilabel
-        - run: echo ${{ env.version }}
+          run: |
+           echo $VERSION
+           echo ${{ env.version }}
