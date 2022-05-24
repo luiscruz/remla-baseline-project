@@ -21,9 +21,6 @@ def initialize(words_counts, X_train, X_val, X_test):
     print('X_val shape ', X_val_mybag.shape)
     print('X_test shape ', X_test_mybag.shape)
 
-    row = X_train_mybag[10].toarray()[0]
-    non_zero_elements_count = (row > 0).sum()
-
     return X_train_mybag, X_val_mybag
 
 
