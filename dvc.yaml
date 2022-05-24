@@ -1,39 +1,39 @@
 stages:
     preprocess:
-        cmd: python src/1_preprocessing.py
+        cmd: python src/p1_preprocessing.py
         deps:
-            - src/1_preprocessing.py
+            - src/p1_preprocessing.py
         outs:
             - output/preprocessed_data.joblib
     processText:
-        cmd: python src/2_text_processors.py
+        cmd: python src/p2_text_processors.py
         deps:
-            - src/2_text_processors.py
+            - src/p2_text_processors.py
             - output/preprocessed_data.joblib
         outs:
             - output/text_processor_data.joblib
             - output/words_dictionaries.joblib
     train:
-        cmd: python src/3_train.py
+        cmd: python src/p3_train.py
         deps:
-            - src/3_train.py
+            - src/p3_train.py
             - output/text_processor_data.joblib
         outs:
             - output/multi_label_binarizer.joblib
             - output/classifiers.joblib
             - output/val_data.joblib
     predict:
-        cmd: python src/4_predict.py
+        cmd: python src/p4_predict.py
         deps:
-            - src/4_predict.py
+            - src/p4_predict.py
             - output/text_processor_data.joblib
             - output/classifiers.joblib
         outs:
             - output/predictions.joblib
     evaluation:
-        cmd: python src/5_evaluation.py
+        cmd: python src/p5_evaluation.py
         deps:
-            - src/5_evaluation.py
+            - src/p5_evaluation.py
             - output/predictions.joblib
             - output/val_data.joblib
 
@@ -43,9 +43,9 @@ stages:
             - results/metrics-tfidf.json:
                   cache: false
     analyze:
-        cmd: python src/6_analyze_features.py
+        cmd: python src/p6_analyze_features.py
         deps:
-            - src/6_analyze_features.py
+            - src/p6_analyze_features.py
             - output/multi_label_binarizer.joblib
             - output/words_dictionaries.joblib
             - output/classifiers.joblib

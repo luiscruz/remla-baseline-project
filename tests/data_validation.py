@@ -22,6 +22,7 @@ def read_info_anomaly(anomaly):
 def detect_anomalies():
     train_df = pd.read_csv(f'../data/train.tsv', sep="\t")
     val_df = pd.read_csv(f'../data/validation.tsv', sep="\t")
+    test_df = pd.read_csv(f'../data/validation.tsv', sep="\t")
 
     train_stats = tfdv.generate_statistics_from_dataframe(train_df)
     val_stats = tfdv.generate_statistics_from_dataframe(val_df)
@@ -40,5 +41,6 @@ def detect_anomalies():
     if not valid_data:
         # What do we do with this?
         data_anomalies = json.dumps(anomalies_detected, indent=4)
+        print(data_anomalies)
 
     return valid_data

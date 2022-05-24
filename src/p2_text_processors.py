@@ -42,26 +42,13 @@ def bag_of_words(text, words_to_index, dict_size):
     return result_vector
 
 
-def main():
-    preprocessed_data = load('output/preprocessed_data.joblib')
+def get_processors(preprocessed_data):
 
     X_train = preprocessed_data["X_train"]
     X_val = preprocessed_data["X_val"]
     X_test = preprocessed_data["X_test"]
     y_train = preprocessed_data["y_train"]
     y_val = preprocessed_data["y_val"]
-
-    nPhrases = 500
-
-    x = randint(0, len(X_train)-nPhrases)
-    test_phrases = {}
-    test_phrases["train"] = (X_train[x:x+nPhrases])
-    x = randint(0, len(X_test)-nPhrases)
-    test_phrases["test"] = X_test[x:x+nPhrases]
-    x = randint(0, len(X_val)-nPhrases)
-    test_phrases["val"] = X_val[x:x+nPhrases]
-    print(json.dumps(test_phrases, indent=4))
-    exit()
 
     # Dictionary of all tags from train corpus with their counts.
     tags_counts = {}
@@ -105,6 +92,14 @@ def main():
                         "X_test": X_test_tfidf, "tfidf_vocab": tfidf_vocab}
 
     output_data = {"tfidf": output_data_tdif, "bag": output_data_bag}
+
+    return output_data, ALL_WORDS, INDEX_TO_WORDS
+
+
+def main():
+    preprocessed_data = load('output/preprocessed_data.joblib')
+
+    output_data, ALL_WORDS, INDEX_TO_WORDS = get_processors(preprocessed_data)
 
     dump(output_data, 'output/text_processor_data.joblib')
 
