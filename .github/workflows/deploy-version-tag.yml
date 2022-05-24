@@ -22,12 +22,10 @@ jobs:
           echo "version_patch=$PATCH" >> $GITHUB_ENV
 
       - name: Check if VERSION.txt is equal to version tag
+        if: $(cat VERSION.txt) != "${{ env.version }}"
         run: |
-        if [ $(cat VERSION.txt) != "${{ env.version }}" ];
-        then
-            echo "Update VERSION.txt to be equal to release version tag"
-            exit 1
-        fi
+          echo "Update VERSION.txt to be equal to release version tag"
+          exit 1
 
       # - name: Registry Login (ghcr.io)
       #   run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
