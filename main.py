@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy as np
+
 from src.model import preprocessing, corpus_counts, bag_of_words, tf_idf, mlb, evaluation
 
 def main():

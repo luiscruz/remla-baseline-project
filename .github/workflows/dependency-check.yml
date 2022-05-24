@@ -1,0 +1,35 @@
+name: Check dependencies using safety
+
+on:
+  push:
+    paths:
+      - requirements.txt
+      - .github/workflows/dependency-check.yml
+    branches: [ main ]
+  pull_request:
+    paths:
+      - requirements.txt
+      - .github/workflows/dependency-check.yml
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+    name: Safety
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9.12
+
+    - name: Install Dependencies
+      run: |
+        pip install safety
+        
+    - name: Check dependencies using safety
+      run: |
+        safety .

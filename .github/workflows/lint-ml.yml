@@ -1,0 +1,39 @@
+name: Lint using mllint
+
+on:
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+
+env:
+  RESULTS_FILE: results.md
+
+jobs:
+  lint-ml:
+    runs-on: ubuntu-latest
+    name: Lint
+    permissions:
+      pull-requests: write
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9.12
+
+    - name: Install Dependencies
+      run: |
+        pip install mllint[tools]
+        
+    - name: Lint using mllint
+      run: |
+        mllint . -o ${{ env.RESULTS_FILE }}
+
+    - name: Comment results to PR
+      uses: NejcZdovc/comment-pr@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        file: ../../${{ env.RESULTS_FILE }}

@@ -41,6 +41,18 @@ Results evaluated using several classification metrics:
 
 Note: this sample project was originally created by @partoftheorigin
 
+## Project setup
+
+Create a virtual environment and install both the `requirements.txt` and the `requirements_dev.txt`.
+
+## Linting
+
+Find the commands per tool below:
+
+- `mllint`: `mllint .`
+- `flake8`: `flake8 .`
+- `pylint`: `pylint .`
+- `mypy`: `mypy .`
 
 [*Release Engineering for Machine Learning Applications* (REMLA)]: https://se.ewi.tudelft.nl/remla/ 
 [Prof. Luís Cruz]: https://luiscruz.github.io/
