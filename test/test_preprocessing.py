@@ -9,5 +9,3 @@ def test_read_file():
     assert train.empty is False
     assert validation.empty is False
     assert test.empty is False
-
-
