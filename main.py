@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from src.model import preprocessing, tag_count, bag_of_words, tf_idf, mlb, evaluation
+from src.model import preprocessing, corpus_counts, bag_of_words, tf_idf, mlb, evaluation
 
 def main():
 
@@ -20,7 +20,7 @@ def main():
 	X_test = [preprocessing.text_prepare(x) for x in X_test]
 
 	# Dictionary of all words from train corpus with their counts.
-	words_counts, tags_counts = tag_count.get_tag_count(X_train, y_train)
+	words_counts, tags_counts = corpus_counts.get_corpus_counts(X_train, y_train)
 	print(sorted(words_counts, key=words_counts.get, reverse=True)[:3])
 
 	print(bag_of_words.test_my_bag_of_words())

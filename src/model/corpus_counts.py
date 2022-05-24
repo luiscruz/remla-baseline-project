@@ -1,4 +1,4 @@
-def get_tag_count(X_train, y_train):
+def get_corpus_counts(X_train, y_train):
 
     # Dictionary of all tags from train corpus with their counts.
     tags_counts = {}
@@ -18,10 +18,5 @@ def get_tag_count(X_train, y_train):
                 tags_counts[tag] += 1
             else:
                 tags_counts[tag] = 1
-            
-    # print(tags_counts)
-    # print(words_counts)
-    # most_common_tags = sorted(tags_counts.items(), key=lambda x: x[1], reverse=True)[:3]
-    # most_common_words = sorted(words_counts.items(), key=lambda x: x[1], reverse=True)[:3]
 
     return words_counts, tags_counts
