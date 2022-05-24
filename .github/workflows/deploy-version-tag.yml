@@ -22,7 +22,7 @@ jobs:
           echo "version_patch=$PATCH" >> $GITHUB_ENV
 
       - name: Check if VERSION.txt is equal to version tag
-        if: $(cat VERSION.txt) == "${{ env.version }}"
+        if: $(cat VERSION.txt) != "${{ env.version }}"
         run: |
           echo "Update VERSION.txt to be equal to release version tag"
           exit 1
