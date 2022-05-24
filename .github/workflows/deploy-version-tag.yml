@@ -1,0 +1,40 @@
+name: Deploy - Version tag
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Parse version info from tag
+        run: |
+          VERSION=${GITHUB_REF:11}
+          MAJOR=`echo "$VERSION" | cut -d . -f 1`
+          MINOR=`echo "$VERSION" | cut -d . -f 2`
+          PATCH=`echo "$VERSION" | cut -d . -f 3`
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version_major=$MAJOR" >> $GITHUB_ENV
+          echo "version_minor=$MINOR" >> $GITHUB_ENV
+          echo "version_patch=$PATCH" >> $GITHUB_ENV
+
+      - name: Update VERSION.txt to release version
+        run: |
+          echo "${{ env.version }}" > ../../VERSION.txt
+
+      # - name: Registry Login (ghcr.io)
+      #   run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # - name: Build and Push Docker Image (Pipeline)
+      #   run: |
+      #     IMG=ghcr.io/${{ github.repository }}
+      #     docker build -f server/Dockerfile \
+      #       --tag $IMG:${{ env.version }} \
+      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+      #       --tag $IMG:${{ env.version_major }}.latest \
+      #       --tag $IMG:latest \
+      #       .
+      #     docker push --all-tags $IMG
