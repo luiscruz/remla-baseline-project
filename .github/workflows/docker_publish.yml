@@ -4,14 +4,11 @@
     init:
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v2
-        - name: Install python version
-          # use the pyenv-action version 7
-          uses: gabrielfalcao/pyenv-action@v7
-
+        - uses: actions/checkout@v3
+        - name: Setup python
+          uses: actions/setup-python@v3
           with:
-            default: 3.8.6 # pick 3.8.6 verion
-            command: pip install -U pip  # upgrade pip after installing python
+            python-version: 3.8.6 # pick 3.8.6 verion
 
         - name: create environment
           run: pyenv local 3.8.6 && python -mvenv .venv386
