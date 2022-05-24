@@ -12,7 +12,9 @@
             python-version: 3.8.6 # pick 3.8.6 verion
 
         - name: Install dependencies
-          run: pip install -r requirements.txt --upgrade pip
+          run: |
+            pip install -r requirements.txt --upgrade pip
+            python -m nltk.downloader -d /usr/share/nltk_data all
 
         - name: debug pyenv
           run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
