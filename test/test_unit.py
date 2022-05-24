@@ -21,5 +21,3 @@ def test_my_bag_of_words():
         if (my_bag_of_words(ex, words_to_index, 4) != ans).any():
             return "Wrong answer for the case: '%s'" % ex
     return 'Basic tests are passed.'
-
-
