@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    permissions:
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -27,7 +29,8 @@ jobs:
 
       - name: Build and push
         run: |
-          IMG=ghcr.io/${{ github.repository }}
+          REPO_LCASE=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+          IMG=ghcr.io/$REPO_LCASE
           docker build \
             -t ${IMG}:latest \
             -t ${IMG}:${{ env.version_major }}-latest \
