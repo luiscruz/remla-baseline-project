@@ -17,8 +17,10 @@ STOPWORDS = set(stopwords.words('english'))
 
 
 def read_data(filename):
-    data = pd.read_csv(filename, sep='\t')
+    data = pd.read_csv(filename, sep='\t', dtype={"title": object, "tags": object})[["title", "tags"]]
+
     data['tags'] = data['tags'].apply(literal_eval)
+
     return data
 
 
@@ -40,7 +42,7 @@ def get_preprocessed_data(path_data="data/"):
     # Read the data to be used in the project
     train = read_data(f'{path_data}train.tsv')
     validation = read_data(f'{path_data}validation.tsv')
-    test = pd.read_csv(f'{path_data}test.tsv', sep='\t')
+    test = pd.read_csv(f'{path_data}test.tsv', sep='\t', dtype={"title": object})[["title"]]
 
     # Separate trainning and validation
     X_train, y_train = train['title'].values, train['tags'].values

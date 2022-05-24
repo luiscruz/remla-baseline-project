@@ -2,8 +2,9 @@ from joblib import dump, load
 import numpy as np
 from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
-from random import randint
-import json
+
+
+np.random.seed(1567)
 
 
 def tfidf_features(X_train, X_val, X_test):
