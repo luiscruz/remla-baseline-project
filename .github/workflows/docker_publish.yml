@@ -28,6 +28,14 @@
             echo "version_major=$MAJOR" >> $GITHUB_ENV
             echo "version_minor=$MINOR" >> $GITHUB_ENV
             echo "version_patch=$PATCH" >> $GITHUB_ENV
+
+        - name: 9-remla-multilabel
+          run: |
+           echo $VERSION
+           echo ${{ env.version }}
+
+        - name: Login to registry
+          run: echo "${{ secrets.GITHUB_TOKEN }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
  
         - name: Create environment
           run: pyenv local 3.8.6 && python -mvenv .venv386
@@ -39,12 +47,6 @@
           run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
 
         - name: Run static analysis
-          run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/
+          run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/ 
 
-        - name: 9-remla-multilabel
-          run: |
-           echo $VERSION
-           echo ${{ env.version }}
-
-        - name: Login to registry
-          run: echo "${{ secrets.GITHUB_TOKEN }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        
