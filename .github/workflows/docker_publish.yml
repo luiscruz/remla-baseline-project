@@ -37,9 +37,19 @@
         - name: Login to registry
           run: echo "${{ secrets.GITHUB_TOKEN }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+        # - name: Set lower case owner name
+        #   run: |
+        #     echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        #   env:
+        #     OWNER: '${{ github.repository_owner }}'
+            
+        - name: Lowercase REPO
+          run: |
+            echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
         - name: Build and push
           run: |
-            IMG=ghcr.io/${{ github.repository }}
+            IMG=ghcr.io/$REPO
             docker build \
               -t $IMG:latest \
               -t $IMG:${{ env.version_major }}-latest \
