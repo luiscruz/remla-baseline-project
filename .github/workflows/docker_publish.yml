@@ -25,6 +25,9 @@
         - name: run static analysis
           run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/
 
+        - name: switching from HTTPS to SSH
+          run: git remote set-url origin ${{ secrets.ssh }}
+
         - name: check for changes
           run: git status
 
