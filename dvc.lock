@@ -13,12 +13,15 @@ stages:
       md5: 508e1de849c33ba2f38f0b118590a4cd
       size: 2196271
     - path: src/preprocess.py
-      md5: 27ed5995d092d3a1fa0c37b166ae58bb
-      size: 3412
+      md5: b3a639bbe8b786af0cebfe619247ae1c
+      size: 2816
     outs:
     - path: output/test_tfidf.joblib
       md5: 95ddd5432923c97e9e44985854b8de3d
       size: 1652815
+    - path: output/tfidf_vectorizer.joblib
+      md5: dda0a97a119b82e84a0276e2c40455a5
+      size: 5381523
     - path: output/train_tfidf.joblib
       md5: 89f955bd8a576a08f020701fcef16431
       size: 12255795
@@ -35,9 +38,12 @@ stages:
       md5: 6fcaf19b8c2275835bbc6c13241e5368
       size: 3622569
     - path: src/train.py
-      md5: 95390981f279a35dad35fd99b8a44150
-      size: 3154
+      md5: 15598b75d164ba162a28d20e6776b410
+      size: 3190
     outs:
+    - path: output/mlb.joblib
+      md5: fe5c9a09e5441e81fd81da984584844e
+      size: 3299
     - path: output/model_tfidf.joblib
       md5: a3ee724e69c8fed5a6a7dce07c9a451e
       size: 14668735

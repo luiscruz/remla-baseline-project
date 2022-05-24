@@ -11,3 +11,4 @@ pydocstyle~=6.1
 mllint~=0.12
 dvc~=2.10
 dvc[gdrive]
+flask~=2.1

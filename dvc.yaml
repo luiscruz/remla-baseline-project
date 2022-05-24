@@ -10,6 +10,7 @@ stages:
     - output/test_tfidf.joblib
     - output/train_tfidf.joblib
     - output/validation_tfidf.joblib
+    - output/tfidf_vectorizer.joblib
   train:
     cmd: python src/train.py
     deps:
@@ -19,3 +20,4 @@ stages:
     outs:
     - output/model_tfidf.joblib
     - output/stats.txt
+    - output/mlb.joblib

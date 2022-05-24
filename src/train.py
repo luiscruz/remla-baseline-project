@@ -74,6 +74,7 @@ def main():
     write_evaluation_scores("stats.txt", y_val, y_val_predicted_labels_tfidf, y_val_predicted_scores_tfidf)
 
     dump(classifier_tfidf, 'output/model_tfidf.joblib')
+    dump(mlb, 'output/mlb.joblib')
 
 
 if __name__ == "__main__":

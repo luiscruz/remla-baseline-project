@@ -47,28 +47,6 @@ def text_prepare(text):
     return text
 
 
-def tfidf_features(X_train, X_val, X_test):
-    """
-    TF-IDF vectorizer with fixed choices of parameters is used to fit the training data, and to transform the training, validation and test data.
-
-    :param X_train: training set.
-    :param X_val: validation set.
-    :param X_test: test set.
-    :return: transformed train, test and validation set.
-    """
-    # Create TF-IDF vectorizer with a proper parameters choice
-    # Fit the vectorizer on the train set
-    # Transform the train, test, and val sets and return the result
-
-    tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r'(\S+)')  # nosec B106
-
-    X_train = tfidf_vectorizer.fit_transform(X_train)
-    X_val = tfidf_vectorizer.transform(X_val)
-    X_test = tfidf_vectorizer.transform(X_test)
-
-    return X_train, X_val, X_test
-
-
 def main():
     """Is the main function."""
     train = read_data('data/train.tsv')
@@ -84,11 +62,16 @@ def main():
     X_val = [text_prepare(x) for x in X_val]
     X_test = [text_prepare(x) for x in X_test]
 
-    X_train_tfidf, X_val_tfidf, X_test_tfidf = tfidf_features(X_train, X_val, X_test)
+    tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r'(\S+)')  # nosec B106
+
+    X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
+    X_val_tfidf = tfidf_vectorizer.transform(X_val)
+    X_test_tfidf = tfidf_vectorizer.transform(X_test)
 
     dump((X_train_tfidf, y_train), 'output/train_tfidf.joblib')
     dump((X_val_tfidf, y_val), 'output/validation_tfidf.joblib')
     dump(X_test_tfidf, 'output/test_tfidf.joblib')
+    dump(tfidf_vectorizer, 'output/tfidf_vectorizer.joblib')
 
 
 if __name__ == "__main__":
