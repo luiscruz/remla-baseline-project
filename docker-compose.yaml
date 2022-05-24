@@ -1,0 +1,6 @@
+services:
+	NAME:
+	image: test
+	ports:
+		- 8080:80
+	volumes:
