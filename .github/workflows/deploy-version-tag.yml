@@ -25,6 +25,8 @@ jobs:
         if: $(cat VERSION.txt) != "${{ env.version }}"
         run: |
           echo "Update VERSION.txt to be equal to release version tag"
+          echo "Release tag version: ${{ env.version }}"
+          echo "VERSION.txt version: $(cat VERSION.txt)"
           exit 1
 
       # - name: Registry Login (ghcr.io)
