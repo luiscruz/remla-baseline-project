@@ -36,6 +36,17 @@
 
         - name: Login to registry
           run: echo "${{ secrets.GITHUB_TOKEN }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+        - name: Build and push
+          run: |
+            IMG=ghcr.io/${{ github.repository }}
+            docker build \
+              -t $IMG:latest \
+              -t $IMG:${{ env.version_major }}-latest \
+              -t $IMG:${{ env.version_major }}.${{ env.version_minor }}-latest \
+              -t $IMG:${{ env.version }} \
+              .
+            docker push --all-tags $IMG
  
     build:
       runs-on: ubuntu-latest
