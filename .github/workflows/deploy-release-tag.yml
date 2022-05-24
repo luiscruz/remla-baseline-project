@@ -35,12 +35,15 @@ jobs:
       - name: Update VERSION.txt to release version
         run: |
           echo "${{ env.version }}" > ../../VERSION.txt
+          git status
 
       - name: Commit and tag the release version
         run: |
           git add .
           git commit -m "Release of version ${{ env.version }}"
           git push origin HEAD:semantic-versioning
+          echo "${{ github.ref }}"
+          echo ${GITHUB_REF}
           git tag "v${{ env.version }}"
           git push origin "v${{ env.version }}"
 
