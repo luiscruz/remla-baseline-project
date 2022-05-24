@@ -34,8 +34,10 @@ jobs:
 
       - name: Update VERSION.txt to release version
         run: |
-          echo "${{ env.version }}" > ../../VERSION.txt
-          git status
+          echo "${{ env.version }}" > VERSION.txt
+          # echo "Check if this works" > VERSION.txt
+          # cat VERSION.txt
+          # git status
 
       - name: Commit and tag the release version
         run: |
@@ -47,24 +49,26 @@ jobs:
           git tag "v${{ env.version }}"
           git push origin "v${{ env.version }}"
 
-      - name: Build Docker image and push to ghcr.io
-        run: |
-          echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          IMG=ghcr.io/${{ github.repository }}
-          docker build \
-            --tag $IMG:${{ env.version }} \
-            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-            --tag $IMG:${{ env.version_major }}.latest \
-            --tag $IMG:latest \
-            .
-          docker push --all-tags $IMG
+      # - name: Build Docker image and push to ghcr.io
+      #   run: |
+      #     echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      #     IMG=ghcr.io/${{ github.repository }}
+      #     docker build \
+      #       --tag $IMG:${{ env.version }} \
+      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+      #       --tag $IMG:${{ env.version_major }}.latest \
+      #       --tag $IMG:latest \
+      #       .
+      #     docker push --all-tags $IMG
           
       - name: Update VERSION.txt to next snapshot release
         run: |
-          echo "${{ env.version_next }}" > ../../VERSION.txt
+          echo "${{ env.version_next }}" > VERSION.txt
+          cat VERSION.txt
+          git status
 
-      - name: Commit the next snapshot release
-        run: |
-          git add .
-          git commit -m "Bump version to ${{ env.version_next }}"
-          git push origin HEAD:semantic-versioning
+      # - name: Commit the next snapshot release
+      #   run: |
+      #     git add .
+      #     git commit -m "Bump version to ${{ env.version_next }}"
+      #     git push origin HEAD:semantic-versioning
