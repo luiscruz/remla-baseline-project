@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
-
-from src import preprocessing, tag_count, bag_of_words, tf_idf, mlb, evaluation
+from src.model import preprocessing, tag_count, bag_of_words, tf_idf, mlb, evaluation
 
 def main():
 

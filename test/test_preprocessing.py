@@ -1,5 +1,5 @@
 import pandas as pd
-from src import preprocessing
+from src.model import preprocessing
 
 def test_read_file():
     train = preprocessing.read_data('./data/train.tsv')
