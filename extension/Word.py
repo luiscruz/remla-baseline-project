@@ -108,8 +108,8 @@ class Word:
         functions ``nltk.pos_tag(tokens)``.
 
                 Parameters:
-                        tuple (Tuple[str, str]): A tuple with as the first argument the text token,
-                                                 and as its second argument, the tokens POS tag.
+                        ``tuple`` (``Tuple[str, str]``): A tuple with as the first argument the text
+                        token, and as its second argument, the tokens POS tag.
 
                 Returns:
                         an instance of ``Word``

@@ -11,9 +11,29 @@ def _select_mutations_random(non_trivial_words: List[Word],
                              num_variants: int,
                              rng: Random) -> List[List[Tuple[Word, str]]]:
     """
-    TODO comments
-    """
+    Selects mutations at random. Ensures that each output sentence is unique, although mutations
+    at the nontrivial word level might be reused across output sentences. For each output sentence,
+    words are selected randomly, without replacement, to be mutated. Then, for the selected words,
+    a variant (synonym/hypernym) is chosen at random (uniform dist.) from the available variants of
+    that word.
 
+            Parameters:
+                ``nontrivial_words`` (``List[Word]``): a list of all nontrivial words (words that
+                can be replaced by a variant (synonym/hypernym)
+
+                ``num_replacements`` (``int``): the number of words that should be replaced per
+                output sentence
+
+                ``num_variants`` (``int``): the number of output sentences
+
+                ``rng`` (``Random``): the random generator instance used to make random choices
+
+            Returns:
+                A list of mutations to be made for each output sentence. For each output sentence,
+                the function returns a list of tuples representing the mutation. The first element
+                of the tuple is the nontrivial word that is to be replaced. The second element of
+                the tuple is the variant that was chosen for the word as a replacement.
+    """
     assert num_replacements <= len(non_trivial_words), "not enough nontrivial words to replace"
 
     choices = set()
@@ -32,17 +52,38 @@ def _select_mutations_random(non_trivial_words: List[Word],
     return mutations_list
 
 
-def _select_mutations_most_common_first(non_trivial_words: List[Word],
+def _select_mutations_most_common_first(nontrivial_words: List[Word],
                                         num_replacements: int,
                                         num_variants: int,
                                         rng: Random) -> List[List[Tuple[Word, str]]]:
     """
-    TODO comments
+    Selects mutations based on how many times a variant for a nontrivial word was suggested by
+    WordNet. The mutations with the highest counts are chosen first. But for a single word, only one
+    mutation is chosen at a time. So if for a sentence, a mutation is chosen for word X, when more
+    mutations still need to be chosen, the mutation with the highest count for word Y is chosen,
+    where X =/= Y. If variants with equal counts are considered, a uniformly random choice is made.
+
+            Parameters:
+                ``nontrivial_words`` (``List[Word]``): a list of all nontrivial words (words that
+                can be replaced by a variant (synonym/hypernym)
+
+                ``num_replacements`` (``int``): the number of words that should be replaced per
+                output sentence
+
+                ``num_variants`` (``int``): the number of output sentences
+
+                ``rng`` (``Random``): the random generator instance used to make random choices
+
+            Returns:
+                A list of mutations to be made for each output sentence. For each output sentence,
+                the function returns a list of tuples representing the mutation. The first element
+                of the tuple is the nontrivial word that is to be replaced. The second element of
+                the tuple is the variant that was chosen for the word as a replacement.
     """
 
     # Some preparations: group mutations by the number of times it is suggested by WordNet
     grouped_by_counts = dict()
-    for word in non_trivial_words:
+    for word in nontrivial_words:
         for variant, count in word.variants.items():
             if count not in grouped_by_counts.keys():
                 grouped_by_counts[count] = {(word, variant)}
@@ -52,10 +93,7 @@ def _select_mutations_most_common_first(non_trivial_words: List[Word],
     groups = list(grouped_by_counts.keys())
     groups.sort(reverse=True)
 
-    # Choose the mutations. The mutations with the highest counts are chosen first. But for a single
-    # word, only one mutation is chosen at a time. So if for a sentence, a mutation is chosen for
-    # word X, if more mutations still need to be chosen, the mutation with the highest count for
-    # word Y is chosen, where X =/= Y.
+    # Choose the mutations.
     mutations_list = []
     for _ in range(num_variants):
         mutations = []
@@ -85,7 +123,7 @@ MUTATION_SELECTION_STRATEGIES = {
 def _get_selection_strategy_func(selection_strategy: str)\
         -> Callable[[List[Word], int, int, Random], List[List[Tuple[Word, str]]]]:
     """
-    TODO comments
+    A basic dictionary lookup to select either of the two mutation selection strategies.
     """
 
     assert selection_strategy in MUTATION_SELECTION_STRATEGIES\
@@ -100,7 +138,34 @@ def mutate_by_replacement(input_sentence: str,
                           selection_strategy: str = "random",
                           random_seed: int = 13) -> List[str]:
     """
-    TODO comments
+    Returns a list of mutated version of the given input sentence. Mutations are based on synonyms
+    and hypernyms of nontrivial words. Nontrivial words are words that are not stopwords (as defined
+    by WordNet and have at least one synonym/hypernym available. The synonyms/hypernyms are based on
+    WordNet Synsets.
+
+    WordNet suggests a lot of variants (synonyms or hypernyms) for each nontrivial word. The same
+    variant can be suggested multiple times in different Synsets. This can be taken as a measure of
+    'variant quality'. There are two strategies available for choosing variants as mutations:
+
+    1) "random": each variant has an equal chance of being chosen, regardless of how many times it
+    was suggested by WordNet.
+    2) "most_common_first": variants that were suggested often are chosen first.
+
+            Parameters:
+                ``input_sentence`` (``str``): the input sentence
+
+                ``num_replacements`` (``int``): the number of words that should be replaced per
+                output sentence
+
+                ``num_variants`` (``int``): the number of output sentences
+
+                ``selection_strategy`` (``str``): the desired selection mutation strategy, which can
+                be either "random" (default) or "most_common_first"
+
+                ``random_seed`` (``int``):
+
+            Returns:
+                A list mutated sentences.
     """
     # Set thread safe seed for reproducibility
     rng = random_pkg.Random()
