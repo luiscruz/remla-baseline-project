@@ -13,7 +13,6 @@ def main():
 	X_test = test['title'].values
 
 	print(train.head())
-	print(preprocessing.test_text_prepare())
 
 	X_train = [preprocessing.text_prepare(x) for x in X_train]
 	X_val = [preprocessing.text_prepare(x) for x in X_val]
