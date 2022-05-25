@@ -1,8 +1,6 @@
 def get_corpus_counts(X_train, y_train):
 
-    # Dictionary of all tags from train corpus with their counts.
     tags_counts = {}
-    # Dictionary of all words from train corpus with their counts.
     words_counts = {}
 
     for sentence in X_train:

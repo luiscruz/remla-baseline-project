@@ -22,12 +22,6 @@ def initialize(words_counts, X_train, X_val, X_test):
 
 
 def my_bag_of_words(text, words_to_index, dict_size):
-    """
-            text: a string
-            dict_size: size of the dictionary
-
-            return a vector which is a bag-of-words representation of 'text'
-    """
     result_vector = np.zeros(dict_size)
 
     for word in text.split():

@@ -24,7 +24,7 @@ def main():
 
 	X_train_mybag, X_val_mybag = bag_of_words.initialize(words_counts, X_train, X_val, X_test)
 
-	X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tf_idf.tfidf_features(X_train, X_val, X_test)
+	X_train_tfidf, X_val_tfidf, _, tfidf_vocab = tf_idf.tfidf_features(X_train, X_val, X_test)
 	tfidf_reversed_vocab = {i:word for word,i in tfidf_vocab.items()}
 
 	mlb_classifier, y_train, y_val = mlb.get_mlb(tags_counts, y_train, y_val)

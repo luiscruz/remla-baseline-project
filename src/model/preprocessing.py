@@ -15,11 +15,6 @@ def read_data(filename):
 	return data
 
 def text_prepare(text):
-	"""
-		text: a string
-		
-		return: modified initial string
-	"""
 	text = text.lower()
 	text = re.sub(REPLACE_BY_SPACE_RE, " ", text)
 	text = re.sub(BAD_SYMBOLS_RE, "", text)

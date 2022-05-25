@@ -10,13 +10,19 @@ def print_evaluation_scores(y_val, predicted):
 
 def print_words_for_tag(classifier, tag, tags_classes, index_to_words):
     """
-        classifier: trained classifier
-        tag: particular tag
-        tags_classes: a list of classes names from MultiLabelBinarizer
-        index_to_words: index_to_words transformation
-        all_words: all words in the dictionary
-        
-        return nothing, just print top 5 positive and top 5 negative words for current tag
+        Print top 5 positive and top 5 negative words for current tag
+        Parameters
+        ---------
+        classifier
+                trained classifier
+        tag
+                a particular tag
+        tags_classes
+                list of classes names from MultiLabelBinarizer
+        index_to_words
+                index_to_words transformation
+        all_words
+                all words in the dictionary
     """
     print('Tag:\t{}'.format(tag))
     

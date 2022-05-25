@@ -1,6 +1,6 @@
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.linear_model import LogisticRegression, RidgeClassifier
+from sklearn.linear_model import LogisticRegression
 
 def get_mlb(tags_counts, y_train, y_val):
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
@@ -12,7 +12,12 @@ def get_mlb(tags_counts, y_train, y_val):
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
     """
-      X_train, y_train — training data
+    Parameters
+    --------
+      X_train
+          training data
+      y_train
+          data labels
 
       return: trained classifier
     """
