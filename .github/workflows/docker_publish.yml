@@ -34,9 +34,6 @@
            echo $VERSION
            echo ${{ env.version }}
 
-        - name: Login to registry
-          run: echo "${{ github.token }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
         # - name: Set lower case owner name
         #   run: |
         #     echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
@@ -47,6 +44,9 @@
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
+
+        - name: Login to registry
+          run: echo "${{ github.token }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
         - name: Lowercase REPO
           run: |
