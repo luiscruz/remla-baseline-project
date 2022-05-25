@@ -25,7 +25,13 @@
         - name: run static analysis
           run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/
 
-        - uses: actions/upload-artifact@v3
+        - name: Archive static analysis report
+          uses: actions/upload-artifact@v3
           with:
             name: generate-reports
-            path: ./report.txt
+            path: output/report.txt
+
+        - name: Download a single artifact
+          uses: actions/download-artifact@v3
+          with:
+            name: generate-reports
