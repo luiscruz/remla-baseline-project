@@ -1,0 +1,24 @@
+rules:
+    disabled: []
+    custom: []
+git:
+    maxFileSize: 10000000
+code-quality:
+    linters:
+        - pylint
+        - mypy
+        - black
+        - isort
+        - bandit
+testing:
+    report: ""
+    targets:
+        minimum: 1
+        ratio:
+            tests: 1
+            other: 4
+    coverage:
+        report: ""
+        targets:
+            line: 80
+

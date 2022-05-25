@@ -8,7 +8,7 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
 PROJECT_NAME = remla
-PYTHON_INTERPRETER = python3
+PYTHON_INTERPRETER = python
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -22,6 +22,7 @@ endif
 
 ## Install Python Dependencies
 requirements: test_environment
+	$(PYTHON_INTERPRETER) -m pip install --upgrade pip
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
@@ -36,7 +37,42 @@ clean:
 
 ## Lint using flake8
 lint:
-	flake8 src
+	$(PYTHON_INTERPRETER) -m black .
+	$(PYTHON_INTERPRETER) -m isort .
+
+check-black:
+	$(PYTHON_INTERPRETER) -m black --check .
+
+check-isort:
+	$(PYTHON_INTERPRETER) -m isort --check .
+
+check-flake8:
+	# stop the build if there are Python syntax errors or undefined names
+	$(PYTHON_INTERPRETER) -m pflake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+  	# exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+	$(PYTHON_INTERPRETER) -m pflake8 src --count --exit-zero --max-complexity=10 --max-line-length=119 --statistics
+
+check-bandit:
+	$(PYTHON_INTERPRETER) -m bandit -rc "pyproject.toml" ./src
+
+check-mllint:
+	$(PYTHON_INTERPRETER) -m mllint --output reports/mllint_report.md
+
+check-mypy:
+	$(PYTHON_INTERPRETER) -m mypy -p src
+
+check-pylint:
+	$(PYTHON_INTERPRETER) -m pylint
+
+check-all:
+	make check-black
+	make check-isort
+	make check-flake8
+	make check-bandit
+	make check-mllint
+
+test:
+	$(PYTHON_INTERPRETER) -m unittest
 
 ## Upload Data to S3
 sync_data_to_s3:

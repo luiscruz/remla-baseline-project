@@ -1,90 +1,24 @@
-import numpy as np
-import pandas as pd
-# from scipy import sparse as sp_sparse
+"""Module used in building features in the ML pipeline."""
+import pickle
+
+import yaml
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
-import yaml
-import pickle 
-# import scipy.sparse as sparse
 
 # Fetch params from yaml params file
-params = yaml.safe_load(open("params.yaml"))
-preprocess_params = params['preprocess']
-featurize_params = params['featurize']
+with open("params.yaml", encoding="utf-8") as f:
+    params = yaml.safe_load(f)
+preprocess_params = params["preprocess"]
+featurize_params = params["featurize"]
 
-INPUT_TRAIN_PATH = preprocess_params['output_train']
-INPUT_VAL_PATH = preprocess_params['output_val']
-INPUT_TEST_PATH = preprocess_params['output_test']
+INPUT_TRAIN_PATH = preprocess_params["output_train"]
+INPUT_VAL_PATH = preprocess_params["output_val"]
+INPUT_TEST_PATH = preprocess_params["output_test"]
 
-OUT_PATH_TRAIN = featurize_params['output_train']
-OUT_PATH_VAL = featurize_params['output_val']
-OUT_PATH_TEST = featurize_params['output_test']
-OUT_MLB_PICKLE = featurize_params['mlb_out']
-
-# For this project we will need to use a list of stop words. It can be downloaded from nltk:
-# import nltk
-
-# nltk.download('stopwords')
-# from nltk.corpus import stopwords
-
-# One of the most known difficulties when working with natural data is that it's unstructured.
-# For example, if you use it "as is" and extract tokens just by splitting the titles by whitespaces,
-# you will see that there are many "weird" tokens like *3.5?*, *"Flip*, etc.
-# To prevent the problems, it's usually useful to prepare the data somehow.
-# REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
-# BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
-# STOPWORDS = set(stopwords.words('english'))
-# DICT_SIZE = 5000
-
-"""
-Task 1 - TextPrepare
-"""
-
-
-# def text_prepare(text):
-#     """
-#     text: a string
-
-#     :return: modified initial string
-#     """
-#     text = text.lower()  # lowercase text
-#     text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
-#     text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
-#     text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
-#     return text
-
-
-# def preprocess_text_prepare(X_train, X_val, X_test):
-#     """
-
-#     :param X_train:
-#     :param X_val:
-#     :param X_test:
-#     :return:
-#     """
-
-#     X_train = [text_prepare(x) for x in X_train]
-#     X_val = [text_prepare(x) for x in X_val]
-#     X_test = [text_prepare(x) for x in X_test]
-#     return X_train, X_val, X_test
-
-
-# def text_prepare_tests():
-#     prepared_questions = []
-#     for line in open('data/text_prepare_tests.tsv', encoding='utf-8'):
-#         line = text_prepare(line.strip())
-#         prepared_questions.append(line)
-#     text_prepare_results = '\n'.join(prepared_questions)
-#     return text_prepare_results
-
-
-"""
-Task 2 - WordsTagsCount
-
-We are assuming that tags_counts and words_counts are dictionaries like {'some_word_or_tag': frequency}. 
-After applying the sorting procedure, results will be look like this: [('most_popular_word_or_tag', frequency), ('less_popular_word_or_tag', frequency), ...]. 
-The grader gets the results in the following format (two comma-separated strings with line break):
-"""
+OUT_PATH_TRAIN = featurize_params["output_train"]
+OUT_PATH_VAL = featurize_params["output_val"]
+OUT_PATH_TEST = featurize_params["output_test"]
+OUT_MLB_PICKLE = featurize_params["mlb_out"]
 
 
 def word_tags_count(X_train, y_train):
@@ -112,66 +46,11 @@ def word_tags_count(X_train, y_train):
             else:
                 tags_counts[tag] = 1
 
-    # print(sorted(words_counts, key=words_counts.get, reverse=True)[:3])
     # We are assuming that tags_counts and words_counts are dictionaries like {'some_word_or_tag': frequency}. After
     # applying the sorting procedure, results will be look like this: [('most_popular_word_or_tag', frequency),
     # ('less_popular_word_or_tag', frequency), ...]
 
     return tags_counts, words_counts
-
-
-"""
-Bag of words
-
-One of the well-known approaches is a bag-of-words representation. To create this transformation, follow the steps:
-    Find N most popular words in train corpus and numerate them. Now we have a dictionary of the most popular words.
-    For each title in the corpora create a zero vector with the dimension equals to N.
-    For each text in the corpora iterate over words which are in the dictionary and increase by 1 the corresponding coordinate.
-
-Let's try to do it for a toy example. Imagine that we have N = 4 and the list of the most popular words is ['hi', 
-'you', 'me', 'are'] 
-
-Then we need to numerate them, for example, like this: {'hi': 0, 'you': 1, 'me': 2, 'are': 3}
-
-And we have the text, which we want to transform to the vector: 'hi how are you'
-
-For this text we create a corresponding zero vector: [0, 0, 0, 0]
-
-And iterate over all words, and if the word is in the dictionary, we increase the value of the corresponding position 
-in the vector: 'hi':  [1, 0, 0, 0] 'how': [1, 0, 0, 0] # word 'how' is not in our dictionary 'are': [1, 0, 0, 
-1] 'you': [1, 1, 0, 1] 
-
-The resulting vector will be: [1, 1, 0, 1]
-"""
-
-
-# def my_bag_of_words(text, words_to_index, dict_size):
-#     """
-#     text: a string
-#     dict_size: size of the dictionary
-        
-#     :return: a vector which is a bag-of-words representation of 'text'
-#     """
-#     result_vector = np.zeros(dict_size)
-
-#     for word in text.split():
-#         if word in words_to_index:
-#             result_vector[words_to_index[word]] += 1
-#     return result_vector
-
-
-"""
-TF-IDF
-
-The second approach extends the bag-of-words framework by taking into account total frequencies of words in the corpora. 
-It helps to penalize too frequent words and provide better features space.
-Implement function tfidf_features using class TfidfVectorizer from scikit-learn. 
-Use train corpus to train a vectorizer. 
-Suggested: filter out too rare words (occur less than in 5 titles) and 
-too frequent words (occur more than in 90% of the titles). 
-Also, use bigrams along with unigrams in your vocabulary.
-"""
-
 
 
 def tfidf_features(X_train, X_val, X_test):
@@ -182,53 +61,74 @@ def tfidf_features(X_train, X_val, X_test):
     # Create TF-IDF vectorizer with a proper parameters choice
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
-
-    tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2),
-                                       token_pattern='(\S+)')
+    tfidf_vectorizer = TfidfVectorizer(  # nosec
+        # pylint: disable = anomalous - backslash - in -string
+        min_df=5,
+        max_df=0.9,
+        ngram_range=(1, 2),
+        token_pattern="(\S+)",  # noqa: W60
+    )
 
     X_train = tfidf_vectorizer.fit_transform(X_train)
     X_val = tfidf_vectorizer.transform(X_val)
     X_test = tfidf_vectorizer.transform(X_test)
 
-    return X_train, X_val, X_test
+    return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
+
 
 def mlb_y_data(y_train, y_val, tags_counts):
+    """Perform MultiLabelBinarization on the counts of all tags
+    :param y_train: training tags
+    :param y_val: validation tags
+    :param Dict[str->int] tags_counts:  where keys are tags and values are how often they occur in the trainset
+    """
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
     y_train = mlb.fit_transform(y_train)
     y_val = mlb.fit_transform(y_val)
     return y_train, y_val, mlb
 
-def pickle_mlb(mlb_obj):
-    with open(OUT_MLB_PICKLE, 'wb') as fd:
+
+def _pickle_mlb(mlb_obj):
+    with open(OUT_MLB_PICKLE, "wb") as fd:
         pickle.dump(mlb_obj, fd, protocol=pickle.HIGHEST_PROTOCOL)
 
-def pickle_sparse_matrix(csr_matrix, label_csr, output_path):
+
+def _pickle_sparse_matrix(csr_matrix, label_csr, output_path):
     with open(output_path, "wb") as fd:
         pickle.dump((csr_matrix, label_csr), fd)
 
-def pickle_sparse_test_matrix(csr_matrix, output_path):
+
+def _pickle_sparse_test_matrix(csr_matrix, output_path):
     with open(output_path, "wb") as fd:
         pickle.dump(csr_matrix, fd)
 
-def load_pickled_data(input_path):
-    with open(input_path, 'rb') as fd:
+
+def _load_pickled_data(input_path):
+    with open(input_path, "rb") as fd:
         return pickle.load(fd)
 
+
 def main():
-    X_train, y_train = load_pickled_data(INPUT_TRAIN_PATH)
-    X_val, y_val = load_pickled_data(INPUT_VAL_PATH)
-    X_test = load_pickled_data(INPUT_TEST_PATH)
-    
+    """
+    Controller for building the features.
+    First loads all input data, performs Multi Label Binarization.
+    Creates the features and pickles these.
+    """
+    X_train, y_train = _load_pickled_data(INPUT_TRAIN_PATH)
+    X_val, y_val = _load_pickled_data(INPUT_VAL_PATH)
+    X_test = _load_pickled_data(INPUT_TEST_PATH)
+
     tags_counts, _ = word_tags_count(X_train=X_train, y_train=y_train)
     y_train, y_val, mlb = mlb_y_data(y_train, y_val, tags_counts)
 
-    X_train_csr, X_val_csr, X_test_csr = tfidf_features(X_train, X_val, X_test)
+    X_train_csr, X_val_csr, X_test_csr, _ = tfidf_features(X_train, X_val, X_test)
 
-    pickle_sparse_matrix(X_train_csr, y_train, OUT_PATH_TRAIN)
-    pickle_sparse_matrix(X_val_csr, y_val, OUT_PATH_VAL)
-    pickle_sparse_test_matrix(X_test_csr, OUT_PATH_TEST)
+    _pickle_sparse_matrix(X_train_csr, y_train, OUT_PATH_TRAIN)
+    _pickle_sparse_matrix(X_val_csr, y_val, OUT_PATH_VAL)
+    _pickle_sparse_test_matrix(X_test_csr, OUT_PATH_TEST)
 
-    pickle_mlb(mlb)
+    _pickle_mlb(mlb)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

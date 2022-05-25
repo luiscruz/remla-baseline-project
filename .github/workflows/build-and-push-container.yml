@@ -1,0 +1,47 @@
+name: Build workflow
+on:
+  workflow_run:
+    workflows:
+      - Test workflow
+    types:
+      - completed
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+permissions:
+  packages: write
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} & startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-20.04
+    steps:
+      - name: tmp
+        run: echo "Building and pushing Docker containers not configured yet"
+#      - uses: actions/checkout@v3
+#
+#      - name: Parse version info from tag
+#        run: |
+#          # GITHUB_REF is like refs/tags/v2.3.5, so strip the first 11 chars
+#          VERSION='0.0.1-test'
+#          MAJOR=`echo "$VERSION" | cut -d . -f 1`
+#          MINOR=`echo "$VERSION" | cut -d . -f 2`
+#          PATCH=`echo "$VERSION" | cut -d . -f 3`
+#          echo "version=$VERSION" >> $GITHUB_ENV
+#          echo "version_major=$MAJOR" >> $GITHUB_ENV
+#          echo "version_minor=$MINOR" >> $GITHUB_ENV
+#          echo "version_patch=$PATCH" >> $GITHUB_ENV
+#          echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+#      - name: Login to registry
+#        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+#
+#      - name: Build and push
+#        run: |
+#          IMG=ghcr.io/${REPO}
+#          docker build \
+#            -t ${IMG}:latest \
+#            -t ${IMG}:${{ env.version_major }}-latest \
+#            -t ${IMG}:${{ env.version_major }}.${{ env.version_minor }}-latest \
+#            -t ${IMG}:${{ env.version }} \
+#            .
+#          docker push --all-tags $IMG

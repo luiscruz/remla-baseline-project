@@ -1,5 +1,7 @@
 # local package
 -e .
+bandit
+black
 
 # terminal dependencies
 dvc[gdrive]
@@ -8,11 +10,24 @@ dvc[gdrive]
 click
 Sphinx
 coverage
-awscli
-flake8
-python-dotenv>=0.5.1
-nltk
-pandas
+pyproject-flake8
+isort
+mllint==0.12.1
+mypy
+nltk~=3.7
 numpy
-sklearn
+pandas~=1.4.2
+pylint
+python-dotenv>=0.5.1
+sklearn~=0.0
 scipy
+
+Sphinx
+toml
+mypy
+pylint
+pytest
+types-PyYAML==6.0.7
+PyYAML~=6.0
+scikit-learn~=1.1.1
+setuptools~=57.0.0
