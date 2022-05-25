@@ -2,15 +2,11 @@ import numpy as np
 from scipy import sparse as sp_sparse
 
 
-ALL_WORDS = []
-
 def initialize(words_counts, X_train, X_val, X_test):
-    global ALL_WORDS
     DICT_SIZE = 5000
     INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[
-        :DICT_SIZE]  # YOUR CODE HERE #######
+        :DICT_SIZE]
     WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
-    ALL_WORDS = WORDS_TO_INDEX.keys()
 
     X_train_mybag = sp_sparse.vstack([sp_sparse.csr_matrix(
         my_bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_train])
