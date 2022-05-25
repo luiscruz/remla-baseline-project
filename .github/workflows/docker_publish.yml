@@ -35,3 +35,4 @@
           uses: actions/download-artifact@v3
           with:
             name: generate-reports
+            path: output
