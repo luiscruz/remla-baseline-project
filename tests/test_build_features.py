@@ -1,7 +1,4 @@
 import unittest
-import re
-from nltk.corpus import stopwords
-
 from src.features.build_features import text_prepare
 
 
@@ -16,3 +13,7 @@ class TestBuildFeatures(unittest.TestCase):
             if text_prepare(ex) != ans:
                 return "Wrong answer for the case: '%s'" % ex
         return 'Basic tests are passed.'
+
+
+if __name__ == '__main__':
+    unittest.main()
