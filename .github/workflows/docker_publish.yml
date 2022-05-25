@@ -34,20 +34,15 @@
            echo $VERSION
            echo ${{ env.version }}
 
+        - name: Login to registry
+          run: echo "${{ secrets.GITHUB_TOKEN }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
         # - name: Set lower case owner name
         #   run: |
         #     echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
         #   env:
         #     OWNER: '${{ github.repository_owner }}'
- 
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-
-        - name: Login to registry
-          run: echo "${{ github.token }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
+            
         - name: Lowercase REPO
           run: |
             echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
@@ -62,7 +57,11 @@
               -t $IMG:${{ env.version }} \
               .
             docker push --all-tags $IMG
-
+ 
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
         - name: Install python version
           # use the pyenv-action version 7
           uses: gabrielfalcao/pyenv-action@v7
