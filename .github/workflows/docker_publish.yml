@@ -48,13 +48,13 @@
       steps:
         - uses: actions/checkout@v2
 
-        - name: Lowercase REPO
-          run: |
-            echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+        # - name: Lowercase REPO
+        #   run: |
+        #     echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
 
         - name: Build and push
           run: |
-            IMG=ghcr.io/$REPO
+            IMG=ghcr.io/${{ github.repository}}
             docker build \
               -t $IMG:latest \
               -t $IMG:${{ env.version_major }}-latest \
