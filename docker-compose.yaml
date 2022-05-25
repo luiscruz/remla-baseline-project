@@ -1,7 +1,0 @@
-services:
- NAME:
-  image: 9-remla-multilabel
-  ports:
-    - "8080:80"
-  container_name: 9-remla
-#  volumes: 

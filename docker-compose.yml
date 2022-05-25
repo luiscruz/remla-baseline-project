@@ -1,0 +1,9 @@
+# high level key
+services:
+# Name of service, currently NAME
+ NAME:
+#  Define what images you want to run for this service.
+  image: 9-remla
+  ports:
+    - 8080:80
+#  volumes: 
