@@ -139,11 +139,6 @@ def main(input_filepath='../../data/interim/', output_filepath='../../data/proce
                            columns=['title', 'tags', 'bow', 'tfidf'])
     test_out = pd.DataFrame(list(zip(X_test, bow_test, tfidf_test)), columns=['title', 'bow', 'tfidf'])
 
-    # Write data to files
-    write_data(train_out, train_file_name_out, ';')
-    write_data(val_out, val_file_name_out, ';')
-    write_data(test_out, test_file_name_out, ';')
-
     pickle.dump(X_train, open(output_filepath +     "X_train.pickle", "wb"))
     pickle.dump(X_val, open(output_filepath +     "X_val.pickle", "wb"))
     pickle.dump(X_test, open(output_filepath +     "X_test.pickle", "wb"))
