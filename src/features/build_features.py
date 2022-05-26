@@ -95,7 +95,7 @@ def mlb_labels(y_train, y_val):
     return mlb, y_train, y_val
 
 
-def main(input_filepath='../../data/interim/', output_filepath='../../data/processed/'):
+def main(input_filepath='data/interim/', output_filepath='data/processed/'):
     """ Runs data processing scripts to turn pre-processed data from (../interim) into
         feature data ready to be trained/tested (saved in ../processed).
     """
