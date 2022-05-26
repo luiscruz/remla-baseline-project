@@ -24,6 +24,6 @@ def text_prepare(text: str):
     text = text.lower()
     text = re.sub(REPLACE_BY_SPACE_RE, " ", text)
     text = re.sub(BAD_SYMBOLS_RE, "", text)
-    text = " ".join([word for word in text.split() if not word in STOP_WORDS])
+    text = " ".join([word for word in text.split() if word not in STOP_WORDS])
 
     return text

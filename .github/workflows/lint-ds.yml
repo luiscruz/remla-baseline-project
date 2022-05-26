@@ -32,4 +32,4 @@ jobs:
         
     - name: Lint using dslinter
       run: |
-        pylint .
+        pylint src/model
