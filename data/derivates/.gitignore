@@ -1,2 +1,3 @@
 /cleaned_train_dataset_properties.pkl
+/tfidf_vectorizer.pkl
 /tfidf_vocab.pkl
