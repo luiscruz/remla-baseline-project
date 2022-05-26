@@ -32,3 +32,20 @@ Note: this sample project was originally created by @partoftheorigin
 # Testing: PyTest
 ## Structure
 Pytests can be found in the "tests" directory. Newly added test classes should end with "test_*.py" and newly added test functions should start with "test"
+
+# DVC
+DVC is used to manage the ML pipeline version control artifacts. The artifacts are pushed to a project google drive repo which, the first time you connect to it, needs authentication.
+To use DVC, commit completed artifacts by:
+```console
+dvc commit -am "<message>"
+```
+and push the commit with:
+```console
+dvc push
+```
+
+To use pushed artifacts you can simply use:
+```console
+dvc pull
+```
+

@@ -1,0 +1,27 @@
+schema: '2.0'
+stages:
+  make_dataset:
+    cmd: python src/data/make_dataset.py
+    deps:
+    - path: data/raw/test.tsv
+      md5: f06925444bd9e4b12b382e0e267345a7
+      size: 1041379
+    - path: data/raw/train.tsv
+      md5: 2502592a16c44c1e33cb827b2a647406
+      size: 7196138
+    - path: data/raw/validation.tsv
+      md5: 508e1de849c33ba2f38f0b118590a4cd
+      size: 2166270
+    - path: src/data/make_dataset.py
+      md5: b46ee369be159175be8e19e5658d2def
+      size: 2722
+    outs:
+    - path: data/interim/test.tsv
+      md5: 763a7ba987278d8556c6fa91b74a768c
+      size: 933554
+    - path: data/interim/train.tsv
+      md5: b4079dfeca809d9e99696aad1e10e151
+      size: 6699340
+    - path: data/interim/validation.tsv
+      md5: a8bcd61d1edff6a0d30fd54f0f0d2b7a
+      size: 2008806

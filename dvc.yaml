@@ -1,0 +1,12 @@
+stages:
+  make_dataset:
+    cmd: python src/data/make_dataset.py
+    deps:
+    - src/data/make_dataset.py
+    - data/raw/test.tsv
+    - data/raw/validation.tsv
+    - data/raw/train.tsv
+    outs:
+    - data/interim/test.tsv
+    - data/interim/train.tsv
+    - data/interim/validation.tsv
