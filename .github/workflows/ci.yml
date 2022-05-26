@@ -21,7 +21,7 @@ jobs:
 
     - name: Run tests
       run: |
-         pytest tests/
+         python -m pytest
 
     - name: Run ML pipeline with DVC
       env:
