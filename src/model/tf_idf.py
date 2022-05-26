@@ -19,7 +19,7 @@ def tfidf_features(X_train: list[str], X_val: list[str], X_test: list[str]):
     # Transform the train, test, and val sets and return the result
 
     tfidf_vectorizer = TfidfVectorizer(
-        min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern="(\S+)"
+        min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r"(\S+)"
     )
 
     X_train = tfidf_vectorizer.fit_transform(X_train)

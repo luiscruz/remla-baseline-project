@@ -5,3 +5,4 @@ mypy
 pylint
 docformatter
 black
+pytest

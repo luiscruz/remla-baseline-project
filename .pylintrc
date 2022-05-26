@@ -5,6 +5,9 @@ ignore=venv
 disable=
     C0114, # missing-module-docstring
     C0116, # missing-function-docstring
+    C0103, # snake_case naming style
+
+good-names=x,y,z,i,j,k
 
 [MESSAGES CONTROL]
 

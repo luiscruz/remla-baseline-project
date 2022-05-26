@@ -8,8 +8,8 @@ from nltk.corpus import stopwords
 
 nltk.download("stopwords")
 
-REPLACE_BY_SPACE_RE = re.compile("[/(){}\[\]\|@,;]")
-BAD_SYMBOLS_RE = re.compile("[^0-9a-z #+_]")
+REPLACE_BY_SPACE_RE = re.compile(r"[/(){}\[\]\|@,;]")
+BAD_SYMBOLS_RE = re.compile(r"[^0-9a-z #+_]")
 STOP_WORDS = set(stopwords.words("english"))
 
 
