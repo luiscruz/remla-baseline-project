@@ -26,9 +26,13 @@ jobs:
       with:
         python-version: 3.9.12
 
-    - name: Install Dependencies
+    - name: Install DS Linter
       run: |
         pip install dslinter
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
         
     - name: Lint using dslinter
       run: |
