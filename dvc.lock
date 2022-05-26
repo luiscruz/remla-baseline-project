@@ -37,9 +37,9 @@ stages:
     - path: data/interim/validation.tsv
       md5: a8bcd61d1edff6a0d30fd54f0f0d2b7a
       size: 2008806
-    - path: src/data/make_dataset.py
-      md5: b46ee369be159175be8e19e5658d2def
-      size: 2722
+    - path: src/features/build_features.py
+      md5: 7690d340d0c2b5b10a4eeeb9844b3775
+      size: 6096
     outs:
     - path: data/processed/X_test.pickle
       md5: 4d16901c0af58d5d1bddd6ec34b4e7b2
