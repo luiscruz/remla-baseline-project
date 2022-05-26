@@ -37,7 +37,7 @@ def main():
     classifier_tfidf = train_classifier(tfidf_train, mlb_y_train)
 
     logger.info('Store model')
-    output_filepath = '../../models/'
+    output_filepath = 'models/'
     pickle.dump(classifier_mybag, open(output_filepath + "bow_model.pickle", "wb"))
     pickle.dump(classifier_tfidf, open(output_filepath + "tfidf_model.pickle", "wb"))
 
