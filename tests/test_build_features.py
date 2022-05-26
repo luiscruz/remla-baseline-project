@@ -1,8 +1,8 @@
-import unittest
+import pytest
 from src.features.build_features import text_prepare
 
 
-class TestBuildFeatures(unittest.TestCase):
+class TestBuildFeatures:
 
     def test_text_prepare(self):
         examples = ["SQL Server - any equivalent of Excel's CHOOSE function?",
@@ -16,4 +16,4 @@ class TestBuildFeatures(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()
