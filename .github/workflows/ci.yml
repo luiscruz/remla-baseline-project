@@ -21,6 +21,7 @@ jobs:
 
     - name: Run tests
       run: |
+         pip install pytest \
          python -m pytest
 
     - name: Run ML pipeline with DVC
