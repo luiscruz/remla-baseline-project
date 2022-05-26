@@ -1,4 +1,4 @@
-name: Deploy
+name: Publish Inference API Docker Image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     permissions:
       packages: write
     steps:
@@ -29,8 +29,7 @@ jobs:
 
       - name: Build and push
         run: |
-          REPO_LCASE=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
-          IMG=ghcr.io/$REPO_LCASE
+          IMG=ghcr.io/${{ github.repository }}
           docker build \
             -t ${IMG}:latest \
             -t ${IMG}:${{ env.version_major }}-latest \
