@@ -19,6 +19,10 @@ def text_prepare(text):
         text: a string
         return: modified initial string
     """
+    REPLACE_BY_SPACE_RE = re.compile(r'[/(){}\[\]\|@,;]')
+    BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
+    STOPWORDS = set(stopwords.words('english'))
+
     text = text.lower() # lowercase text
     text = re.sub(REPLACE_BY_SPACE_RE, " ", text) # replace REPLACE_BY_SPACE_RE symbols by space in text
     text = re.sub(BAD_SYMBOLS_RE, "", text) # delete symbols which are in BAD_SYMBOLS_RE from text
@@ -35,12 +39,12 @@ def tfidf_features(X_train_, X_val_, X_test_):
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
     tfidf_vectorizer = TfidfVectorizer(
-        min_df=5, max_df=0.9, ngram_range=(1,2), token_pattern=r'(\S+)') ####### YOUR CODE HERE #######
+        min_df=5, max_df=0.9, ngram_range=(1,2), token_pattern=r'(\S+)')
     X_train_ = tfidf_vectorizer.fit_transform(X_train_)
     X_val_ = tfidf_vectorizer.transform(X_val_)
     X_test_ = tfidf_vectorizer.transform(X_test_)
 
-    return X_train_, X_val_, X_test_, tfidf_vectorizer.vocabulary_
+    return X_train_, X_val_, X_test_, tfidf_vectorizer, tfidf_vectorizer.vocabulary_
 
 
 if __name__ == '__main__':
@@ -53,10 +57,6 @@ if __name__ == '__main__':
     X_train, y_train = train['title'].values, train['tags'].values
     X_val, y_val = validation['title'].values, validation['tags'].values
     X_test = test['title'].values
-
-    REPLACE_BY_SPACE_RE = re.compile(r'[/(){}\[\]\|@,;]')
-    BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
-    STOPWORDS = set(stopwords.words('english'))
 
     # remove bad symbols
     X_train = [text_prepare(x) for x in X_train]
@@ -87,8 +87,10 @@ if __name__ == '__main__':
         }
         pickle.dump(properties, f)
 
-    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
+    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vectorizer, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
 
+    with open(ROOT_DIR / 'data/derivates/tfidf_vectorizer.pkl', 'wb') as f:
+        pickle.dump(tfidf_vectorizer, f)
     with open(ROOT_DIR / 'data/derivates/tfidf_vocab.pkl', 'wb') as f:
         pickle.dump(tfidf_vocab, f)
 
