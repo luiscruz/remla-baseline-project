@@ -21,8 +21,7 @@ jobs:
 
     - name: Run tests
       run: |
-         pip install pytest \
-         python -m pytest
+         docker run pytest tests/
 
     - name: Run ML pipeline with DVC
       env:
