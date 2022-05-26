@@ -18,6 +18,10 @@ jobs:
           --load-plugins=dslinter \
           --reports=y \
           src
+
+    - name: Run unit tests
+      - run: python -m unittest test_build_features.TestBuildFeatures
+
     - name: Run ML pipeline with DVC
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
