@@ -1,0 +1,33 @@
+name: Test using pytest
+
+on:
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+
+jobs:
+  lint-ml:
+    runs-on: ubuntu-latest
+    name: Test
+    permissions:
+      pull-requests: write
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9.12
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Install Development Dependencies
+      run: |
+        pip install -r requirements_dev.txt
+        
+    - name: Run tests using pytest
+      run: |
+        pytest
