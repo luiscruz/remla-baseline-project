@@ -26,7 +26,7 @@ def main():
     logger.info('Starting the program')
 
     logger.info('Load data')
-    input_filepath = '../../data/processed/'
+    input_filepath = 'data/processed/'
     bow_train = pickle.load(open(input_filepath + "bow_train.pickle", "rb"))
     tfidf_train = pickle.load(open(input_filepath + "tfidf_train.pickle", "rb"))
     mlb_y_train = pickle.load(open(input_filepath + "mlb_train.pickle", "rb"))
