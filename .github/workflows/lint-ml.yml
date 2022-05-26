@@ -23,9 +23,17 @@ jobs:
       with:
         python-version: 3.9.12
 
-    - name: Install Dependencies
+    - name: Install ML Lint
       run: |
         pip install mllint[tools]
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Install Development Dependencies
+      run: |
+        pip install -r requirements_dev.txt
         
     - name: Lint using mllint
       run: |
