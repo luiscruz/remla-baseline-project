@@ -27,11 +27,6 @@
         - name: run static analysis
           run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/
 
-	- run: gh pr comment $PULLREQ --body "Hello world!"
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            PULLREQ: ${{ github.event.pull_request.html_url }}
-
     tests:
       runs-on: ubuntu-latest
       steps:
