@@ -31,7 +31,7 @@ jobs:
           path: mllint-report.md
 
       - name: Lint with pylint
-        run: python -m pylint ./REMLA-project-group-7/src
+        run: pylint $(git ls-files '*.py')
 
       - name: Upload `pylint` report
         uses: actions/upload-artifact@v3
