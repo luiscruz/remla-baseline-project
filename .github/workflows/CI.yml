@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pytest-cov
-          path: cov.xml
+          path: coverage.xml
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
