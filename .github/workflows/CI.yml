@@ -26,23 +26,31 @@ jobs:
       - name: Run `mllint`
         run: mllint -o mllint-report.md
 
-      - name: Lint with pylint
-        uses: cclauss/GitHub-Action-for-pylint@0.7.0
-
-      - name: Test with pytest
-        run: pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-
       - name: Upload `mllint` report
         uses: actions/upload-artifact@v3
         with:
           name: mllint-report.md
           path: mllint-report.md
 
+      - name: Lint with pylint
+        uses: cclauss/GitHub-Action-for-pylint@0.7.0
+
+      - name: Test with pytest
+        run: pytest --doctest-modules --junitxml=junit/test-results.xml --cov=./REMLA-project-group-7 --cov-report xml
+
       - name: Upload pytest test results
         uses: actions/upload-artifact@v3
         with:
-          name: pytest-results-3.9
-          path: junit/test-results-3.9.xml
+          name: pytest-results
+          path: junit/test-results.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
+      - name: Upload pytest-cov results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-cov
+          path: cov.xml
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
