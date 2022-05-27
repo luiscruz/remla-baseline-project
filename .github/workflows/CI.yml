@@ -31,7 +31,7 @@ jobs:
           path: mllint-report.md
 
       - name: Lint with pylint
-        run: pylint --output=pylint.txt ./REMLA-project-group-7/src
+        run: pylint --output=pylint.txt --output-format=text ./REMLA-project-group-7/src
 
       - name: Upload `pylint` report
         uses: actions/upload-artifact@v3
