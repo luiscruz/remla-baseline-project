@@ -21,8 +21,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run mllint
-        run: |
-          pip install --upgrade mllint
+        run:
           mllint -o mllint-report.md
 
       - name: Upload `mllint` report
@@ -32,9 +31,7 @@ jobs:
           path: mllint-report.md
 
       - name: Lint with pylint
-        run: |
-          pip install pylint
-          pylint --output=pylint.txt
+        run: pylint --output=pylint.txt ./REMLA-project-group-7/src
 
       - name: Upload `pylint` report
         uses: actions/upload-artifact@v3
@@ -46,7 +43,7 @@ jobs:
         run: |
           pip install pytest
           pip install pytest-cov
-          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=./REMLA-project-group-7/src --cov-report xml
+          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=./REMLA-project-group-7/tests --cov-report xml
 
       - name: Upload pytest test results
         uses: actions/upload-artifact@v3
