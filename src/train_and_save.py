@@ -6,7 +6,7 @@ DEFAULT_EXPORTS_PATH = '../exports/model.joblib'
 
 parser = ArgumentParser()
 parser.add_argument('--model-path', type=str, default='model.joblib')
-parser.add_argument('--data-dir', type=str, default='./data-dir')
+parser.add_argument('--data-dir', type=str, default='../data')
 args = parser.parse_args()
 
 train_and_save_models(args.data_dir, args.model_path)

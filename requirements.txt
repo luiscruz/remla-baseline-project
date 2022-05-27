@@ -174,3 +174,4 @@ xmltodict==0.13.0
 yarl==1.7.2
 zc.lockfile==2.0
 zipp==3.8.0
+neptune-client
