@@ -31,13 +31,13 @@ jobs:
           path: mllint-report.md
 
       - name: Lint with pylint
-        run: pylint --output=pylint.txt --output-format=text ./REMLA-project-group-7/src
+        run: pylint ./REMLA-project-group-7/src
 
       - name: Upload `pylint` report
         uses: actions/upload-artifact@v3
         with:
-          name: pylint.txt
-          path: pylint.txt
+          name: report.txt
+          path: report.txt
 
       - name: Test with pytest
         run: |
