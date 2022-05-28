@@ -136,3 +136,4 @@ dmypy.json
 # Gitignore models and data which is tracked by DVC
 data/*
 models/*
+/reports/mllint_report.md

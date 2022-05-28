@@ -7,7 +7,7 @@ import yaml
 from flasgger import Swagger
 
 # import traceback
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 
 from src.preprocess.preprocess_data import text_prepare
 
@@ -57,3 +57,13 @@ def predict():
     res = {"tags": tags, "classifier": "decision tree", "title": title}
     print(res)
     return jsonify(res)
+
+def get_metrics() -> str:
+    metric_str = ""
+
+
+@app.route("/metrics")
+def metrics():
+    response = make_response(get_metrics(), 200)
+    response.mimetype = "text/plain"
+
