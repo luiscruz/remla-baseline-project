@@ -8,6 +8,7 @@ from src.preprocess.preprocess_data import (  # pylint: disable=no-name-in-modul
     init_data,
     text_prepare,
 )
+from src.serve_model import app
 
 
 class TestPipeLine(unittest.TestCase):
@@ -35,10 +36,15 @@ class TestPipeLine(unittest.TestCase):
         """Test tfidf"""
         root = "./data/raw/"
         X_train, X_val, X_test, _, _ = init_data(root + "train.tsv", root + "validation.tsv", root + "test.tsv")
-        _, _, _, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
+        _, _, _, tfidf_vocab, _ = tfidf_features(X_train, X_val, X_test)
         tfidf_reversed_vocab = {i: word for word, i in tfidf_vocab.items()}
         self.assertTrue("c#" in tfidf_vocab)
         # During the built-in tokenization of TfidfVectorizer and use ‘(\S+)’
         # regexp as a token_pattern in the constructor of the vectorizer.
         expected_tag = "c#"
         self.assertEqual(tfidf_reversed_vocab[4516], expected_tag)
+
+    def test_inference_api(self):
+        tester = app.test_client()
+        response = tester.post("/predict", json={"title": "this is a python title"})
+        self.assertIn(b"python", response.data)

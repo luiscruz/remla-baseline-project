@@ -19,18 +19,6 @@ REPLACE_BY_SPACE_RE = re.compile("[/(){}\[\]\|@,;]")  # noqa: W605 pylint: disab
 BAD_SYMBOLS_RE = re.compile("[^0-9a-z #+_]")
 STOPWORDS = set(stopwords.words("english"))
 
-# Fetch params from yaml params file
-with open("params.yaml", encoding="utf-8") as f:
-    params = yaml.safe_load(f)["preprocess"]
-
-INPUT_TRAIN_PATH = params["input_train"]
-INPUT_VAL_PATH = params["input_val"]
-INPUT_TEST_PATH = params["input_test"]
-
-OUT_PATH_TRAIN = params["output_train"]
-OUT_PATH_VAL = params["output_val"]
-OUT_PATH_TEST = params["output_test"]
-
 
 def _read_data(filename):
     """
@@ -105,6 +93,18 @@ def pickle_test_data(X_data, out_path):
 
 def main():
     """Run preprocessing steps sequentially"""
+    # Fetch params from yaml params file
+    with open("params.yaml", encoding="utf-8") as f:
+        params = yaml.safe_load(f)["preprocess"]
+
+    INPUT_TRAIN_PATH = params["input_train"]
+    INPUT_VAL_PATH = params["input_val"]
+    INPUT_TEST_PATH = params["input_test"]
+
+    OUT_PATH_TRAIN = params["output_train"]
+    OUT_PATH_VAL = params["output_val"]
+    OUT_PATH_TEST = params["output_test"]
+
     X_train, X_val, X_test, y_train, y_val = init_data(INPUT_TRAIN_PATH, INPUT_VAL_PATH, INPUT_TEST_PATH)
 
     X_train, X_val, X_test = preprocess_text_prepare(X_train, X_val, X_test)

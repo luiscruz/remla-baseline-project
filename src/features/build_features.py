@@ -19,6 +19,7 @@ OUT_PATH_TRAIN = featurize_params["output_train"]
 OUT_PATH_VAL = featurize_params["output_val"]
 OUT_PATH_TEST = featurize_params["output_test"]
 OUT_MLB_PICKLE = featurize_params["mlb_out"]
+OUT_TFIDF_PICKLE = featurize_params["tfidf_vectorizer_out"]
 
 
 def word_tags_count(X_train, y_train):
@@ -73,7 +74,7 @@ def tfidf_features(X_train, X_val, X_test):
     X_val = tfidf_vectorizer.transform(X_val)
     X_test = tfidf_vectorizer.transform(X_test)
 
-    return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
+    return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_, tfidf_vectorizer
 
 
 def mlb_y_data(y_train, y_val, tags_counts):
@@ -88,9 +89,9 @@ def mlb_y_data(y_train, y_val, tags_counts):
     return y_train, y_val, mlb
 
 
-def _pickle_mlb(mlb_obj):
-    with open(OUT_MLB_PICKLE, "wb") as fd:
-        pickle.dump(mlb_obj, fd, protocol=pickle.HIGHEST_PROTOCOL)
+def _pickle_obj(obj, out_path):
+    with open(out_path, "wb") as fd:
+        pickle.dump(obj, fd, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def _pickle_sparse_matrix(csr_matrix, label_csr, output_path):
@@ -121,13 +122,14 @@ def main():
     tags_counts, _ = word_tags_count(X_train=X_train, y_train=y_train)
     y_train, y_val, mlb = mlb_y_data(y_train, y_val, tags_counts)
 
-    X_train_csr, X_val_csr, X_test_csr, _ = tfidf_features(X_train, X_val, X_test)
+    X_train_csr, X_val_csr, X_test_csr, _, tfidf = tfidf_features(X_train, X_val, X_test)
 
     _pickle_sparse_matrix(X_train_csr, y_train, OUT_PATH_TRAIN)
     _pickle_sparse_matrix(X_val_csr, y_val, OUT_PATH_VAL)
     _pickle_sparse_test_matrix(X_test_csr, OUT_PATH_TEST)
 
-    _pickle_mlb(mlb)
+    _pickle_obj(mlb, OUT_MLB_PICKLE)
+    _pickle_obj(tfidf, OUT_TFIDF_PICKLE)
 
 
 if __name__ == "__main__":
