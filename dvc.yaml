@@ -28,6 +28,8 @@ stages:
       - ${featurize.output_test}
       - ${featurize.mlb_out}:
           cache: true
+      - ${featurize.tfidf_vectorizer_out}:
+          cache: true
   train:
     cmd: python ${train.script}
     params:

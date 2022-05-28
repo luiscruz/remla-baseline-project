@@ -13,6 +13,7 @@ featurize:
   output_val: data/interim/validation_featurized.pkl
   output_test: data/interim/test_featurized.pkl
   mlb_out: models/mlb.pkl
+  tfidf_vectorizer_out: models/tfidf_vectorizer.pkl
 
 train:
   script: src/models/train_model.py

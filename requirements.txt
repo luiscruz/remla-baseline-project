@@ -8,7 +8,6 @@ dvc[gdrive]
 
 # external requirements
 click
-Sphinx
 coverage
 pyproject-flake8
 isort
@@ -19,15 +18,18 @@ numpy
 pandas~=1.4.2
 pylint
 python-dotenv>=0.5.1
-sklearn~=0.0
+scikit-learn~=1.1.1
 scipy
 
 Sphinx
 toml
-mypy
-pylint
 pytest
 types-PyYAML==6.0.7
 PyYAML~=6.0
-scikit-learn~=1.1.1
 setuptools~=57.0.0
+
+matplotlib==3.4.1
+Flask
+markupsafe==2.0.1
+jinja2<3.1.0
+flasgger
