@@ -1,5 +1,6 @@
 import tensorflow_data_validation as tfdv
 import pandas as pd
+from tensorflow_data_validation.utils.schema_util import write_schema_text, load_schema_text
 
 def test_data_validation():
     train = pd.read_csv('data/raw/train.tsv', sep="\t")
@@ -10,10 +11,12 @@ def test_data_validation():
     test_stats = tfdv.generate_statistics_from_dataframe(test)
     validation_stats = tfdv.generate_statistics_from_dataframe(validation)
 
-    schema = tfdv.infer_schema(train_stats)
-    schema.default_environment[:] = ['TRAINING', 'TESTING', 'VALIDATION']
-    # Specify that 'tags' feature is not in TESTING environment.
-    tfdv.get_feature(schema, 'tags').not_in_environment[:] = ['TESTING']
+    #schema = tfdv.infer_schema(train_stats)
+    #schema.default_environment[:] = ['TRAINING', 'TESTING', 'VALIDATION']
+    ## Specify that 'tags' feature is not in TESTING environment.
+    #tfdv.get_feature(schema, 'tags').not_in_environment[:] = ['TESTING']
+    #write_schema_text(schema, "data/raw/schema")
+    schema = load_schema_text("data/raw/schema")
 
     test_anomalies = tfdv.validate_statistics(
         test_stats, schema, environment='TESTING')
