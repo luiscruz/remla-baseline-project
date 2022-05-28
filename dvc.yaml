@@ -18,6 +18,7 @@ stages:
   data_validation:
     cmd: pytest tests/test_data_validation.py
     deps:
+      - data/raw/schema
       - data/raw/test.tsv
       - data/raw/train.tsv
       - data/raw/validation.tsv
