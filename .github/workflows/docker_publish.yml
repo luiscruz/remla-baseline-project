@@ -1,5 +1,8 @@
-  name: Multi-label-classification
-  on: push
+  name: Merge to main check
+  on:
+    pull_request:
+      branches:
+        - main
   jobs:
     init:
       runs-on: ubuntu-latest
