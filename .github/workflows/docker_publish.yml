@@ -1,8 +1,5 @@
   name: Merge to main check
-  on:
-    pull_request:
-      branches:
-        - main
+  on: push
   jobs:
     init:
       runs-on: ubuntu-latest
