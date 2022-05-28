@@ -1,0 +1,14 @@
+services:
+  gateway:
+    image: nginx:latest
+    depends_on:
+      - inference-service
+    volumes:
+      - ./gateway_nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8000:80"
+
+  inference-service:
+    build: ../../
+    image: inference-service:latest
+    command: gunicorn -b 0.0.0.0:5000 src.serve_model:app

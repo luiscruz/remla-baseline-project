@@ -1,0 +1,7 @@
+Flask
+flasgger
+pyyaml
+sklearn
+gunicorn==20.1.0
+nltk
+pandas
