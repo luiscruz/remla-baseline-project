@@ -9,20 +9,22 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
     - name: Setup Python
       uses: actions/setup-python@v3
       with:
         python-version: '3.9'
-        cache: 'pip'
-    - name: Install Requirements
-      run: pip install -r requirements.txt
+        cache: 'poetry'
+    - name: Install Dependencies
+      run: poetry install
     - name: Pylint (dslinter)
-      run: pylint src
+      run: poetry run pylint src
     - name: flake8
-      run: flake8 src
+      run: poetry run flake8 src
     - name: pydocstyle
-      run: pydocstyle src
+      run: poetry run pydocstyle src
     - name: Bandit
-      run: bandit -r src -c bandit.yaml
+      run: poetry run bandit -r src -c bandit.yaml
     - name: Test
-      run: pytest
+      run: poetry run pytest
