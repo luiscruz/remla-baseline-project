@@ -42,11 +42,9 @@ def predict():
     processed_title = tfidf_vectorizer.transform([prepared_title])
 
     with open(ROOT_DIR / 'models/tfidf.pkl', 'rb') as f:
-    	model = pickle.load(f)
+        model = pickle.load(f)
     prediction = model.predict(processed_title)[0]
 
-    # TODO: Convert preediction: binary array -> list of tags as strings ?
-    
     return jsonify({
         "result": prediction.tolist(),
         "classifier": "tfifd multi-label-binarizer",
@@ -56,5 +54,5 @@ def predict():
 
 if __name__ == '__main__':
     with open(ROOT_DIR / 'data/derivates/tfidf_vectorizer.pkl', 'rb') as f:
-    	tfidf_vectorizer = pickle.load(f)
+        tfidf_vectorizer = pickle.load(f)
     app.run(port=8080, debug=True)
