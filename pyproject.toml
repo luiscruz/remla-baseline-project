@@ -21,6 +21,10 @@ dslinter = "^2.0"
 pydocstyle = "^6.1"
 mllint = "^0.12"
 dvc = { version = "^2.10", extras = ["gdrive"] }
+pytest-cov = "^3.0"
+black = "^22.3"
+isort = "^5.10"
+mypy = "^0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
