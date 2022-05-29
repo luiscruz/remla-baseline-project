@@ -22,5 +22,6 @@ COPY dvc.yaml .
 COPY dvc.lock .
 COPY .git .git
 COPY data data
+COPY models models
 
 # TODO: Add entrypoint to ML application here
