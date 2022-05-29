@@ -35,7 +35,7 @@ def predict():
                     example: This is an example of a title.
     responses:
       200:
-        description: "The result of the prediction (e.g. 'python', 'c++' or 'javascript')"
+        description: "The result of the prediction, a list of tags (e.g. 'python', 'c++' and/or 'javascript')"
     """
     input_data = request.get_json()
     title = input_data.get('title')
