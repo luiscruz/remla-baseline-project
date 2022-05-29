@@ -20,4 +20,4 @@ jobs:
         pip install "$(grep commitizen requirements.txt)"
     - name: Run commitizen check
       run: |
-        cz check --rev-range main..HEAD
+        cz check --rev-range origin/main..HEAD
