@@ -6,6 +6,8 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      CHECK_DIRS: src tests
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -19,12 +21,16 @@ jobs:
     - name: Install Dependencies
       run: poetry install
     - name: Pylint (dslinter)
-      run: poetry run pylint src tests
+      run: poetry run pylint $CHECK_DIRS
     - name: flake8
-      run: poetry run flake8 src tests
+      run: poetry run flake8 $CHECK_DIRS
     - name: pydocstyle
-      run: poetry run pydocstyle src tests
+      run: poetry run pydocstyle $CHECK_DIRS
     - name: Bandit
-      run: poetry run bandit -r src tests -c bandit.yaml
+      run: poetry run bandit -r $CHECK_DIRS -c bandit.yaml
+    - name: Black
+      run: poetry run black $CHECK_DIRS --check
+    - name: isort
+      run: poetry run isort $CHECK_DIRS -c
     - name: Test
       run: poetry run pytest
