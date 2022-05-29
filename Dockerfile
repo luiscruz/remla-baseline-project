@@ -25,7 +25,7 @@ COPY .git .git
 COPY data data
 COPY models models
 
-# Setup and run entrypoint for dynamic interaction with the model
+# Dynamic interaction with the model
 EXPOSE 8080
 ENTRYPOINT ["python"]
-CMD ["src/serve_model.py"]
+CMD ["src/models/serve_model.py"]
