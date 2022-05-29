@@ -19,12 +19,12 @@ jobs:
     - name: Install Dependencies
       run: poetry install
     - name: Pylint (dslinter)
-      run: poetry run pylint src
+      run: poetry run pylint src tests
     - name: flake8
-      run: poetry run flake8 src
+      run: poetry run flake8 src tests
     - name: pydocstyle
-      run: poetry run pydocstyle src
+      run: poetry run pydocstyle src tests
     - name: Bandit
-      run: poetry run bandit -r src -c bandit.yaml
+      run: poetry run bandit -r src tests -c bandit.yaml
     - name: Test
       run: poetry run pytest
