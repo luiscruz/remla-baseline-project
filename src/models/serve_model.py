@@ -1,11 +1,9 @@
 """
 Flask API of the SMS Spam detection model model.
 """
-# import traceback
 import pickle
 from flask import Flask, jsonify, request
 from flasgger import Swagger
-# import pandas as pd
 
 from src.config.definitions import ROOT_DIR
 from src.features.build_features import text_prepare
