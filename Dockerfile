@@ -11,9 +11,10 @@ COPY src src
 
 RUN python -m pip install --upgrade pip &&\
     pip install -r requirements.txt &&\
-    pip install -e .[linter]
+    pip install -e .[all]
 
 COPY .pylintrc .
+COPY tests tests
 
 # Copy necessary files and folders for dvc
 COPY .dvc .dvc

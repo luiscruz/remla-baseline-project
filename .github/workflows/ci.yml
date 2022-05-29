@@ -19,6 +19,9 @@ jobs:
           --reports=y \
           src
 
+    - name: Run unit tests
+      run: |
+        docker run app pytest tests
 
     - name: Run ML pipeline with DVC
       env:
