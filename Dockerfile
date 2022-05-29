@@ -16,3 +16,8 @@ RUN python -m pip install --upgrade pip &&\
 RUN python src/data/make_dataset.py
 RUN python src/features/build_features.py
 RUN python src/models/train_model.py
+
+# Setup and run entrypoint for dynamic interaction with the model
+EXPOSE 8080
+ENTRYPOINT ["python"]
+CMD ["src/serve_model.py"]
