@@ -1,6 +1,5 @@
 attrs==21.4.0
 click==8.0.4
-dataclasses==0.8
 flasgger==0.9.5
 Flask==2.0.3
 importlib-metadata==4.8.3
