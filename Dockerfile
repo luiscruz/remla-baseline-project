@@ -13,6 +13,7 @@ RUN python -m pip install --upgrade pip &&\
     pip install -r requirements.txt &&\
     pip install -e .[all]
 
+<<<<<<< HEAD
 COPY .pylintrc .
 COPY tests tests
 
@@ -24,4 +25,7 @@ COPY .git .git
 COPY data data
 COPY models models
 
-# TODO: Add entrypoint to ML application here
+# Setup and run entrypoint for dynamic interaction with the model
+EXPOSE 8080
+ENTRYPOINT ["python"]
+CMD ["src/serve_model.py"]
