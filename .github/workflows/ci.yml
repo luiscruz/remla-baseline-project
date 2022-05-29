@@ -19,10 +19,6 @@ jobs:
           --reports=y \
           src
 
-    - name: Run unit tests
-      run: |
-        docker run app bash -c "dvc pull &&  pytest tests"
-
     - name: Run ML pipeline with DVC
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
@@ -33,3 +29,6 @@ jobs:
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
           app bash -c "dvc pull && dvc repro" 
 
+    - name: Run unit tests
+      run: |
+        docker run app pytest tests
