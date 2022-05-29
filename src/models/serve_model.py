@@ -51,7 +51,7 @@ def predict():
     
     return jsonify({
         "result": prediction.tolist(),
-        "classifier": "tfifd multi-label-binarizer ",
+        "classifier": "tfifd multi-label-binarizer",
         "title": title
     })
 
