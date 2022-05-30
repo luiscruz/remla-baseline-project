@@ -1,23 +1,23 @@
 import pandas
 import pytest
-from util import util
+from src.util import util
 
 
 @pytest.fixture()
 def df1():
-    df1 = util.read_data('../data/interim/test.tsv')
+    df1 = util.read_data('data/interim/test.tsv')
     yield df1
 
 
 @pytest.fixture()
 def df2():
-    df2 = util.read_data('../data/interim/train.tsv')
+    df2 = util.read_data('data/interim/train.tsv')
     yield df2
 
 
 @pytest.fixture()
 def df3():
-    df3 = util.read_data('../data/interim/validation.tsv')
+    df3 = util.read_data('data/interim/validation.tsv')
     yield df3
 
 
