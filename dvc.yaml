@@ -22,6 +22,7 @@ stages:
       - data/raw/test.tsv
       - data/raw/train.tsv
       - data/raw/validation.tsv
+      - tests/test_data_validation.py
   make_dataset:
     cmd: python -m src.data.make_dataset
     deps:
