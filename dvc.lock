@@ -13,37 +13,40 @@ stages:
       md5: 508e1de849c33ba2f38f0b118590a4cd
       size: 2196271
     - path: src/preprocess.py
-      md5: 10b93319d092837bf67d8d2674d44dd8
-      size: 2832
+      md5: b1ed7f0fb99b18965df5b6a37043e135
+      size: 3160
     outs:
+    - path: output/sorted_tags.joblib
+      md5: db9bf2f0d7c02305a8524d5430b2c414
+      size: 997
     - path: output/test_tfidf.joblib
       md5: 130692199758f571993b30bfe6860e5d
       size: 1652814
     - path: output/tfidf_vectorizer.joblib
-      md5: c3de9a3244a80c4f3a376f2e02e003d0
+      md5: f0f2e41a02f4392fcd4d6caf011321cd
       size: 5381522
     - path: output/train_tfidf.joblib
-      md5: 2c6ace40f30da1709657d06bcd527fd7
-      size: 12255794
+      md5: 4283cd065963763ad792e72400192d71
+      size: 9238663
     - path: output/validation_tfidf.joblib
-      md5: e18ea65d439f35d0afae28ed48b41bac
-      size: 3622568
+      md5: c1f50eaca3876d7edfa26ff28260230b
+      size: 2713585
   train:
     cmd: python src/train.py
     deps:
     - path: output/train_tfidf.joblib
-      md5: 2c6ace40f30da1709657d06bcd527fd7
-      size: 12255794
+      md5: 4283cd065963763ad792e72400192d71
+      size: 9238663
     - path: output/validation_tfidf.joblib
-      md5: e18ea65d439f35d0afae28ed48b41bac
-      size: 3622568
+      md5: c1f50eaca3876d7edfa26ff28260230b
+      size: 2713585
     - path: src/train.py
       md5: dd09074f7e1b59587d4ac88df80faceb
       size: 3384
     outs:
     - path: output/mlb.joblib
-      md5: fe5c9a09e5441e81fd81da984584844e
-      size: 3299
+      md5: cb43aa3cba8096c9b336ede0d46036bb
+      size: 2676
     - path: output/model_tfidf.joblib
       md5: a3ee724e69c8fed5a6a7dce07c9a451e
       size: 14668735

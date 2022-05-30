@@ -11,6 +11,7 @@ stages:
     - output/train_tfidf.joblib
     - output/validation_tfidf.joblib
     - output/tfidf_vectorizer.joblib
+    - output/sorted_tags.joblib
   train:
     cmd: python src/train.py
     deps:

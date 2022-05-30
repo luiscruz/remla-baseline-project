@@ -70,10 +70,16 @@ def main():
     X_val_tfidf = tfidf_vectorizer.transform(X_val)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
 
+    sorted_tags = list((set((tag for question in y_train for tag in question))))
+    sorted_tags.sort()
+    y_train = [[sorted_tags.index(tag) for tag in question] for question in y_train]
+    y_val = [[sorted_tags.index(tag) for tag in question] for question in y_val]
+
     dump((X_train_tfidf, y_train), "output/train_tfidf.joblib")
     dump((X_val_tfidf, y_val), "output/validation_tfidf.joblib")
     dump(X_test_tfidf, "output/test_tfidf.joblib")
     dump(tfidf_vectorizer, "output/tfidf_vectorizer.joblib")
+    dump(sorted_tags, "output/sorted_tags.joblib")
 
 
 if __name__ == "__main__":
