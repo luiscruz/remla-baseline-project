@@ -44,7 +44,7 @@ def tfidf_features(X_train_, X_val_, X_test_):
     X_val_ = tfidf_vectorizer_.transform(X_val_)
     X_test_ = tfidf_vectorizer_.transform(X_test_)
 
-    return X_train_, X_val_, X_test_, tfidf_vectorizer_, tfidf_vectorizer.vocabulary_
+    return X_train_, X_val_, X_test_, tfidf_vectorizer_, tfidf_vectorizer_.vocabulary_
 
 
 if __name__ == '__main__':
