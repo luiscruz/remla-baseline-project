@@ -1,0 +1,33 @@
+name: ci
+
+on: [push]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build docker image
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+      run: |
+        pip install dvc[s3]==2.10.2
+        dvc pull
+        docker build . -t app  
+    
+    - name: Run Pylint with Dslinter plugin
+      run: |
+        docker run app pylint \
+          --load-plugins=dslinter \
+          --reports=y \
+          src
+
+    - name: Run unit tests
+      run: |
+        docker run app pytest tests
+
+    - name: Run ML pipeline with DVC
+      run: |
+        docker run app dvc repro

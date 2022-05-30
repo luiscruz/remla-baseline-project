@@ -2,17 +2,26 @@ FROM python:3.9.12-slim
 
 WORKDIR /root/
 
+RUN apt-get update &&\
+    apt-get install -y gcc
+
 COPY requirements.txt .
 COPY setup.py .
 COPY src src
-COPY models models
-COPY data data
 
 RUN python -m pip install --upgrade pip &&\
     pip install -r requirements.txt &&\
-    pip install -e .
+    pip install -e .[all]
 
-# Seperate RUN commands to enable caching the different stages
-RUN python src/data/make_dataset.py
-RUN python src/features/build_features.py
-RUN python src/models/train_model.py
+COPY .pylintrc .
+COPY tests tests
+
+# Copy necessary files and folders for dvc
+COPY .dvc .dvc
+COPY dvc.yaml .
+COPY dvc.lock .
+COPY .git .git
+COPY data data
+COPY models models
+
+# TODO: Add entrypoint to ML application here
