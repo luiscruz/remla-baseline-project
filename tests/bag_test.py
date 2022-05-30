@@ -1,11 +1,4 @@
-from common_tools import delete_import, copy_file_import
-
-
-if copy_file_import("src/2_bag_of_words.py"):
-    from testing_file import bag_of_words
-
-delete_import()
-
+from dependencies.bag_of_words import bag_of_words
 
 def test_bag():
 
