@@ -1,0 +1,51 @@
+stages:
+  make_dataset:
+    cmd: python src/data/make_dataset.py
+    deps:
+    - src/data/make_dataset.py
+    - data/raw/test.tsv
+    - data/raw/validation.tsv
+    - data/raw/train.tsv
+    outs:
+    - data/interim/test.tsv
+    - data/interim/train.tsv
+    - data/interim/validation.tsv
+  extract_features:
+    cmd: python src/features/build_features.py
+    deps:
+      - src/features/build_features.py
+      - data/interim/test.tsv
+      - data/interim/validation.tsv
+      - data/interim/train.tsv
+    outs:
+      - data/processed/X_train.pickle
+      - data/processed/X_val.pickle
+      - data/processed/X_test.pickle
+      - data/processed/bow_train.pickle
+      - data/processed/bow_val.pickle
+      - data/processed/bow_test.pickle
+      - data/processed/tfidf_train.pickle
+      - data/processed/tfidf_val.pickle
+      - data/processed/tfidf_test.pickle
+      - data/processed/mlb.pickle
+      - data/processed/mlb_val.pickle
+      - data/processed/mlb_train.pickle
+#  train_model:
+#    cmd: python src/models/train_model.py
+#    deps:
+#      - src/models/train_model.py
+#      - data/processed/X_train.pickle
+#      - data/processed/X_val.pickle
+#      - data/processed/X_test.pickle
+#      - data/processed/bow_train.pickle
+#      - data/processed/bow_val.pickle
+#      - data/processed/bow_test.pickle
+#      - data/processed/tfidf_train.pickle
+#      - data/processed/tfidf_val.pickle
+#      - data/processed/tfidf_test.pickle
+#      - data/processed/mlb.pickle
+#      - data/processed/mlb_val.pickle
+#      - data/processed/mlb_train.pickle
+#    outs:
+#      - models/bow_model.pickle
+#      - models/tfidf_model.pickle

@@ -95,7 +95,7 @@ def mlb_labels(y_train, y_val):
     return mlb, y_train, y_val
 
 
-def main(input_filepath='../../data/interim/', output_filepath='../../data/processed/'):
+def main(input_filepath='data/interim/', output_filepath='data/processed/'):
     """ Runs data processing scripts to turn pre-processed data from (../interim) into
         feature data ready to be trained/tested (saved in ../processed).
     """
@@ -138,11 +138,6 @@ def main(input_filepath='../../data/interim/', output_filepath='../../data/proce
     val_out = pd.DataFrame(list(zip(X_val, y_val, bow_val, tfidf_val)),
                            columns=['title', 'tags', 'bow', 'tfidf'])
     test_out = pd.DataFrame(list(zip(X_test, bow_test, tfidf_test)), columns=['title', 'bow', 'tfidf'])
-
-    # Write data to files
-    write_data(train_out, train_file_name_out, ';')
-    write_data(val_out, val_file_name_out, ';')
-    write_data(test_out, test_file_name_out, ';')
 
     pickle.dump(X_train, open(output_filepath +     "X_train.pickle", "wb"))
     pickle.dump(X_val, open(output_filepath +     "X_val.pickle", "wb"))

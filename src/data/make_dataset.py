@@ -17,12 +17,15 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 
-def main(input_filepath='../../data/raw/', output_filepath='../../data/interim/'):
+def main(input_filepath='data/raw/', output_filepath='data/interim/'):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
+
+    path = os.getcwd()
+    logger.info('working dir: ' + path)
 
     train_file_name = 'train.tsv'
     validation_file_name = 'validation.tsv'
