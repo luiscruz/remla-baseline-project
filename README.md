@@ -7,7 +7,17 @@ This project designs a Release pipeline for a multilabel classifying ML applicat
 * DVC
 * Kubernetes
 
-# Testing: PyTest
+# Testing
+### What is tested:
+#### Data quality
+Data is tested for:
+* Empty fields
+* Duplicates
+#### Unit tests
+The methods used for data pre-processing and feature extraction are tested with unit tests
+#### Data cleaning
+#### Feature extraction
+### Testing framework: PyTest
 Pytests can be found in the "tests" directory. Newly added test classes should end with "test_*.py" and newly added test functions should start with "test"
 
 # DVC
