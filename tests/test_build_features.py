@@ -10,9 +10,7 @@ class TestBuildFeatures:
         answers = ["sql server equivalent excels choose function",
                    "free c++ memory vectorint arr"]
         for ex, ans in zip(examples, answers):
-            if text_prepare(ex) != ans:
-                return "Wrong answer for the case: '%s'" % ex
-        return 'Basic tests are passed.'
+            assert text_prepare(ex) == ans
 
 
 if __name__ == '__main__':
