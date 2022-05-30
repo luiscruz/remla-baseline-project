@@ -13,67 +13,67 @@ stages:
       md5: 508e1de849c33ba2f38f0b118590a4cd
       size: 2166270
     - path: src/data/make_dataset.py
-      md5: b46ee369be159175be8e19e5658d2def
-      size: 2722
+      md5: c1853ace5f4a6de31542f2849d36ffc0
+      size: 3548
     outs:
     - path: data/interim/test.tsv
-      md5: 763a7ba987278d8556c6fa91b74a768c
-      size: 933554
+      md5: f39d042186959dc34630f2c5b153c759
+      size: 931854
     - path: data/interim/train.tsv
-      md5: b4079dfeca809d9e99696aad1e10e151
-      size: 6699340
+      md5: 17149c522da39de8a27517011db4b7a0
+      size: 6697908
     - path: data/interim/validation.tsv
-      md5: a8bcd61d1edff6a0d30fd54f0f0d2b7a
-      size: 2008806
+      md5: d7aca554e6ac507bb53b79d60ee1e445
+      size: 2007448
   extract_features:
     cmd: python src/features/build_features.py
     deps:
     - path: data/interim/test.tsv
-      md5: 763a7ba987278d8556c6fa91b74a768c
-      size: 933554
+      md5: f39d042186959dc34630f2c5b153c759
+      size: 931854
     - path: data/interim/train.tsv
-      md5: b4079dfeca809d9e99696aad1e10e151
-      size: 6699340
+      md5: 17149c522da39de8a27517011db4b7a0
+      size: 6697908
     - path: data/interim/validation.tsv
-      md5: a8bcd61d1edff6a0d30fd54f0f0d2b7a
-      size: 2008806
+      md5: d7aca554e6ac507bb53b79d60ee1e445
+      size: 2007448
     - path: src/features/build_features.py
       md5: 7690d340d0c2b5b10a4eeeb9844b3775
       size: 6096
     outs:
     - path: data/processed/X_test.pickle
-      md5: 4d16901c0af58d5d1bddd6ec34b4e7b2
-      size: 864890
+      md5: d6390783776aa7e23f3382af30fabf2e
+      size: 863441
     - path: data/processed/X_train.pickle
-      md5: bfba6705d476e8bd4aee5a0aff83ceb8
-      size: 4324413
+      md5: ffb25b92dc3feb95aeac950731d25de6
+      size: 4324278
     - path: data/processed/X_val.pickle
-      md5: 55f743ff53d281f4b2d66628c79b7cb9
-      size: 1301445
+      md5: e43ab8e1cb93b2b1464b289b562c0056
+      size: 1300701
     - path: data/processed/bow_test.pickle
-      md5: b2465f52fe62a9489ae20e9de7020aab
-      size: 1306355
+      md5: 7a3d694cb669277b1729714872d1d7b1
+      size: 1304027
     - path: data/processed/bow_train.pickle
-      md5: c63bc760ff0bcabc74f22b57f22faef3
-      size: 6562487
+      md5: 95f7a7a9260e8cd2e83b089a373af259
+      size: 6561059
     - path: data/processed/bow_val.pickle
-      md5: c14711cd1eee731006e420fd5fa807dc
-      size: 1964463
+      md5: 417780beae4495b7f870d8fccae43f7a
+      size: 1963143
     - path: data/processed/mlb.pickle
       md5: 5d180c30fd6da3e373bfa5ccb4fe0c2c
       size: 1880
     - path: data/processed/mlb_train.pickle
-      md5: 067d865dafad654cc43c3ec3eae1b518
-      size: 80000164
+      md5: 118aea091119982f3039c0c7b3769742
+      size: 79978564
     - path: data/processed/mlb_val.pickle
-      md5: 5289cf274348ce5f98633a8cd3993e44
-      size: 24000162
+      md5: 36f10410bfbd607b1e561dab1be9c9f9
+      size: 23978562
     - path: data/processed/tfidf_test.pickle
-      md5: b0a79cca2675fe19fec0a1764102c1d9
-      size: 1652795
+      md5: e90a24e00b329a2417499cfe95ff8b51
+      size: 1649411
     - path: data/processed/tfidf_train.pickle
-      md5: 1b160fe73d56e75e081cc7853fea7382
-      size: 8485283
+      md5: d775f43a891d6e047a892a5f1acb6ddb
+      size: 8483159
     - path: data/processed/tfidf_val.pickle
-      md5: 4ce0e53ac6d0fbb2672e5089544d1b17
-      size: 2486967
+      md5: 716477a7d0a4da09e98c144438c9838e
+      size: 2485071

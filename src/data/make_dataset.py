@@ -17,6 +17,36 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 
+def filterDuplicates(X_y_train, X_y_val, X_test):
+    sample_set = set()
+    text_set = set()
+
+    X_y_train_res = []
+    X_y_val_res = []
+    X_test_res = []
+
+    for r in X_y_train:
+        key = r[0] + str(r[1])
+        if key not in sample_set:
+            sample_set.add(key)
+            text_set.add(r[0])
+            X_y_train_res.append(r)
+
+    for r in X_y_val:
+        key = r[0] + str(r[1])
+        if key not in sample_set:
+            sample_set.add(key)
+            text_set.add(r[0])
+            X_y_val_res.append(r)
+
+    for r in X_test:
+        if r not in text_set:
+            text_set.add(r)
+            X_test_res.append(r)
+
+    return X_y_train_res, X_y_val_res, X_test_res
+
+
 def main(input_filepath='data/raw/', output_filepath='data/interim/'):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
@@ -46,10 +76,14 @@ def main(input_filepath='data/raw/', output_filepath='data/interim/'):
     X_val = [text_prepare(x) for x in X_val]
     X_test = [text_prepare(x) for x in X_test]
 
+    X_y_train = list(zip(X_train, y_train))
+    X_y_val = list(zip(X_val, y_val))
+    X_y_train, X_y_val, X_test = filterDuplicates(X_y_train, X_y_val, X_test)
+
     #  Lists to pd for easy writing
-    train_out = pd.DataFrame(list(zip(X_train, y_train)),
+    train_out = pd.DataFrame(X_y_train,
                              columns=['title', 'tags'])
-    val_out = pd.DataFrame(list(zip(X_val, y_val)),
+    val_out = pd.DataFrame(X_y_val,
                            columns=['title', 'tags'])
     test_out = pd.DataFrame(X_test, columns=['title'])
 
