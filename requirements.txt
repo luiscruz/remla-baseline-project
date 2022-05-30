@@ -13,7 +13,7 @@ dvc[gdrive]
 
 # Packages used in src
 Numpy
-Pandas
+Pandas==1.4.2
 scikit-learn
 nltk
 scipy
@@ -21,4 +21,4 @@ scipy
 # Packages used for testing
 pytest
 tensorflow-data-validation[visualization]==1.8.0
-pandas==1.4.2
+
