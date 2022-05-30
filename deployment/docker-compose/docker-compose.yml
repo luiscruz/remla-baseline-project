@@ -11,4 +11,6 @@ services:
   inference-service:
     build: ../../
     image: inference-service:latest
-    command: gunicorn -b 0.0.0.0:5000 src.serve_model:app
+    command: sh src/startup.sh
+    environment:
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus

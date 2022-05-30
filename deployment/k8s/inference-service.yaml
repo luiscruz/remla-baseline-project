@@ -18,7 +18,7 @@ kind: Deployment
 metadata:
   name: inference-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       component: inference-app
@@ -31,10 +31,13 @@ spec:
         - name: inference-app
           image: inference-service:latest
           imagePullPolicy: Never
-          command: ["gunicorn"]
-          args: ["-b", "0.0.0.0:5000", "src.serve_model:app"]
+          command: ["sh"]
+          args: ["src/startup.sh"]
           ports:
             - containerPort: 5000
+          environment:
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: "/tmp/prometheus/"
 
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -46,7 +49,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: inference-deployment
+      app: inference-service
   endpoints:
     - targetPort: 5000
       path: "/metrics"

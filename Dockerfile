@@ -29,8 +29,7 @@ FROM python:3.8.13-slim
 WORKDIR /root/
 
 RUN mkdir models
-COPY --from=model_build /root/models /models
-COPY --from=model_build /root/models /models
+COPY --from=model_build /root/models models
 
 COPY src src
 
