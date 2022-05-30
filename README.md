@@ -27,4 +27,7 @@ Results evaluated using several classification metrics:
 - [scikit-learn](http://scikit-learn.org/stable/index.html) — a tool for data mining and data analysis.
 - [NLTK](http://www.nltk.org/) — a platform to work with natural language.
 
+## Contributing
+To prepare your local environment for development, install all requirements using `pip install -r requirements.txt`. We make use of the conventional commits specification for our commit messages. We've got checks on CI that enforce this specification. To help you, we've defined a git hook that runs these checks after every commit. You can configure it by running `pre-commit install`.
+
 Note: this sample project was originally created by @partoftheorigin
