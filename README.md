@@ -12,7 +12,14 @@ Pytests can be found in the "tests" directory. Newly added test classes should e
 
 # DVC
 DVC is used to manage the ML pipeline version control artifacts. The artifacts are pushed to a project google drive repo which, the first time you connect to it, needs authentication.
-To use DVC, commit completed artifacts by:
+
+To use DVC, 
+Run the pipeline by:
+```console
+dvc repro
+```
+
+commit completed artifacts by:
 ```console
 dvc commit -am "<message>"
 ```
