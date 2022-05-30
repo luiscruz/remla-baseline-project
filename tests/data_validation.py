@@ -75,3 +75,11 @@ def detect_anomalies():
         dump_anomalies(test_anomalies_detected)
 
     return valid_data
+
+
+if __name__ == '__main__':
+
+    if detect_anomalies():
+        print("No data anomalies detected.")
+    else:
+        print("Anomalies in the data were detected.")

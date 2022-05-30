@@ -18,3 +18,11 @@ def test_text_prepare():
         if text_prepare(ex) != ans:
             return False
     return True
+
+
+if __name__ == '__main__':
+
+    if test_text_prepare():
+        print("Successfully passed preprocessing test.")
+    else:
+        print("Preprocessing test not passed.")

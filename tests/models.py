@@ -55,9 +55,12 @@ def test_accuracy_models():
 
     diff_acc_tfidf = abs(accuracy_score(y_val, labels_tfidf_1)-accuracy_score(y_val, labels_tfidf_2))
 
-    print(diff_acc_bag)
-    print(diff_acc_tfidf)
     return diff_acc_bag < LIMIT or diff_acc_tfidf < LIMIT
 
 
-test_accuracy_models()
+if __name__ == '__main__':
+
+    if test_accuracy_models():
+        print("Successfully models test.")
+    else:
+        print("Models test not passed.")

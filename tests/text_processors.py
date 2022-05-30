@@ -36,3 +36,16 @@ def test_tfidf():
         train_values["train"], train_values["val"], train_values["test"])[3]
 
     return tfidf_vocabulary == result_vocab
+
+
+if __name__ == '__main__':
+
+    if test_bag_of_words():
+        print("Successfully passed bag of words test.")
+    else:
+        print("Bag of words test not passed.")
+
+    if test_tfidf():
+        print("Successfully passed tfid test.")
+    else:
+        print("Tfid test not passed.")
