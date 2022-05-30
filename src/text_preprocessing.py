@@ -67,6 +67,18 @@ def text_prepare(text):
 
 
 def main():
+    """
+        Main logic of this stage:
+        * reads the data
+        * splits the data into features and labels
+        * preprocesses the data by:
+            * ensuring all lowercase letters
+            * replacing some symbols by spaces
+            * deleting some symbols
+            * deleting stopwords
+        * calculating word and tag counts
+        * dumps the preprocessed data in a joblib
+    """
     # Read data
     train = read_data(data_directory + '/train.tsv')
     validation = read_data(data_directory + '/validation.tsv')
