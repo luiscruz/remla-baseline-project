@@ -2,18 +2,24 @@
 Flask API of the SMS Spam detection model model.
 """
 import os
-import shutil
 import pickle
+import shutil
 
 import yaml
 from flasgger import Swagger
-from flask import Flask, jsonify, request, Response
-from prometheus_client import Summary, CollectorRegistry, multiprocess, CONTENT_TYPE_LATEST, Counter
-from prometheus_client import generate_latest
+from flask import Flask, Response, jsonify, request
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    Counter,
+    Summary,
+    generate_latest,
+    multiprocess,
+)
 
 from src.preprocess.preprocess_data import text_prepare
 
-PROMETHEUS_MULTIPROC_DIR = os.environ['PROMETHEUS_MULTIPROC_DIR']
+PROMETHEUS_MULTIPROC_DIR = os.environ["PROMETHEUS_MULTIPROC_DIR"]
 # make sure the dir is clean
 shutil.rmtree(PROMETHEUS_MULTIPROC_DIR, ignore_errors=True)
 os.makedirs(PROMETHEUS_MULTIPROC_DIR)
@@ -25,7 +31,8 @@ swagger = Swagger(app)
 registry = CollectorRegistry()
 multiprocess.MultiProcessCollector(registry)
 
-duration_metric = Summary('predict_duration', 'Time spent per predict request')
+duration_metric = Summary("predict_duration", "Time spent per predict request")
+
 
 def load_yaml_params():
     # Fetch params from yaml params file
