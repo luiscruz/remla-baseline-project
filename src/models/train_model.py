@@ -26,7 +26,7 @@ def main():
     logger.info('Starting the program')
 
     logger.info('Load data')
-    input_filepath = '../../data/processed/'
+    input_filepath = 'data/processed/'
     bow_train = pickle.load(open(input_filepath + "bow_train.pickle", "rb"))
     tfidf_train = pickle.load(open(input_filepath + "tfidf_train.pickle", "rb"))
     mlb_y_train = pickle.load(open(input_filepath + "mlb_train.pickle", "rb"))
@@ -37,7 +37,7 @@ def main():
     classifier_tfidf = train_classifier(tfidf_train, mlb_y_train)
 
     logger.info('Store model')
-    output_filepath = '../../models/'
+    output_filepath = 'models/'
     pickle.dump(classifier_mybag, open(output_filepath + "bow_model.pickle", "wb"))
     pickle.dump(classifier_tfidf, open(output_filepath + "tfidf_model.pickle", "wb"))
 
