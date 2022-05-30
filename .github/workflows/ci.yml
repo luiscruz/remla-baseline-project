@@ -9,7 +9,12 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Build docker image
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
       run: |
+        pip install dvc[s3]==2.10.2
+        dvc pull
         docker build . -t app  
     
     - name: Run Pylint with Dslinter plugin
@@ -18,13 +23,11 @@ jobs:
           --load-plugins=dslinter \
           --reports=y \
           src
-    - name: Run ML pipeline with DVC
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
-      run: |
-        docker run \
-          -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-          app bash -c "dvc pull && dvc repro" 
 
+    - name: Run unit tests
+      run: |
+        docker run app pytest tests
+
+    - name: Run ML pipeline with DVC
+      run: |
+        docker run app dvc repro
