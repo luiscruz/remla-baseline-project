@@ -1,30 +1,35 @@
-# Multilabel classification on Stack Overflow tags
-Predict tags for posts from StackOverflow with multilabel classification approach.
+# Release engeneering of Multilabel classification on Stack Overflow tags
+This project designs a Release pipeline for a multilabel classifying ML applications. The application detials can be found on [the forked project](https://github.com/luiscruz/remla-baseline-project/blob/main/README.md). The team working on this project has applied the following changes to improve the development of the ML applications:
+* Modularise code in separate code files
+* PyTest
+* MLLint
+* Docker
+* DVC
+* Kubernetes
 
-## Dataset
-- Dataset of post titles from StackOverflow
+# Testing: PyTest
+Pytests can be found in the "tests" directory. Newly added test classes should end with "test_*.py" and newly added test functions should start with "test"
 
-## Transforming text to a vector
-- Transformed text data to numeric vectors using bag-of-words and TF-IDF.
+# DVC
+DVC is used to manage the ML pipeline version control artifacts. The artifacts are pushed to a project google drive repo which, the first time you connect to it, needs authentication.
 
-## MultiLabel classifier
-[MultiLabelBinarizer](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MultiLabelBinarizer.html) to transform labels in a binary form and the prediction will be a mask of 0s and 1s.
+To use DVC, 
+Run the pipeline by:
+```console
+dvc repro
+```
 
-[Logistic Regression](http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) for Multilabel classification
-- Coefficient = 10
-- L2-regularization technique
+commit completed artifacts by:
+```console
+dvc commit -am "<message>"
+```
+and push the commit with:
+```console
+dvc push
+```
 
-## Evaluation
-Results evaluated using several classification metrics:
-- [Accuracy](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.accuracy_score.html)
-- [F1-score](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html)
-- [Area under ROC-curve](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html)
-- [Area under precision-recall curve](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html#sklearn.metrics.average_precision_score)
+To use pushed artifacts you can simply use:
+```console
+dvc pull
+```
 
-## Libraries
-- [Numpy](http://www.numpy.org/) — a package for scientific computing.
-- [Pandas](https://pandas.pydata.org/) — a library providing high-performance, easy-to-use data structures and data analysis tools for the Python
-- [scikit-learn](http://scikit-learn.org/stable/index.html) — a tool for data mining and data analysis.
-- [NLTK](http://www.nltk.org/) — a platform to work with natural language.
-
-Note: this sample project was originally created by @partoftheorigin
