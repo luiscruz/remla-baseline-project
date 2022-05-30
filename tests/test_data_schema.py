@@ -4,7 +4,7 @@ import pandas as pd
 import tensorflow_data_validation as tfdv
 
 
-REFRESH_SCHEMAS = False
+REFRESH_SCHEMAS = True
 
 
 @pytest.mark.parametrize(
