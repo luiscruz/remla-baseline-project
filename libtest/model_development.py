@@ -16,8 +16,8 @@ from sklearn.model_selection import GridSearchCV
 """Test that compares the baseline scores to the model scores
     params: 
         scores: dictionary of scores 
-            {"Acc": , "APC": , "F1": , "ROC_AUC": } 
-            (Accuracy, Average Precision Score, F1-score, ROC-AUC score)
+            {"ACC": , "AP": , "F1": , "ROC_AUC": } 
+            (Accuracy, Average Precision score, F1-score, ROC-AUC score)
         X_train: list of features for training data
         X_test: list of features for testing data
         Y_train: list of outputs for training data
@@ -26,35 +26,34 @@ from sklearn.model_selection import GridSearchCV
             "logistic", default: "linear" 
             
 """
-def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="linear"):
-    options = ["linear", "logistic"]
-    if model not in options:
-        model = "linear"
 
+
+def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="linear"):
     # TRAINS Classifier
-    if model == "linear":
-        classifier = LinearRegression().fit(X_train, Y_train)
     if model == "logistic":
         classifier = LogisticRegression().fit(X_train, Y_train)
+    else:  # Default linear model
+        classifier = LinearRegression().fit(X_train, Y_train)
 
-    # TESTS Classifier & RETURNS score difference
+    # TESTS Classifier
     y_pred = classifier.predict(X_test)
-    to_return = {}
-    if "Acc" in scores.key():
-        accuracy = accuracy_score(Y_test, y_pred)
-        to_return["Acc"] = scores["Acc"] - accuracy
-    if "APC" in scores.key():
-        aps = average_precision_score(Y_test, y_pred)
-        to_return["APC"] = scores["APC"] - aps
-    if "F1" in scores.key():
-        f1_score = f1_score(Y_test, y_pred)
-        to_return["F1"] = scores["F1"] - f1_score
-    if "ROC_AUC" in scores.key():
+    score_differences = {}
+    covered_scores = scores.keys()
+    if "ACC" in covered_scores:
+        acc = accuracy_score(Y_test, y_pred)
+        score_differences["ACC"] = scores["ACC"] - acc
+    if "AP" in covered_scores:
+        ap = average_precision_score(Y_test, y_pred)
+        score_differences["AP"] = scores["AP"] - ap
+    if "F1" in covered_scores:
+        f1 = f1_score(Y_test, y_pred)
+        score_differences["F1"] = scores["F1"] - f1
+    if "ROC_AUC" in covered_scores:
         roc_auc = roc_auc_score(Y_test, y_pred)
-        to_return["ROC_AUC"] = scores["ROC_AUC"] - roc_auc
-    return to_return
-    baseline_score = classifier.score(X_val, Y_val)
-    return own_score - baseline_score
+        score_differences["ROC_AUC"] = scores["ROC_AUC"] - roc_auc
+
+    # RETURNS score difference
+    return score_differences
 
 
 def tunable_hyperparameters(model, tunable_parameters, curr_parameters, train_X, train_Y):
@@ -70,6 +69,3 @@ def tunable_hyperparameters(model, tunable_parameters, curr_parameters, train_X,
     dissimilar = [i for i, j in zip(grid.best_params_, curr_parameters) if i != j]
 
     return len(dissimilar) / len(curr_parameters), grid.best_params_
-
-
-
