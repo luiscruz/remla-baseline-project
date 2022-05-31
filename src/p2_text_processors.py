@@ -9,7 +9,7 @@ np.random.seed(1567)
 
 def tfidf_features(X_train, X_val, X_test):
     """
-        X_train, X_val, X_test — samples        
+        X_train, X_val, X_test — samples
         return TF-IDF vectorized representation of each sample and vocabulary
     """
     # Create TF-IDF vectorizer with a proper parameters choice
@@ -38,8 +38,10 @@ def bag_of_words(text, words_to_index, dict_size):
     result_vector = np.zeros(dict_size)
 
     for word in text.split():
+
         if word in words_to_index:
             result_vector[words_to_index[word]] += 1
+
     return result_vector
 
 
@@ -74,7 +76,7 @@ def get_processors(preprocessed_data):
 
     DICT_SIZE = 5000
     INDEX_TO_WORDS = sorted(words_counts.items(), key=lambda x: x[1], reverse=True)[:DICT_SIZE]
-    WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
+    WORDS_TO_INDEX = {word[0]: i for i, word in enumerate(INDEX_TO_WORDS)}
     ALL_WORDS = WORDS_TO_INDEX.keys()
 
     X_train_bag = sp_sparse.vstack([sp_sparse.csr_matrix(

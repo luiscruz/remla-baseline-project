@@ -49,21 +49,6 @@ def get_preprocessed_data(path_data="data/"):
     X_val, y_val = validation['title'].values, validation['tags'].values
     X_test = test['title'].values
 
-    # Clean all the data
-    prepared_questions = []
-    cont = 0
-    test_texts = []
-    test_outs = []
-    for line in open(f'{path_data}text_prepare_tests.tsv', encoding='utf-8'):
-        test_texts.append(line)
-        line = text_prepare(line.strip())
-        prepared_questions.append(line)
-
-        test_outs.append(line)
-        cont += 1
-
-    text_prepare_results = '\n'.join(prepared_questions)
-
     # Retrieve preprocesed data
     X_train = [text_prepare(x) for x in X_train]
     X_val = [text_prepare(x) for x in X_val]
