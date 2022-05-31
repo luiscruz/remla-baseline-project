@@ -41,5 +41,6 @@ dvc pull
 ## Docker
 
 ```
-docker build --build-arg GIT_COMMIT=$(git rev-parse HEAD) -t my_image:$(git rev-parse HEAD) .
+export GIT_COMMIT=$(git rev-parse HEAD)
+docker build --build-arg GIT_COMMIT=${GIT_COMMIT} -t group7/remla:${GIT_COMMIT} .
 ```
