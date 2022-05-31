@@ -1,3 +1,5 @@
+joblib
+tensorflow-data-validation
 numpy==1.20.2
 pandas==1.2.4
 nltk==3.6.1

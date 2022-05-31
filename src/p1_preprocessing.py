@@ -17,8 +17,10 @@ STOPWORDS = set(stopwords.words('english'))
 
 
 def read_data(filename):
-    data = pd.read_csv(filename, sep='\t')
+    data = pd.read_csv(filename, sep='\t', dtype={"title": object, "tags": object})[["title", "tags"]]
+
     data['tags'] = data['tags'].apply(literal_eval)
+
     return data
 
 
@@ -35,11 +37,12 @@ def text_prepare(text):
     return text
 
 
-def main():
+def get_preprocessed_data(path_data="data/"):
+
     # Read the data to be used in the project
-    train = read_data('data/train.tsv')
-    validation = read_data('data/validation.tsv')
-    test = pd.read_csv('data/test.tsv', sep='\t')
+    train = read_data(f'{path_data}train.tsv')
+    validation = read_data(f'{path_data}validation.tsv')
+    test = pd.read_csv(f'{path_data}test.tsv', sep='\t', dtype={"title": object})[["title"]]
 
     # Separate trainning and validation
     X_train, y_train = train['title'].values, train['tags'].values
@@ -51,7 +54,7 @@ def main():
     cont = 0
     test_texts = []
     test_outs = []
-    for line in open('data/text_prepare_tests.tsv', encoding='utf-8'):
+    for line in open(f'{path_data}text_prepare_tests.tsv', encoding='utf-8'):
         test_texts.append(line)
         line = text_prepare(line.strip())
         prepared_questions.append(line)
@@ -66,10 +69,13 @@ def main():
     X_val = [text_prepare(x) for x in X_val]
     X_test = [text_prepare(x) for x in X_test]
 
-    preprocessed_data = {"X_train": X_train, "X_val": X_val, "X_test": X_test, "y_train": y_train, "y_val": y_val}
+    return {"X_train": X_train, "X_val": X_val, "X_test": X_test, "y_train": y_train, "y_val": y_val}
+
+
+def main():
+    preprocessed_data = get_preprocessed_data()
 
     dump(preprocessed_data, 'output/preprocessed_data.joblib')
-    return preprocessed_data
 
 
 if __name__ == "__main__":

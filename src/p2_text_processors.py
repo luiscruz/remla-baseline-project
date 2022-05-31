@@ -1,6 +1,31 @@
 from joblib import dump, load
 import numpy as np
 from scipy import sparse as sp_sparse
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+
+np.random.seed(1567)
+
+
+def tfidf_features(X_train, X_val, X_test):
+    """
+        X_train, X_val, X_test — samples        
+        return TF-IDF vectorized representation of each sample and vocabulary
+    """
+    # Create TF-IDF vectorizer with a proper parameters choice
+    # Fit the vectorizer on the train set
+    # Transform the train, test, and val sets and return the result
+
+    tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2),
+                                       token_pattern='(\S+)')  # YOUR CODE HERE #######
+
+    X_train = tfidf_vectorizer.fit_transform(X_train)
+
+    # transform uses the features learnt in the fit_transform
+    X_val = tfidf_vectorizer.transform(X_val)
+    X_test = tfidf_vectorizer.transform(X_test)
+
+    return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
 
 
 def bag_of_words(text, words_to_index, dict_size):
@@ -18,8 +43,7 @@ def bag_of_words(text, words_to_index, dict_size):
     return result_vector
 
 
-def main():
-    preprocessed_data = load('output/preprocessed_data.joblib')
+def get_processors(preprocessed_data):
 
     X_train = preprocessed_data["X_train"]
     X_val = preprocessed_data["X_val"]
@@ -53,17 +77,32 @@ def main():
     WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
     ALL_WORDS = WORDS_TO_INDEX.keys()
 
-    X_train = sp_sparse.vstack([sp_sparse.csr_matrix(
+    X_train_bag = sp_sparse.vstack([sp_sparse.csr_matrix(
         bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_train])
-    X_val = sp_sparse.vstack([sp_sparse.csr_matrix(
+    X_val_bag = sp_sparse.vstack([sp_sparse.csr_matrix(
         bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_val])
-    X_test = sp_sparse.vstack([sp_sparse.csr_matrix(
+    X_test_bag = sp_sparse.vstack([sp_sparse.csr_matrix(
         bag_of_words(text, WORDS_TO_INDEX, DICT_SIZE)) for text in X_test])
 
-    output_data = {"X_train": X_train, "X_val": X_val,
-                   "X_test": X_test, "y_train": y_train, "y_val": y_val, "tags_counts": tags_counts}
+    output_data_bag = {"X_train": X_train_bag, "X_val": X_val_bag,
+                       "X_test": X_test_bag, "y_train": y_train, "y_val": y_val, "tags_counts": tags_counts}
 
-    dump(output_data, 'output/bag_of_words.joblib')
+    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
+
+    output_data_tdif = {"X_train": X_train_tfidf, "X_val": X_val_tfidf,
+                        "X_test": X_test_tfidf, "tfidf_vocab": tfidf_vocab}
+
+    output_data = {"tfidf": output_data_tdif, "bag": output_data_bag}
+
+    return output_data, ALL_WORDS, INDEX_TO_WORDS
+
+
+def main():
+    preprocessed_data = load('output/preprocessed_data.joblib')
+
+    output_data, ALL_WORDS, INDEX_TO_WORDS = get_processors(preprocessed_data)
+
+    dump(output_data, 'output/text_processor_data.joblib')
 
     dump({"all_words": list(ALL_WORDS), "vocabulary": INDEX_TO_WORDS}, "output/words_dictionaries.joblib")
 
