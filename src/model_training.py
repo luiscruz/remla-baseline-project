@@ -18,10 +18,11 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
       return: trained classifier
     """
-    joblib.dump(['l1', 1], output_directory + "/linear_regression_params.joblib")
+    joblib.dump(['l1', 1], output_directory + "/logistic_regression_params.joblib")
     # Create and fit LogisticRegression wrapped into OneVsRestClassifier.
 
     clf = LogisticRegression(penalty=penalty, C=C, dual=False, solver='liblinear')
+    joblib.dump(clf, output_directory + "/logistic_regression.joblib")
     clf = OneVsRestClassifier(clf)
     clf.fit(X_train, y_train)
 
