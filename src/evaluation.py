@@ -13,17 +13,24 @@ from sklearn.metrics import roc_auc_score
 output_directory = "output"
 
 
-def print_evaluation_scores(y_val, predicted):
+def calculate_evaluation_scores(model_name, y_val, predicted):
     """
         y_val: ground truth labels
         predicted: predicted labels
 
-        Prints the evaluation results to an output file
+        Calculate the evaluation results and save results in joblib and an output file
     """
-    with open(output_directory + "/accuracies.txt", "w", encoding='utf-8') as f:
-        f.write(f"Accuracy score: {accuracy_score(y_val, predicted)} \n"
-                f"F1 score: {f1_score(y_val, predicted, average='weighted')} \n"
-                f"Average precision score: {average_precision_score(y_val, predicted, average='macro')}")
+    # Calculate scores
+    accuracy = accuracy_score(y_val, predicted)
+    f1 = f1_score(y_val, predicted, average='weighted')
+    avg_precision = average_precision_score(y_val, predicted, average='macro')
+    # Write to joblib
+    joblib.dump((accuracy, f1, avg_precision), output_directory + f"/{model_name}_scores.joblib")
+    # Write to output file
+    with open(output_directory + f"/{model_name}_accuracies.txt", "w", encoding='utf-8') as f:
+        f.write(f"Accuracy score: {accuracy} \n"
+                f"F1 score: {f1} \n"
+                f"Average precision score: {avg_precision}")
         f.close()
 
 
@@ -56,9 +63,9 @@ def main():
               f"Predicted labels:\t{','.join(y_val_pred_inversed[i])}\n\n")
 
     print('Bag-of-words')
-    print_evaluation_scores(y_val, y_val_predicted_labels_mybag)
+    calculate_evaluation_scores("BOW", y_val, y_val_predicted_labels_mybag)
     print('Tfidf')
-    print_evaluation_scores(y_val, y_val_predicted_labels_tfidf)
+    calculate_evaluation_scores("TFIDF", y_val, y_val_predicted_labels_tfidf)
 
     roc_auc_score(y_val, y_val_predicted_scores_mybag, multi_class='ovo')
     roc_auc_score(y_val, y_val_predicted_scores_tfidf, multi_class='ovo')
