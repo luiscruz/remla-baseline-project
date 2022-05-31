@@ -7,4 +7,12 @@
 """
 
 
-# todo add more
+def compare_against_baseline(model = "linear", own_score,  train_X, train_Y, test_X, test_Y):
+    options = ["linear", "logistic"]
+    if model not in options:
+        model = "linear"
+        
+    # TRAINS Classifier
+
+    # TESTS Classifier & RETURNS score
+
