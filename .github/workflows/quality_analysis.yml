@@ -1,0 +1,50 @@
+  name: Quality analysis
+
+  on:
+    pull_request:
+      types: [opened, reopened]
+      branches:
+        - main
+
+  jobs:
+    static-analysis:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Setup python
+          uses: actions/setup-python@v3
+          with:
+            python-version: 3.8.6 # pick 3.8.6 verion
+
+        - name: Install dependencies
+          run: |
+            pip install -r requirements.txt --upgrade pip
+            python -m nltk.downloader -d /usr/share/nltk_data all
+
+        - name: debug pyenv
+          run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+
+        - name: run static analysis
+          run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/
+
+    tests:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Setup python
+          uses: actions/setup-python@v3
+          with:
+            python-version: 3.8.6 # pick 3.8.6 verion
+
+        - name: Install dependencies
+          run: |
+            pip install -r requirements.txt --upgrade pip
+            python -m nltk.downloader -d /usr/share/nltk_data all
+
+        - name: debug pyenv
+          run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+
+        - name: run tests
+          run: python -m pytest
