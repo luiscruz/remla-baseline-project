@@ -1,0 +1,31 @@
+name: Test
+on:
+    pull_request:
+    push: { branches: main }
+
+jobs:
+    test:
+        name: Run test suite
+        runs-on: ubuntu-20.04
+        container:
+            image: ghcr.io/${{ github.repository }}
+            credentials:
+                username: ${{ github.actor }}
+                password: ${{ secrets.github_token }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Check packages
+              run: pip3 list
+
+            - name: Install pytest
+              run: pip3 install pytest
+
+            - name: Run tests
+              run: |
+                  pytest tests/preprocessing.py 
+                  pytest tests/text_processors.py
+                  pytest tests/data_validation.py
+                  pytest tests/models.py

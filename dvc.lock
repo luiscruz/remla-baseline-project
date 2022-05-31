@@ -1,0 +1,123 @@
+schema: '2.0'
+stages:
+  createBag:
+    cmd: python src/2_text_processors.py
+    deps:
+    - path: output/preprocessed_data.joblib
+      md5: b9f1085ac0fa1aa2ceddb697efe069f3
+      size: 12448057
+    - path: src/2_text_processors.py
+      md5: ad0c290bfc728cdee6b8084f5a641a9f
+      size: 3607
+    outs:
+    - path: output/text_processor_data.joblib
+      md5: 5317ce0d3bb57f8135728976f9cd3cb2
+      size: 18565594
+    - path: output/words_dictionaries.joblib
+      md5: e17d202b34b8bbdb182567580fd3569c
+      size: 150392
+  preprocess:
+    cmd: python src/1_preprocessing.py
+    deps:
+    - path: src/1_preprocessing.py
+      md5: 84e7514401625b64f21f3194e80abbbb
+      size: 2263
+    outs:
+    - path: output/preprocessed_data.joblib
+      md5: b9f1085ac0fa1aa2ceddb697efe069f3
+      size: 12448057
+  1_preprocess:
+    cmd: python src/1_preprocessing.py
+    deps:
+    - path: src/1_preprocessing.py
+      md5: 0958909acffb52777aee6b66cd81e173
+      size: 2127
+    outs:
+    - path: output/preprocessed_data.joblib
+      md5: b9f1085ac0fa1aa2ceddb697efe069f3
+      size: 12448057
+  train:
+    cmd: python src/3_train.py
+    deps:
+    - path: output/text_processor_data.joblib
+      md5: 5317ce0d3bb57f8135728976f9cd3cb2
+      size: 18565594
+    - path: src/3_train.py
+      md5: c54f98eae138f6bbbda01125c0eca007
+      size: 1802
+    outs:
+    - path: output/classifiers.joblib
+      md5: 7bbbafa3a12b4d5f1c8ebd3761923bf1
+      size: 18703620
+    - path: output/multi_label_binarizer.joblib
+      md5: 1d6096b4a06b0aa20959ff086235d9b6
+      size: 3748
+    - path: output/val_data.joblib
+      md5: fa3a8b990e85618bcf5ad2ad3fdafe41
+      size: 24000218
+  predict:
+    cmd: python src/4_predict.py
+    deps:
+    - path: output/classifiers.joblib
+      md5: 7bbbafa3a12b4d5f1c8ebd3761923bf1
+      size: 18703620
+    - path: output/text_processor_data.joblib
+      md5: 5317ce0d3bb57f8135728976f9cd3cb2
+      size: 18565594
+    - path: src/4_predict.py
+      md5: dd3fdc6030db157107de2839476783c5
+      size: 826
+    outs:
+    - path: output/predictions.joblib
+      md5: 29e2b2c37f923c42bc1694769757d546
+      size: 96000437
+  analyze:
+    cmd: python src/6_analyze_features.py
+    deps:
+    - path: output/classifiers.joblib
+      md5: 7bbbafa3a12b4d5f1c8ebd3761923bf1
+      size: 18703620
+    - path: output/multi_label_binarizer.joblib
+      md5: 1d6096b4a06b0aa20959ff086235d9b6
+      size: 3748
+    - path: output/words_dictionaries.joblib
+      md5: e17d202b34b8bbdb182567580fd3569c
+      size: 150392
+    - path: src/6_analyze_features.py
+      md5: 1bc96ab3aa796cd15d91f27f62ba0979
+      size: 2391
+  evaluation:
+    cmd: python src/5_evaluation.py
+    deps:
+    - path: output/predictions.joblib
+      md5: 29e2b2c37f923c42bc1694769757d546
+      size: 96000437
+    - path: output/val_data.joblib
+      md5: fa3a8b990e85618bcf5ad2ad3fdafe41
+      size: 24000218
+    - path: src/5_evaluation.py
+      md5: f10dc74fae9cb758ef300db84ea47fad
+      size: 1429
+    outs:
+    - path: results/metrics-bag.json
+      md5: 2e06cd83469404b92e408aa10c54a96c
+      size: 92
+    - path: results/metrics-tfidf.json
+      md5: 42191dd32e5933a76d8538374d4a5dd3
+      size: 138
+  processText:
+    cmd: python src/2_text_processors.py
+    deps:
+    - path: output/preprocessed_data.joblib
+      md5: b9f1085ac0fa1aa2ceddb697efe069f3
+      size: 12448057
+    - path: src/2_text_processors.py
+      md5: ad0c290bfc728cdee6b8084f5a641a9f
+      size: 3607
+    outs:
+    - path: output/text_processor_data.joblib
+      md5: 5317ce0d3bb57f8135728976f9cd3cb2
+      size: 18565594
+    - path: output/words_dictionaries.joblib
+      md5: e17d202b34b8bbdb182567580fd3569c
+      size: 150392
