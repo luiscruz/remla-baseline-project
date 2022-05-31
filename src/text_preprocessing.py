@@ -19,6 +19,8 @@ from nltk.corpus import stopwords
 
 data_directory = "data"
 output_directory = "output"
+feature_list = ['title']
+label_list = ['tags']
 
 
 def read_data(filename):
@@ -27,8 +29,9 @@ def read_data(filename):
 
         reads the data in the file and returns it as a dataframe
     """
-    data = pd.read_csv(filename, sep='\t', dtype={'title': 'str', 'tags': 'str'})
-    data = data[['title', 'tags']]
+    data = pd.read_csv(filename, sep='\t', dtype={'title': 'str', 'tags': 'str'}) # pylint: disable=column-selection-pandas
+    # Pylint doesn't recognize that this column selection is valid.
+    data = data[feature_list + label_list]
     data['tags'] = data['tags'].apply(literal_eval)
     return data
 
@@ -79,8 +82,9 @@ def main():
     # Read data
     train = read_data(data_directory + '/train.tsv')
     validation = read_data(data_directory + '/validation.tsv')
-    test = pd.read_csv(data_directory + '/test.tsv', sep='\t', dtype={'title': 'str'})
-    test = test[['title']]
+    test = pd.read_csv(data_directory + '/test.tsv', sep='\t', dtype={'title': 'str'}) # pylint: disable=column-selection-pandas
+    # Pylint doesn't recognize that this column selection is valid.
+    test = test[feature_list]
 
     # Split data
     X_train, y_train, X_val, y_val, X_test = split_data(train, validation, test)
