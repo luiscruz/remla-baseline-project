@@ -1,7 +1,7 @@
 import sys
 import os
 import json
-
+from joblib import load
 sys.path.append(os.getcwd())
 
 
@@ -9,8 +9,7 @@ def test_tfidf():
 
     from src import p2_text_processors
 
-    with open("tests/dependencies/tfidf_process_data.json", "r") as file:
-        validation_data = json.load(file)
+    validation_data = load("tests/dependencies/tfidf_process_data.joblib")
 
     train_values = validation_data["train_values"]
     result_vocab = validation_data["result_vocab"]
