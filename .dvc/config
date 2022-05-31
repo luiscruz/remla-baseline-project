@@ -1,0 +1,5 @@
+[core]
+    autostage = true
+    remote = remla-remote
+['remote "remla-remote"']
+    url = gdrive://1YGxLrqLgvR3Lr3zrtLyvo57aM9eWjORX
