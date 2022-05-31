@@ -33,5 +33,5 @@ jobs:
                   pytest tests/tfidf.py
                   pytest tests/models.py
 
-            - name: Check quality og the code
+            - name: Check quality of the code
               run: pylint src
