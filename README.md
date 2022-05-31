@@ -48,4 +48,4 @@ dvc init
 dvc repro
 ```
 
-The results of our execution will be in the folder results, in a JSON format, with a list of the most/least popular words in the text and metrics such as the accuracy or the precision of the tags that were set.
+The results of our execution will be in the folder results, in a JSON format, with a list of the most/least popular words in the text and metrics such as the accuracy or the precision of the tags that were set..
