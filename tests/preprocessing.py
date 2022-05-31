@@ -20,9 +20,4 @@ def test_text_prepare():
     return True
 
 
-if __name__ == '__main__':
-
-    if test_text_prepare():
-        print("Successfully passed preprocessing test.")
-    else:
-        print("Preprocessing test not passed.")
+assert test_text_prepare(), "Preprocessing is not working correctly"

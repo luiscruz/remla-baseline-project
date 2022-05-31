@@ -31,17 +31,29 @@ def get_anomalies_detected(anomalies):
 
 
 def dump_anomalies(anomalies_detected, option):
-    file_anomalies = f'../validation/{option}.json'
+    file_anomalies = f'static_analysis/validation/{option}.json'
+
     with open(file_anomalies, "w") as file_write:
         file_write.write(json.dumps(anomalies_detected, indent=4))
 
 
-def detect_anomalies():
+def get_message(anomalies_files):
+    message = ''
+
+    if len(anomalies_files) > 1:
+        message = "Anomalies detected in test and validation data"
+    elif len(anomalies_files) > 0:
+        message = f"Anomalies deteceted in {anomalies_files[0]} data"
+
+    return message
+
+
+def test_detect_anomalies():
     train_df = pd.read_csv(f'data/train.tsv', sep="\t")
     val_df = pd.read_csv(f'data/validation.tsv', sep="\t")
-    test_df = pd.read_csv(f'data/validation.tsv', sep="\t")
+    test_df = pd.read_csv(f'data/test.tsv', sep="\t")
 
-    valid_data = True
+    anomalies_files = []
 
     # For the validation set
 
@@ -55,8 +67,8 @@ def detect_anomalies():
     val_anomalies_detected = get_anomalies_detected(anomalies)
 
     if len(val_anomalies_detected.keys()) > 0:
-        valid_data = False
-        dump_anomalies(val_anomalies_detected)
+        anomalies_files.append("validation")
+        dump_anomalies(val_anomalies_detected, "val_data")
 
     # For the test set
 
@@ -64,22 +76,20 @@ def detect_anomalies():
 
     train_stats = tfdv.generate_statistics_from_dataframe(train_df)
     test_stats = tfdv.generate_statistics_from_dataframe(test_df)
-    anomalies = tfdv.validate_statistics(test_stats, schema=schema)
 
     schema = tfdv.infer_schema(train_stats)
+
+    anomalies = tfdv.validate_statistics(test_stats, schema=schema)
 
     test_anomalies_detected = get_anomalies_detected(anomalies)
 
     if len(test_anomalies_detected.keys()) > 0:
-        valid_data = False
-        dump_anomalies(test_anomalies_detected)
+        anomalies_files.append("test")
+        dump_anomalies(test_anomalies_detected, "test_data")
 
-    return valid_data
+    return anomalies_files
 
 
-if __name__ == '__main__':
+message = get_message(test_detect_anomalies())
 
-    if detect_anomalies():
-        print("No data anomalies detected.")
-    else:
-        print("Anomalies in the data were detected.")
+assert message == '', f"{message}, check the directory static_analysis/validation."
