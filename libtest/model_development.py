@@ -7,14 +7,11 @@
 """
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
-<<<<<<< HEAD
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
-=======
 from sklearn.model_selection import GridSearchCV
->>>>>>> a82c5145a4e955d01b8344649cfd4cf7767201cb
 
 """Test that compares the baseline scores to the model scores
     params: 
