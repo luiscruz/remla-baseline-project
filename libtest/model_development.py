@@ -56,7 +56,7 @@ def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="li
     return score_differences
 
 
-def tunable_hyperparameters(model, tunable_parameters, curr_parameters, train_X, train_Y):
+def tunable_hyperparameters(model, tunable_parameters, curr_parameters, X_train, Y_train):
     """
        Uses grid search to find the optimal (hyper)parameters.
        Takes as input the model, parameters to be tuned, current parameters, training data.
@@ -64,7 +64,7 @@ def tunable_hyperparameters(model, tunable_parameters, curr_parameters, train_X,
     """
     grid = GridSearchCV(estimator=model, param_grid=tunable_parameters, n_jobs=-1)
 
-    grid.fit(train_X, train_Y)
+    grid.fit(X_train, Y_train)
 
     dissimilar = [i for i, j in zip(grid.best_params_, curr_parameters) if i != j]
 
