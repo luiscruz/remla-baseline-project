@@ -132,3 +132,5 @@ dmypy.json
 .idea
 *.ipynb
 /output
+*.joblib
+src/output/accuracies.txt

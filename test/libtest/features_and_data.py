@@ -13,7 +13,7 @@ def no_unsuitable_features(used_features, unsuitable_features):
         Compares the list of used features to the list of unsuitable features. The size of the intersection should be 0.
     """
     illegal_features = [f for f in used_features if f in unsuitable_features]
-    assert len(illegal_features) == 0
+    assert len(illegal_features) == 0, "At least one unsuitable feature is used."
 
 
 def feature_target_correlations(dataset, target):

@@ -38,6 +38,8 @@ def test_hey():
         for j in y_train[i]:
             labels_matrix[i][id_labels[j]] = 1
 
+    libtest.features_and_data.feature_target_correlations(mybag, labels_matrix[:, 1])
+
 
 
 
