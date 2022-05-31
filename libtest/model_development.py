@@ -7,6 +7,7 @@
 """
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
 
 
 def compare_against_baseline(own_score, train_X, train_Y, test_X, test_Y, model="linear"):
@@ -23,3 +24,21 @@ def compare_against_baseline(own_score, train_X, train_Y, test_X, test_Y, model=
     # TESTS Classifier & RETURNS score
     baseline_score = classifier.score(test_X, test_Y)
     return own_score - baseline_score
+
+
+def tunable_hyperparameters(model, tunable_parameters, curr_parameters, train_X, train_Y):
+    """
+       Uses grid search to find the optimal (hyper)parameters.
+       Takes as input the model, parameters to be tuned, current parameters, training data.
+       Returns percentage of non optimal (hyper)parameters and the list of optimal (hyper)parameters.
+    """
+    grid = GridSearchCV(estimator=model, param_grid=tunable_parameters, n_jobs=-1)
+
+    grid.fit(train_X, train_Y)
+
+    dissimilar = [i for i, j in zip(grid.best_params_, curr_parameters) if i != j]
+
+    return len(dissimilar) / len(curr_parameters), grid.best_params_
+
+
+
