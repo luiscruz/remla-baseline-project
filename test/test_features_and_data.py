@@ -23,6 +23,8 @@ def test_hey():
         for j in i:
             unique_labels.add(j)
 
+    print(unique_labels)
+    print(len(unique_labels))
     labels_id = {}
     id_labels = {}
     counter = 0
@@ -40,14 +42,29 @@ def test_hey():
 
     libtest.features_and_data.feature_target_correlations(mybag, labels_matrix[:, 1])
     libtest.features_and_data.pairwise_feature_correlations(mybag)
+    # libtest.features_and_data.feature_target_correlations(tfidf, labels_matrix[:, 1])
+    # libtest.features_and_data.pairwise_feature_correlations(tfidf)
 
 
+def test_hey2():
+    mybag, tfidf, _, _ = joblib.load("../output/vectorized_x.joblib")
+    import collections
+    features_values = {}
+    features_distribution = {}
 
+    for i in range(mybag.shape[1]):
+        all_occurrences_of_feature_i = mybag[:, i]
+        arr = all_occurrences_of_feature_i.toarray().reshape(-1)
+        features_values[i] = set(arr)
+        features_distribution[i] = collections.Counter(arr).most_common()
 
-
-
-
-
+    print(features_values)
+    print(features_distribution)
+    expected = [1,2,3,4,5,6]
+    for i in features_values.keys():
+        for k in features_values[i]:
+            assert k in expected
+        break
 
 
 # todo add more
