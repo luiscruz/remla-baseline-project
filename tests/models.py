@@ -58,9 +58,4 @@ def test_accuracy_models():
     return diff_acc_bag < LIMIT or diff_acc_tfidf < LIMIT
 
 
-if __name__ == '__main__':
-
-    if test_accuracy_models():
-        print("Successfully models test.")
-    else:
-        print("Models test not passed.")
+assert test_accuracy_models(), "The models are not working properly"

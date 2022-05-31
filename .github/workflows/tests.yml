@@ -23,9 +23,15 @@ jobs:
             - name: Install pytest
               run: pip3 install pytest
 
+            - name: Data validation
+              run: pytest static_analysis/data_validation.py
+
             - name: Run tests
               run: |
                   pytest tests/preprocessing.py 
-                  pytest tests/text_processors.py
-                  pytest tests/data_validation.py
+                  pytest tests/bag_of_words.py
+                  pytest tests/tfidf.py
                   pytest tests/models.py
+
+            - name: Check quality og the code
+              run: pylint src

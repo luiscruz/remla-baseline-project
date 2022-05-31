@@ -29,7 +29,7 @@ share/python-wheels/
 !requirements.txt
 
 MANIFEST
-validation
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -134,7 +134,6 @@ dmypy.json
 .DS_STORE
 output/*
 results
-static_analysis
 
 
 .bash_history
