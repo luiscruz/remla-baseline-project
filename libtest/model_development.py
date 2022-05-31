@@ -9,17 +9,17 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 
 
-def compare_against_baseline(own_score, train_X, train_Y, test_X, test_Y, model="linear"):
+def compare_against_baseline(own_score, X_train, X_val, Y_train, Y_val, model="linear"):
     options = ["linear", "logistic"]
     if model not in options:
         model = "linear"
 
     # TRAINS Classifier
     if model == "linear":
-        classifier = LinearRegression().fit(train_X, train_Y)
+        classifier = LinearRegression().fit(X_train, Y_train)
     if model == "logistic":
-        classifier = LogisticRegression().fit(train_X, train_Y)
+        classifier = LogisticRegression().fit(X_train, Y_train)
 
-    # TESTS Classifier & RETURNS score
-    baseline_score = classifier.score(test_X, test_Y)
+    # TESTS Classifier & RETURNS score difference
+    baseline_score = classifier.score(X_val, Y_val)
     return own_score - baseline_score
