@@ -8,11 +8,12 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 
-def compare_against_baseline(model = "linear", own_score,  train_X, train_Y, test_X, test_Y):
+
+def compare_against_baseline(own_score, train_X, train_Y, test_X, test_Y, model="linear"):
     options = ["linear", "logistic"]
     if model not in options:
         model = "linear"
-        
+
     # TRAINS Classifier
     if model == "linear":
         classifier = LinearRegression().fit(train_X, train_Y)
@@ -20,4 +21,5 @@ def compare_against_baseline(model = "linear", own_score,  train_X, train_Y, tes
         classifier = LogisticRegression().fit(train_X, train_Y)
 
     # TESTS Classifier & RETURNS score
-
+    baseline_score = classifier.score(test_X, test_Y)
+    return own_score - baseline_score
