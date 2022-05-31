@@ -5,7 +5,7 @@
     Eric Breck, Shanqing Cai, Eric Nielsen, Michael Salib, D. Sculley (2016). What’s your ML test score? A rubric for ML production systems. Reliable Machine Learning in the Wild - NIPS 2016 Workshop (2016).
     Available: https://storage.googleapis.com/pub-tools-public-publication-data/pdf/45742.pdf
 """
-from scipy.stats.stats import pearsonr
+import numpy as np
 
 
 def no_unsuitable_features(used_features, unsuitable_features):
@@ -27,7 +27,7 @@ def feature_target_correlations(dataset, target):
     # Loop over each feature
     for i in range(f):
         all_occurrences_of_feature_i = dataset[:, i]
-        corr = pearsonr(all_occurrences_of_feature_i, target)[0]
+        corr = np.corrcoef(all_occurrences_of_feature_i.toarray().reshape(-1), target)[0][1]
         correlations.append(corr)
 
     # None of the correlations should be exactly 0
@@ -47,7 +47,7 @@ def pairwise_feature_correlations(dataset):
         for j in range(i):
             all_occurrences_of_feature_i = dataset[:, i]
             all_occurrences_of_feature_j = dataset[:, j]
-            corr = pearsonr(all_occurrences_of_feature_i, all_occurrences_of_feature_j)[0]
+            corr = np.corrcoef(all_occurrences_of_feature_i.toarray().reshape(-1), all_occurrences_of_feature_j.toarray().reshape(-1))[0][1]
             correlations.append(corr)
 
     # None of the correlations are exactly 1

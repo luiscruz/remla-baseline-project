@@ -39,6 +39,7 @@ def test_hey():
             labels_matrix[i][id_labels[j]] = 1
 
     libtest.features_and_data.feature_target_correlations(mybag, labels_matrix[:, 1])
+    libtest.features_and_data.pairwise_feature_correlations(mybag)
 
 
 
