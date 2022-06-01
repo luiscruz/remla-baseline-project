@@ -3,6 +3,7 @@
 """
 @author hielke
 """
+import os
 from flask import Flask
 
 app = Flask(__name__)
@@ -15,6 +16,6 @@ def hello_world():
 # TODO: Add a predict endpoint...
 
 if __name__ == '__main__':
-    PORT = 8080
-    print(f'Running Flask app on port {PORT}')
-    app.run(port=PORT, debug=True)
+    port = int(os.environ.get('port', 5000))
+    print(f'Running Flask app on port {port}')
+    app.run(debug=True, port=port)
