@@ -33,6 +33,11 @@ export PORT=5000
 docker build --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PORT=$PORT -t group7/remla:$GIT_COMMIT .
 docker run --rm -p $PORT:$PORT group7/remla:${GIT_COMMIT}
 ```
+alternatively with powershell you can run the following from the root:
+```
+docker build -t remla7 ./
+docker run --rm -p 5000:5000 -it remla7
+```
 
 ## Server
 
