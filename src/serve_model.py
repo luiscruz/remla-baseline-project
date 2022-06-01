@@ -15,5 +15,6 @@ def hello_world():
 # TODO: Add a predict endpoint...
 
 if __name__ == '__main__':
-    print('running...')
-    app.run(port=8080, debug=True)
+    PORT = 8080
+    print(f'Running Flask app on port {PORT}')
+    app.run(port=PORT, debug=True)
