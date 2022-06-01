@@ -3,6 +3,9 @@ FROM python:3.7.10-slim
 
 WORKDIR /root/
 
+RUN python -m venv ./venv
+ENV PATH=./venv/bin:$PATH
+
 # Keep setuptools and wheel up to date
 RUN pip install -U \
     setuptools \
