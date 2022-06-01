@@ -62,10 +62,27 @@ def tunable_hyperparameters(model, tunable_parameters, curr_parameters, X_train,
        Takes as input the model, parameters to be tuned, current parameters, training data.
        Returns percentage of non optimal (hyper)parameters and the list of optimal (hyper)parameters.
     """
-    grid = GridSearchCV(estimator=model, param_grid=tunable_parameters, n_jobs=-1)
-
+    grid = GridSearchCV(estimator=model, param_grid=tunable_parameters)
+    print(grid)
     grid.fit(X_train, Y_train)
 
     dissimilar = [i for i, j in zip(grid.best_params_, curr_parameters) if i != j]
 
     return len(dissimilar) / len(curr_parameters), grid.best_params_
+
+
+def data_slices(model, X_train_slices, Y_train_slices, X_val, Y_val):
+    # scores = []
+    min = 100
+    max = 0
+
+    for x_slice, y_slice in zip(X_train_slices, Y_train_slices):
+        model.fit(x_slice, y_slice)
+        score = model.score(X_val, Y_val)
+        # scores.append(score)
+        if score < min:
+            min = score
+        if score > max:
+            max = score
+
+    return max - min

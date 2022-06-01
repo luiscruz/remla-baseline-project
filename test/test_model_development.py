@@ -33,31 +33,27 @@ def test_tunable_hyperparameters():
     Y_train, Y_val = joblib.load(output_directory + "/y_preprocessed.joblib")
     curr_params = joblib.load(output_directory + "/logistic_regression_params.joblib")
     classifier = joblib.load(output_directory + "/logistic_regression.joblib")
-    # classifier_mybag, classifier_tfidf = joblib.load(output_directory + "/classifiers.joblib")
+    classifier_mybag, classifier_tfidf = joblib.load(output_directory + "/classifiers.joblib")
 
     mlb = MultiLabelBinarizer()
     X_train = mlb.fit_transform(X_train)
     Y_train = mlb.fit_transform(Y_train)
 
-    print(np.shape(X_train))
-    print(np.shape(Y_train))
-
     tunable_parameters = {
-        "penalty": ['l1', 'l2', 'elasticnet', 'none'],
-        "C": [0.0001, 0.001, 0.1, 1.0, 10.0, 100.0, 1000.0],
+        "estimator__penalty": ['l1', 'l2'],
+        "estimator__C": [0.1, 1.0],
     }
 
-    # percentage_mybag, optimal_parameters_mybag = lib.tunable_hyperparameters(LogisticRegression(), tunable_parameters,
-    #                                                                          curr_params, X_train, Y_train)
-    # print("dissimilar percentage_mybag: " + percentage_mybag + ", current: " + curr_params + ", optimal: "
-    #       + optimal_parameters_mybag)
+    percentage_mybag, optimal_parameters_mybag = lib.tunable_hyperparameters(classifier_mybag, tunable_parameters,
+                                                                             curr_params, X_train, Y_train)
+    print("dissimilar percentage_mybag: " + percentage_mybag + ", current: " + curr_params + ", optimal: "
+          + optimal_parameters_mybag)
 
-    # percentage_tfidf, optimal_parameters_tfidf = lib.tunable_hyperparameters(classifier, tunable_parameters,
-    #                                                                          curr_params, X_train, Y_train)
-    # print("dissimilar percentage_tfidf: " + percentage_tfidf + ", current: " + curr_params + ", optimal: "
-    #       + optimal_parameters_tfidf)
+    percentage_tfidf, optimal_parameters_tfidf = lib.tunable_hyperparameters(classifier_tfidf, tunable_parameters,
+                                                                             curr_params, X_train, Y_train)
+    print("dissimilar percentage_tfidf: " + percentage_tfidf + ", current: " + curr_params + ", optimal: "
+          + optimal_parameters_tfidf)
 
 
 if __name__ == '__main__':
-    # unittest.main()
     test_tunable_hyperparameters()
