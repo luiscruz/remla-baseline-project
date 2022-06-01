@@ -18,9 +18,12 @@ ENV GIT_HASH=$GIT_HASH
 LABEL git_hash=$GIT_HASH
 
 COPY . .
-# RUN dvc pull && dvc repro
+RUN dvc pull
 
-EXPOSE 8080
+ARG PORT=5000
+ENV PORT=$PORT
+
+EXPOSE $PORT
 
 ENTRYPOINT ["python"]
 CMD ["src/serve_model.py"]

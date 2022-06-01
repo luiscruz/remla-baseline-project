@@ -46,8 +46,9 @@ dvc pull
 
 ```
 export GIT_COMMIT=$(git rev-parse HEAD)
-docker build --build-arg GIT_COMMIT=${GIT_COMMIT} -t group7/remla:${GIT_COMMIT} .
-docker run --rm -p 5000:5000 group7/remla:${GIT_COMMIT}
+export PORT=5000
+docker build --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PORT=$PORT -t group7/remla:$GIT_COMMIT .
+docker run --rm -p $PORT:$PORT group7/remla:${GIT_COMMIT}
 ```
 
-Now go to localhost:5000 and you should see "Hello World"
+Now go to 127.0.0.1:5000 and you should see "Hello World"
