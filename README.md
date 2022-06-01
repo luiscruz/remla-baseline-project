@@ -13,6 +13,31 @@ This project designs a Release pipeline for a multilabel classifying ML applicat
 
 Pytests can be found in the "tests" directory. Newly added test classes should end with "test\_\*.py" and newly added test functions should start with "test"
 
+# Installation
+
+## Local (with `venv` as virtual environemnt)
+
+```
+python -m venv ./venv
+. ./venv/bin/activate
+pip install -r requirements.txt
+dvc pull
+python src/serve_model.py
+```
+
+## Docker
+
+```
+export GIT_COMMIT=$(git rev-parse HEAD)
+export PORT=5000
+docker build --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PORT=$PORT -t group7/remla:$GIT_COMMIT .
+docker run --rm -p $PORT:$PORT group7/remla:${GIT_COMMIT}
+```
+
+## Server
+
+The application is now served at 127.0.0.1:5000.
+
 # DVC
 
 DVC is used to manage the ML pipeline version control artifacts. The artifacts are pushed to a project google drive repo which, the first time you connect to it, needs authentication.
@@ -42,13 +67,3 @@ To use pushed artifacts you can simply use:
 dvc pull
 ```
 
-## Docker
-
-```
-export GIT_COMMIT=$(git rev-parse HEAD)
-export PORT=5000
-docker build --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PORT=$PORT -t group7/remla:$GIT_COMMIT .
-docker run --rm -p $PORT:$PORT group7/remla:${GIT_COMMIT}
-```
-
-Now go to 127.0.0.1:5000 and you should see "Hello World"
