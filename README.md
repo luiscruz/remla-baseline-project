@@ -47,7 +47,7 @@ dvc pull
 ```
 export GIT_COMMIT=$(git rev-parse HEAD)
 docker build --build-arg GIT_COMMIT=${GIT_COMMIT} -t group7/remla:${GIT_COMMIT} .
-docker run -p 5000:5000 group7/remla:${GIT_COMMIT}
+docker run --rm -p 5000:5000 group7/remla:${GIT_COMMIT}
 ```
 
-Now go to localhost:5000
+Now go to localhost:5000 and you should see "Hello World"

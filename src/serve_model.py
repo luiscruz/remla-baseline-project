@@ -18,4 +18,4 @@ def hello_world():
 if __name__ == '__main__':
     port = int(os.environ.get('port', 5000))
     print(f'Running Flask app on port {port}')
-    app.run(debug=True, port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
