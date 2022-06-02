@@ -4,12 +4,11 @@
 import joblib
 import numpy as np
 
-import libtest.features_and_data
-from src.text_preprocessing import feature_list
+from libtest.features_and_data import no_unsuitable_features, pairwise_feature_correlations, feature_target_correlations
 
 
 def test_no_unsuitable_features():
-    libtest.features_and_data.no_unsuitable_features(feature_list, [])
+    no_unsuitable_features(['title'], [])
 
 
 def prepare_correlation_analysis():
@@ -41,16 +40,16 @@ def prepare_correlation_analysis():
 def test_pairwise_feature_correlations():
     mybag, tfidf, _ = prepare_correlation_analysis()
 
-    libtest.features_and_data.pairwise_feature_correlations(mybag, sample_size=100000)
-    libtest.features_and_data.pairwise_feature_correlations(tfidf, sample_size=100000)
+    pairwise_feature_correlations(mybag, sample_size=100000)
+    pairwise_feature_correlations(tfidf, sample_size=100000)
 
 
 def test_feature_target_correlations():
     mybag, tfidf, labels_matrix = prepare_correlation_analysis()
 
     for i in range(3):
-        libtest.features_and_data.feature_target_correlations(mybag, labels_matrix[:, i])
-        libtest.features_and_data.feature_target_correlations(tfidf, labels_matrix[:, i])
+        feature_target_correlations(mybag, labels_matrix[:, i])
+        feature_target_correlations(tfidf, labels_matrix[:, i])
 
 
 def test_feature_values():
