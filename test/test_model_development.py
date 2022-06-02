@@ -79,12 +79,12 @@ def test_data_slicing():
 
 
 
-    model = MultiLabelBinarizer(LogisticRegression(penalty='l1', C=1, dual=False, solver='liblinear'))
+    model = OneVsRestClassifier(LogisticRegression(penalty='l1', C=1, dual=False, solver='liblinear'))
     # lib.data_slices(model, slices, X_val, Y_val)
     min = 100
     max = 0
 
-    tags_counts = joblib.load(output_directory + "/tags_count.joblib")
+    tags_counts = joblib.load(output_directory + "/tags_counts.joblib")
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
     # y_train = mlb.fit_transform(y_train)
     Y_val = mlb.fit_transform(Y_val)
