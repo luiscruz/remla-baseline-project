@@ -1,5 +1,7 @@
   name: Merge to main check
-  on: push
+  on: 
+    push: 
+  # tags: ["v[0-9]+.[0-9]+.[0-9]+"]
   jobs:
     init:
       runs-on: ubuntu-latest
@@ -35,3 +37,44 @@
           uses: actions/download-artifact@v3
           with:
             path: output
+
+        - name: Parse version info from tag
+          run: |
+            # GITHUB_REF is like refs/tags/v2.3.5, so strip the first 11 characters.
+            VERSION=${GITHUB_REF:11}
+            MAJOR=`echo "$VERSION" | cut -d . -f 1`
+            MINOR=`echo "$VERSION" | cut -d . -f 2`
+            PATCH=`echo "$VERSION" | cut -d . -f 3`
+            echo "version=$VERSION" >> $GITHUB_ENV
+            echo "version_major=$MAJOR" >> $GITHUB_ENV
+            echo "version_minor=$MINOR" >> $GITHUB_ENV
+            echo "version_patch=$PATCH" >> $GITHUB_ENV
+
+        - name: 9-remla-multilabel
+          run: |
+           echo $VERSION
+           echo ${{ env.version }}
+
+        - name: Login to registry
+          run: echo "${{ secrets.GITHUB_TOKEN }}" docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+        # - name: Set lower case owner name
+        #   run: |
+        #     echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        #   env:
+        #     OWNER: '${{ github.repository_owner }}'
+            
+        - name: Lowercase REPO
+          run: |
+            echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+
+        - name: Build and push
+          run: |
+            IMG=ghcr.io/$REPO
+            docker build \
+              -t $IMG:latest \
+              -t $IMG:${{ env.version_major }}-latest \
+              -t $IMG:${{ env.version_major }}.${{ env.version_minor }}-latest \
+              -t $IMG:${{ env.version }} \
+              .
+            docker push --all-tags $IMG
