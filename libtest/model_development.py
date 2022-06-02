@@ -13,22 +13,19 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import GridSearchCV
 
-"""Test that compares the baseline scores to the model scores
-    params: 
-        scores: dictionary of scores 
-            {"ACC": , "AP": , "F1": , "ROC_AUC": } 
-            (Accuracy, Average Precision score, F1-score, ROC-AUC score)
-        X_train: list of features for training data
-        X_test: list of features for testing data
-        Y_train: list of outputs for training data
-        Y_test: list of outputs for testing data
-        model: type of baseline model
-            "logistic", default: "linear" 
-            
-"""
-
-
 def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="linear"):
+    """
+     Compares the classifier model scores against a baseline classifier model.
+    :param scores: dictionary of scores
+            {"ACC": , "AP": , "F1": , "ROC_AUC": }
+            (Accuracy, Average Precision score, F1-score, ROC-AUC score)
+    :param X_train: list of features for training data
+    :param X_test: list of features for testing data
+    :param Y_train: list of outputs for training data
+    :param Y_test: list of outputs for testing data
+    :param model: type of baseline model "logistic", default: "linear"
+    :return: score differences between model and baseline model
+    """
     # TRAINS Classifier
     if model == "logistic":
         classifier = LogisticRegression().fit(X_train, Y_train)
@@ -59,8 +56,12 @@ def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="li
 def tunable_hyperparameters(model, tunable_parameters, curr_parameters, X_train, Y_train):
     """
        Uses grid search to find the optimal (hyper)parameters.
-       Takes as input the model, parameters to be tuned, current parameters, training data.
-       Returns percentage of non optimal (hyper)parameters and the list of optimal (hyper)parameters.
+    :param model: the classification model
+    :param tunable_parameters: parameters to be tuned
+    :param curr_parameters: current parameters used
+    :param X_train: list of features for training data
+    :param Y_train: list of outputs for training data
+    :return: Returns percentage of non optimal (hyper)parameters and the list of optimal (hyper)parameters.
     """
     grid = GridSearchCV(estimator=model, param_grid=tunable_parameters)
     print(grid)
@@ -72,6 +73,15 @@ def tunable_hyperparameters(model, tunable_parameters, curr_parameters, X_train,
 
 
 def data_slices(model, X_train_slices, Y_train_slices, X_val, Y_val):
+    """
+        Runs the given model the data slices and compares the difference in score in all slices.
+    :param model: the classification model
+    :param X_train_slices: array with slices of X_train data
+    :param Y_train_slices: array with slices of Y_train data
+    :param X_val: X validation data
+    :param Y_val: Y validation data
+    :return: the difference between min and max score over all slices
+    """
     # scores = []
     min = 100
     max = 0
