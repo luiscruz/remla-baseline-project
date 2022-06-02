@@ -1,0 +1,36 @@
+name: Release image
+
+on:
+  push:
+    tags:
+      - '*' # Release docker image with every pushed tag
+
+jobs:
+  dockerhub-release-on-tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Extract tag name
+      run: |
+        TAG_NAME=${GITHUB_REF:11}
+        echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+    
+    - name: Log in to Github Container Registery
+      run: |
+        echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    
+    - name: Build and push docker image
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+      run: |
+        pip install dvc[s3]==2.10.2
+        dvc pull
+        IMAGE=ghcr.io/${{ github.repository }}
+        docker build \
+          -t $IMAGE:latest \
+          -t $IMAGE:${{ env.tag_name }} \
+          .
+        docker build . -t crpaulsen/remla-app:${{ env.tag_name }}
+        docker push --all-tags $IMAGE
