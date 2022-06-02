@@ -9,7 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-output_directory = "output"
+output_directory = "../output"
 
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
@@ -49,7 +49,7 @@ def main():
     classifier_tfidf = train_classifier(X_train_tfidf, y_train)
 
     joblib.dump((classifier_mybag, classifier_tfidf), output_directory + "/classifiers.joblib")
-    joblib.dump(y_val, output_directory + "/fitted_y_val.joblib")
+    joblib.dump((y_train, y_val), output_directory + "/fitted_y.joblib")
     joblib.dump(mlb, output_directory + "/mlb.joblib")
 
 

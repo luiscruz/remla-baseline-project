@@ -16,18 +16,19 @@ import pandas as pd
 output_directory = "../output"
 
 
-def test_against_baseline():
+def test_tfidf_against_baseline():
     # Run own model and get score
-    X_train, X_val, _ = joblib.load(output_directory + "/X_preprocessed.joblib")
-    Y_train, Y_val = joblib.load(output_directory + "/y_preprocessed.joblib")
+    _, X_train_tfidf, _, X_val_tfidf= joblib.load(output_directory + "/vectorized_x.joblib")
+    Y_train, Y_val = joblib.load(output_directory + "/fitted_y.joblib")
 
     (accuracy, f1, avg_precision) = joblib.load(output_directory + "/TFIDF_scores.joblib")
     scores = {"ACC": accuracy, "F1": f1, "AP": avg_precision}
 
-    score_differences = lib.compare_against_baseline(scores, X_train, X_val, Y_train, Y_val, model="linear")
+    baseline_scores, score_differences = lib.compare_against_baseline(scores, X_train_tfidf, X_val_tfidf, Y_train, Y_val, model="linear")
 
     # Assert every score differs at least 10 percent from the baseline
-    for score, diff in score_differences:
+    for score, diff in score_differences.items():
+        print(score, " score difference: ", diff)
         assert (diff > 0.1)
 
 

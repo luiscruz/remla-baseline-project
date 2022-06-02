@@ -12,6 +12,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.multiclass import OneVsRestClassifier
 
 def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="linear"):
     """
@@ -30,27 +31,34 @@ def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="li
     if model == "logistic":
         classifier = LogisticRegression().fit(X_train, Y_train)
     else:  # Default linear model
-        classifier = LinearRegression().fit(X_train, Y_train)
+        classifier = LinearRegression()
+    classifier = OneVsRestClassifier(classifier)
+    classifier.fit(X_train, Y_train)
 
     # TESTS Classifier
     y_pred = classifier.predict(X_test)
+    # y_pred_scores = classifier.decision_function(X_test)
+    baseline_scores = {}
     score_differences = {}
     covered_scores = scores.keys()
     if "ACC" in covered_scores:
         acc = accuracy_score(Y_test, y_pred)
+        baseline_scores["ACC"] = acc
         score_differences["ACC"] = scores["ACC"] - acc
     if "AP" in covered_scores:
         ap = average_precision_score(Y_test, y_pred)
+        baseline_scores["AP"] = ap
         score_differences["AP"] = scores["AP"] - ap
     if "F1" in covered_scores:
-        f1 = f1_score(Y_test, y_pred)
+        f1 = f1_score(Y_test, y_pred, average='weighted') # average needs to be set
+        baseline_scores["F1"] = f1
         score_differences["F1"] = scores["F1"] - f1
-    if "ROC_AUC" in covered_scores:
-        roc_auc = roc_auc_score(Y_test, y_pred)
-        score_differences["ROC_AUC"] = scores["ROC_AUC"] - roc_auc
+    # if "ROC_AUC" in covered_scores:
+    #     roc_auc = roc_auc_score(Y_test, y_pred_scores)
+    #     score_differences["ROC_AUC"] = scores["ROC_AUC"] - roc_auc
 
     # RETURNS score difference
-    return score_differences
+    return baseline_scores, score_differences
 
 
 def tunable_hyperparameters(model, tunable_parameters, curr_parameters, X_train, Y_train):
