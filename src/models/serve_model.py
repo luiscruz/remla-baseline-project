@@ -59,4 +59,4 @@ def predict():
 if __name__ == '__main__':
     with open(ROOT_DIR / 'data/derivates/tfidf_vectorizer.pkl', 'rb') as f:
     	tfidf_vectorizer = pickle.load(f)
-    app.run(port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
