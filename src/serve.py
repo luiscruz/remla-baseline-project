@@ -16,9 +16,7 @@ app = Flask(__name__)
 @app.route("/tags", methods=["GET"])
 def tags():
     """Give a sorted list of the known tags."""
-    res = {
-        "result": SORTED_TAGS
-    }
+    res = {"result": SORTED_TAGS}
     return jsonify(res)
 
 
@@ -30,10 +28,7 @@ def predict():
     processed_title_tfidf = TFIDF_VECTORIZER.transform([text_prepare(title)])
     prediction = MLB.inverse_transform(MODEL.predict(processed_title_tfidf))[0]
     prediction = [int(id) for id in prediction]
-    res = {
-        "title": title,
-        "result": prediction
-    }
+    res = {"title": title, "result": prediction}
     return jsonify(res)
 
 
