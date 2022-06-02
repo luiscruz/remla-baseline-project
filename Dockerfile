@@ -3,7 +3,7 @@ FROM python:3.9.12-slim
 WORKDIR /root/
 
 RUN apt-get update &&\
-    apt-get install -y gcc
+    apt-get install --no-install-recommends -y gcc g++
 
 COPY requirements.txt .
 COPY setup.py .
