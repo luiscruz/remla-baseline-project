@@ -10,7 +10,7 @@ from math import isclose
 from sklearn.metrics import f1_score, average_precision_score, accuracy_score
 
 
-def test_reproducibility_training(model, x_train, y_train, x_test, y_test, eval_metrics=None, precision=1e-3):
+def reproducibility_training(model, x_train, y_train, x_test, y_test, eval_metrics=None, precision=1e-3):
     models = {}
     for i in range(2):
         trained_model = model.fit(x_train, y_train)
@@ -21,7 +21,8 @@ def test_reproducibility_training(model, x_train, y_train, x_test, y_test, eval_
     print(lst, models)
     assert lst
 
-def test_improved_model_quality(model_1, model_2, x_test, y_test):
+
+def improved_model_quality(model_1, model_2, x_test, y_test):
     res1 = get_accuracy(model_1, x_test, y_test)
     res2 = get_accuracy(model_2, x_test, y_test)
     lst = all(y >= x for x, y in zip(res1, res2))

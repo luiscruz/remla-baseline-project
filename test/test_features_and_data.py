@@ -11,9 +11,10 @@ from src.text_preprocessing import feature_list
 def test_no_unsuitable_features():
     libtest.features_and_data.no_unsuitable_features(feature_list, [])
 
+
 def prepare_correlation_analysis():
-    mybag, tfidf, _, _ = joblib.load("../output/vectorized_x.joblib")
-    y_train, _ = joblib.load("../output/y_preprocessed.joblib")
+    mybag, tfidf, _, _ = joblib.load("output/vectorized_x.joblib")
+    y_train, _ = joblib.load("output/y_preprocessed.joblib")
 
     unique_labels = {None}
     for i in y_train:
@@ -52,8 +53,8 @@ def test_feature_target_correlations():
         libtest.features_and_data.feature_target_correlations(tfidf, labels_matrix[:, i])
 
 
-def test_hey2():
-    mybag, tfidf, _, _ = joblib.load("../output/vectorized_x.joblib")
+def test_feature_values():
+    mybag, tfidf, _, _ = joblib.load("output/vectorized_x.joblib")
     import collections
     features_values = {}
     features_distribution = {}
@@ -64,13 +65,10 @@ def test_hey2():
         features_values[i] = set(arr)
         features_distribution[i] = collections.Counter(arr).most_common()
 
-    print(features_values)
-    print(features_distribution)
-    expected = [1,2,3,4,5,6]
+    expected = [0, 1, 2, 3, 4, 5, 6]
     for i in features_values.keys():
         for k in features_values[i]:
             assert k in expected
         break
-
 
 # todo add more
