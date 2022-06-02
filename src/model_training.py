@@ -9,7 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-output_directory = "../output"
+output_directory = "output"
 
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):

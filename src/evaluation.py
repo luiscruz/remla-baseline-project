@@ -10,7 +10,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
 
-output_directory = "../output"
+output_directory = "output"
 
 
 def calculate_evaluation_scores(model_name, y_val, predicted):
