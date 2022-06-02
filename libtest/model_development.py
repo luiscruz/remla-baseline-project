@@ -72,27 +72,33 @@ def tunable_hyperparameters(model, tunable_parameters, curr_parameters, X_train,
     return len(dissimilar) / len(curr_parameters), grid.best_params_
 
 
-def data_slices(model, X_train_slices, Y_train_slices, X_val, Y_val):
+def data_slices(model, slices, X_val, Y_val):
     """
         Runs the given model the data slices and compares the difference in score in all slices.
     :param model: the classification model
-    :param X_train_slices: array with slices of X_train data
+    :param slices: dictionary with slices
+        key: category of slicing
+        value: tuple (X_slice, Y_slice)
     :param Y_train_slices: array with slices of Y_train data
     :param X_val: X validation data
     :param Y_val: Y validation data
     :return: the difference between min and max score over all slices
     """
-    # scores = []
     min = 100
     max = 0
 
-    for x_slice, y_slice in zip(X_train_slices, Y_train_slices):
+    for key in slices.keys():
+        x_slice = []
+        for x in slices[key]:
+            x_slice.append(x[0])
+        y_slice = []
+        for y in slices[key]:
+            y_slice.append(y[1])
         model.fit(x_slice, y_slice)
         score = model.score(X_val, Y_val)
-        # scores.append(score)
         if score < min:
             min = score
         if score > max:
             max = score
 
-    return max - min
+    print(max - min)

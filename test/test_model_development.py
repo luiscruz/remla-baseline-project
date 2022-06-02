@@ -9,6 +9,9 @@ import libtest.model_development as lib
 
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.preprocessing import MultiLabelBinarizer
+import pandas as pd
 
 output_directory = "../output"
 
@@ -54,6 +57,60 @@ def test_tunable_hyperparameters():
     print("dissimilar percentage_tfidf: " + percentage_tfidf + ", current: " + curr_params + ", optimal: "
           + optimal_parameters_tfidf)
 
+def test_data_slicing():
+    X_train, X_val, _ = joblib.load(output_directory + "/X_preprocessed.joblib")
+    Y_train, Y_val = joblib.load(output_directory + "/y_preprocessed.joblib")
+    # print("x train", X_train[:5])
+    # print("y train", Y_train[:5])
+    length = (len(x.split()) for x in X_train)
+    tuples = list((x, y, z) for x,y,z in zip(X_train, Y_train, length))
+    tuples.sort(key=lambda y: y[2])
+
+    # print(len(tuples))
+
+    slices = {}
+    # count = 0
+    for t in tuples:
+        # count += 1
+        # print(count)
+        if t[2] not in slices.keys():
+            slices[t[2]] = []
+        slices[t[2]].append((t[0], t[1]))
+
+
+
+    model = MultiLabelBinarizer(LogisticRegression(penalty='l1', C=1, dual=False, solver='liblinear'))
+    # lib.data_slices(model, slices, X_val, Y_val)
+    min = 100
+    max = 0
+
+    tags_counts = joblib.load(output_directory + "/tags_count.joblib")
+    mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
+    # y_train = mlb.fit_transform(y_train)
+    Y_val = mlb.fit_transform(Y_val)
+
+    for key in slices.keys():
+        x_slice = []
+        for x in slices[key]:
+            x_slice.append(x[0])
+        y_slice = []
+        for y in slices[key]:
+            y_slice.append(y[1])
+        y_slice = y_train = mlb.fit_transform(y_slice)
+        model.fit(x_slice, y_slice)
+        score = model.score(X_val, Y_val)
+        if score < min:
+            min = score
+        if score > max:
+            max = score
+
+
+
+
+
+
 
 if __name__ == '__main__':
-    test_tunable_hyperparameters()
+    # test_tunable_hyperparameters()
+    test_data_slicing()
+
