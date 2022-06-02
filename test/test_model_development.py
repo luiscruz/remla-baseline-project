@@ -93,18 +93,30 @@ def test_data_slicing():
     for key in slices.keys():
         x_slice = []
         for x in slices[key]:
-            x_slice.append(x[0])
+
+            # nsamples, nx, ny = x[0].toarray().shape
+            # to_add = x[0].reshape((nsamples,nx*ny))
+            x_slice.append(x[0].toarray())
+        x_slice = np.stack(x_slice, axis=0 )
+
         y_slice = []
         for y in slices[key]:
             y_slice.append(y[1])
         y_slice = mlb.fit_transform(y_slice)
-        print(type(x_slice[0]))
+        #
+        # print(x_slice.ndim)
+        # print(y_slice.ndim)
+        nsamples, nx, ny = x_slice.shape
+        x_slice = x_slice.reshape((nsamples,nx*ny))
         model.fit(x_slice, y_slice)
         score = model.score(X_val_mybag, Y_val)
+        print(score)
         if score < min:
             min = score
         if score > max:
             max = score
+
+    assert max-min < 0.2
 
 
 
