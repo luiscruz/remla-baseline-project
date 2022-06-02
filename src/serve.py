@@ -37,4 +37,4 @@ if __name__ == "__main__":
     TFIDF_VECTORIZER = joblib.load("output/tfidf_vectorizer.joblib")
     MLB = joblib.load("output/mlb.joblib")
     SORTED_TAGS = joblib.load("output/sorted_tags.joblib")
-    app.run(host="0.0.0.0", port=8080, debug=True)  # nosec
+    app.run(host="0.0.0.0", port=8080, debug=False)  # nosec
