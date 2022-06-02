@@ -63,7 +63,8 @@ def test_data_slicing():
     # print("x train", X_train[:5])
     # print("y train", Y_train[:5])
     length = (len(x.split()) for x in X_train)
-    tuples = list((x, y, z) for x,y,z in zip(X_train, Y_train, length))
+    X_train_mybag, _, X_val_mybag, _ = joblib.load(output_directory + "/vectorized_x.joblib")
+    tuples = list((x, y, z) for x,y,z in zip(X_train_mybag, Y_train, length))
     tuples.sort(key=lambda y: y[2])
 
     # print(len(tuples))
@@ -78,7 +79,6 @@ def test_data_slicing():
         slices[t[2]].append((t[0], t[1]))
 
 
-
     model = OneVsRestClassifier(LogisticRegression(penalty='l1', C=1, dual=False, solver='liblinear'))
     # lib.data_slices(model, slices, X_val, Y_val)
     min = 100
@@ -89,6 +89,7 @@ def test_data_slicing():
     # y_train = mlb.fit_transform(y_train)
     Y_val = mlb.fit_transform(Y_val)
 
+
     for key in slices.keys():
         x_slice = []
         for x in slices[key]:
@@ -96,9 +97,10 @@ def test_data_slicing():
         y_slice = []
         for y in slices[key]:
             y_slice.append(y[1])
-        y_slice = y_train = mlb.fit_transform(y_slice)
+        y_slice = mlb.fit_transform(y_slice)
+        print(type(x_slice[0]))
         model.fit(x_slice, y_slice)
-        score = model.score(X_val, Y_val)
+        score = model.score(X_val_mybag, Y_val)
         if score < min:
             min = score
         if score > max:
