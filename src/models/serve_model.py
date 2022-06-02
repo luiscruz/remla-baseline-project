@@ -3,9 +3,10 @@ Flask API of the SMS Spam detection model model.
 """
 import traceback
 import pickle
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flasgger import Swagger
 import pandas as pd
+import random
 
 from src.config.definitions import ROOT_DIR
 from src.features.build_features import text_prepare
@@ -13,6 +14,7 @@ from src.features.build_features import text_prepare
 app = Flask(__name__)
 swagger = Swagger(app)
 
+num_pred = 0
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -47,6 +49,9 @@ def predict():
     	model = pickle.load(f)
     prediction = model.predict(processed_title)[0]
 
+    global num_pred
+    num_pred = num_pred + 1  # Increment number of total predictions made
+
     # TODO: Convert preediction: binary array -> list of tags as strings ?
     
     return jsonify({
@@ -54,6 +59,25 @@ def predict():
         "classifier": "tfifd multi-label-binarizer ",
         "title": title
     })
+
+
+@app.route('/metrics', methods=['GET'])
+def metrics():
+    """
+    Get metrics for monitoring.
+    """
+
+    string = ""
+    string += "# HELP my_random A random number\n"
+    string += "# TYPE my_random gauge\n"
+    string += "my_random " + str(random.randint(0,100)) + "\n\n"
+
+    string += "# HELP num_pred Number of total predictions made\n"
+    string += "# TYPE num_pred counter\n"
+    string += "num_pred " + str(num_pred) + "\n\n"
+
+    # Note: Prometheus requires mimetype to be explicitly set to text/plain
+    return Response(string, mimetype='text/plain')
 
 
 if __name__ == '__main__':
