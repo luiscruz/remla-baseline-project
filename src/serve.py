@@ -16,7 +16,10 @@ app = Flask(__name__)
 @app.route("/tags", methods=["GET"])
 def tags():
     """Give a sorted list of the known tags."""
-    return jsonify(SORTED_TAGS)
+    res = {
+        "result": SORTED_TAGS
+    }
+    return jsonify(res)
 
 
 @app.route("/predict", methods=["POST"])
@@ -28,9 +31,8 @@ def predict():
     prediction = MLB.inverse_transform(MODEL.predict(processed_title_tfidf))[0]
     prediction = [int(id) for id in prediction]
     res = {
-        "result": prediction,
-        # "classifier": "",
         "title": title,
+        "result": prediction
     }
     return jsonify(res)
 
