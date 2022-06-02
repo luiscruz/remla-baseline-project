@@ -18,43 +18,49 @@ def no_unsuitable_features(used_features, unsuitable_features):
     assert len(illegal_features) == 0, "At least one unsuitable feature is used."
 
 
-def feature_target_correlations(dataset, target):
+def feature_target_correlations(dataset, target, sample_size=10000):
     """"
         Takes a matrix (#datapoints, #features) and a vector of targets (#datapoints).
         Calculates the correlation of each individual feature with the target.
+        A sample of the points is taken for speedup
     """
     n, f = dataset.shape
-    correlations = []
 
-    # Loop over each feature
-    for i in range(f):
-        all_occurrences_of_feature_i = dataset[:, i]
-        corr = np.corrcoef(all_occurrences_of_feature_i.toarray().reshape(-1), target)[0][1]
-        correlations.append(corr)
+    # Assure that sample_size is not too big -> out of bounds
+    if n < sample_size:
+        sample_size = n
+
+    correlations = np.corrcoef(np.transpose(dataset[:sample_size].toarray()), target[:sample_size])
 
     # None of the correlations should be exactly 0
-    assert all(correlations), "At least one feature has 0 correlation with the target."
+    assert np.all(correlations), "At least one feature has 0 correlation with the target. " \
+                                 "Perhaps increasing the sample_size solves the issue."
 
 
-def pairwise_feature_correlations(dataset):
+def pairwise_feature_correlations(dataset, sample_size=10000, feature_sample=5):
     """"
         Takes a matrix (#datapoints, #features).
         Calculates the correlation of each pair of features.
     """
     n, f = dataset.shape
-    correlations = []
 
-    # Loop over each pair of features
-    for i in range(f):
-        for j in range(i):
-            all_occurrences_of_feature_i = dataset[:, i]
-            all_occurrences_of_feature_j = dataset[:, j]
-            corr = np.corrcoef(all_occurrences_of_feature_i.toarray().reshape(-1),
-                               all_occurrences_of_feature_j.toarray().reshape(-1))[0][1]
-            correlations.append(corr)
+    # Assure that sample_size is not too big -> out of bounds
+    if n < sample_size:
+        sample_size = n
+    if f < feature_sample:
+        feature_sample = f
 
-    # None of the correlations are exactly 1
-    assert all([c != 1.0000 for c in correlations]), "At least one pair of features has perfect correlation."
+    correlations = np.corrcoef(np.transpose(dataset[:sample_size, :feature_sample].toarray()),
+                               np.transpose(dataset[:sample_size, :feature_sample].toarray()))
+
+    # Matrix is 4 concatenations of the matrix of interest, chop off
+    correlations = correlations[:feature_sample, :feature_sample]
+    # Delete 1.0 from the diagonal (because correlations with itself is always 1.0, we are not interested in that)
+    correlations -= np.eye(correlations.shape[0])
+
+    assert 1.0000000 not in correlations, "At least one pair of features has perfect correlation. " \
+                                          "Perhaps increasing the sample_size solves the issue." \
+                                          f"Feature pairs with perfect correlation: {list(zip(np.where(correlations == 1.0)[0], np.where(correlations == 1.0)[1]))}"
 
 
 def feature_values(dataset, feature_column_id, expected_values):
