@@ -27,7 +27,7 @@ def text_prepare(text):
     text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
     text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
     text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
-    
+
     return text
 
 
@@ -40,13 +40,13 @@ def tfidf_features(X_train_, X_val_, X_test_):
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
 
-    tfidf_vectorizer = TfidfVectorizer(
+    tfidf_vectorizer_ = TfidfVectorizer(
         min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r'(\S+)')
-    X_train_ = tfidf_vectorizer.fit_transform(X_train_)
-    X_val_ = tfidf_vectorizer.transform(X_val_)
-    X_test_ = tfidf_vectorizer.transform(X_test_)
+    X_train_ = tfidf_vectorizer_.fit_transform(X_train_)
+    X_val_ = tfidf_vectorizer_.transform(X_val_)
+    X_test_ = tfidf_vectorizer_.transform(X_test_)
 
-    return X_train_, X_val_, X_test_, tfidf_vectorizer, tfidf_vectorizer.vocabulary_
+    return X_train_, X_val_, X_test_, tfidf_vectorizer_, tfidf_vectorizer_.vocabulary_
 
 
 if __name__ == '__main__':

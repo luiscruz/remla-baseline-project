@@ -1,18 +1,11 @@
 """
 Flask API of the SMS Spam detection model model.
 """
-<<<<<<< HEAD
-import pickle
-from flask import Flask, jsonify, request
-from flasgger import Swagger
-=======
-import traceback
+
 import pickle
 from flask import Flask, jsonify, request, Response
 from flasgger import Swagger
-import pandas as pd
 import random
->>>>>>> 2cd4689bc757856a3c45a594054eb4c483a06b93
 
 from src.config.definitions import ROOT_DIR
 from src.features.build_features import text_prepare
@@ -20,10 +13,7 @@ from src.features.build_features import text_prepare
 app = Flask(__name__)
 swagger = Swagger(app)
 
-<<<<<<< HEAD
-=======
 num_pred = 0
->>>>>>> 2cd4689bc757856a3c45a594054eb4c483a06b93
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -46,11 +36,9 @@ def predict():
                     example: This is an example of a title.
     responses:
       200:
-<<<<<<< HEAD
+
         description: "The result of the prediction, a list of tags (e.g. 'python', 'c++' and/or 'javascript')"
-=======
-        description: "The result of the prediction (e.g. 'python', 'c++' or 'javascript')"
->>>>>>> 2cd4689bc757856a3c45a594054eb4c483a06b93
+
     """
     input_data = request.get_json()
     title = input_data.get('title')
@@ -59,14 +47,6 @@ def predict():
     processed_title = tfidf_vectorizer.transform([prepared_title])
 
     with open(ROOT_DIR / 'models/tfidf.pkl', 'rb') as f:
-<<<<<<< HEAD
-        model = pickle.load(f)
-    prediction = model.predict(processed_title)[0]
-
-    return jsonify({
-        "result": prediction.tolist(),
-        "classifier": "tfifd multi-label-binarizer",
-=======
     	model = pickle.load(f)
     prediction = model.predict(processed_title)[0]
 
@@ -78,23 +58,15 @@ def predict():
     return jsonify({
         "result": prediction.tolist(),
         "classifier": "tfifd multi-label-binarizer ",
->>>>>>> 2cd4689bc757856a3c45a594054eb4c483a06b93
         "title": title
     })
 
 
-<<<<<<< HEAD
-if __name__ == '__main__':
-    with open(ROOT_DIR / 'data/derivates/tfidf_vectorizer.pkl', 'rb') as f:
-        tfidf_vectorizer = pickle.load(f)
-    app.run(port=8080, debug=True)
-=======
 @app.route('/metrics', methods=['GET'])
 def metrics():
     """
     Get metrics for monitoring.
     """
-
     string = ""
     string += "# HELP my_random A random number\n"
     string += "# TYPE my_random gauge\n"
@@ -110,6 +82,5 @@ def metrics():
 
 if __name__ == '__main__':
     with open(ROOT_DIR / 'data/derivates/tfidf_vectorizer.pkl', 'rb') as f:
-    	tfidf_vectorizer = pickle.load(f)
+        tfidf_vectorizer = pickle.load(f)
     app.run(host='0.0.0.0', port=8080, debug=True)
->>>>>>> 2cd4689bc757856a3c45a594054eb4c483a06b93
