@@ -5,6 +5,9 @@
       types: [opened, reopened]
       branches:
         - main
+    push:
+      branches:
+        - main
 
   jobs:
     static-analysis:
