@@ -46,7 +46,7 @@
         - name: debug pyenv
           run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
 
-	- create joblibs
+	- name: create joblibs
 	  run: dvc repro
 
         - name: run tests
