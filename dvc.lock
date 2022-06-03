@@ -4,11 +4,11 @@ stages:
     cmd: python -m src.data.make_dataset
     deps:
     - path: src/config/definitions.py
-      md5: 827d65bf50548dea33609e8d39b60e43
-      size: 90
+      md5: 5744b597d0c60b1b49653dc10d643c28
+      size: 142
     - path: src/data/make_dataset.py
-      md5: 5323ac008f4353caafacadfbe07b8687
-      size: 174
+      md5: 98d6bd4d6053d09b8c21a58b7a01e72b
+      size: 223
     outs:
     - path: data/external/corpora/stopwords.zip
       md5: 18a27eb100bbd7f5116d66110d303f29
@@ -34,14 +34,14 @@ stages:
       md5: 508e1de849c33ba2f38f0b118590a4cd
       size: 2166270
     - path: src/common/data.py
-      md5: 7fcd0f05b24ca31c5db492d9eb53179c
-      size: 187
+      md5: 032e08d8f23b662991c89fa5dc2c7de9
+      size: 396
     - path: src/config/definitions.py
-      md5: 827d65bf50548dea33609e8d39b60e43
-      size: 90
+      md5: 5744b597d0c60b1b49653dc10d643c28
+      size: 142
     - path: src/features/build_features.py
-      md5: f89de210795a941458edad7749c35777
-      size: 3448
+      md5: 107fdf019e8ebedb97e9afcfab39c755
+      size: 3855
     outs:
     - path: data/derivates/cleaned_train_dataset_properties.pkl
       md5: 29c600e89cf8129ebc8b7a75dbad48f4
@@ -65,15 +65,27 @@ stages:
       md5: 12637bc042c74154cc176d3d859478e7
       size: 10530934
     - path: src/config/definitions.py
-      md5: 827d65bf50548dea33609e8d39b60e43
-      size: 90
+      md5: 5744b597d0c60b1b49653dc10d643c28
+      size: 142
     - path: src/models/train_model.py
-      md5: 46497e2ed8a2055c45f710426f4e539d
-      size: 1397
+      md5: 3c7d697a8216d55b41750757355c573c
+      size: 1498
     outs:
     - path: models/mlb.pkl
       md5: 5d180c30fd6da3e373bfa5ccb4fe0c2c
       size: 1880
     - path: models/tfidf.pkl
-      md5: 25d2929220075bb217079cdecf12d045
+      md5: 7e05594b9003f404d187600bc49dc9d3
       size: 14666657
+  data_validation:
+    cmd: pytest tests/test_data_validation.py
+    deps:
+    - path: data/raw/test.tsv
+      md5: f06925444bd9e4b12b382e0e267345a7
+      size: 1041379
+    - path: data/raw/train.tsv
+      md5: 2502592a16c44c1e33cb827b2a647406
+      size: 7196138
+    - path: data/raw/validation.tsv
+      md5: 508e1de849c33ba2f38f0b118590a4cd
+      size: 2166270

@@ -11,7 +11,11 @@ from nltk.corpus import stopwords
 from src.config.definitions import ROOT_DIR
 from src.common.data import read_data
 
-nltk.data.path.append((ROOT_DIR / 'data/external').as_posix()) # specify path to nltk data
+nltk.data.path.append((ROOT_DIR / 'data/external').as_posix())  # specify path to nltk data
+
+REPLACE_BY_SPACE_RE = re.compile(r'[/(){}\[\]\|@,;]')
+BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
+STOPWORDS = set(stopwords.words('english'))
 
 
 def text_prepare(text):
@@ -19,14 +23,10 @@ def text_prepare(text):
         text: a string
         return: modified initial string
     """
-    REPLACE_BY_SPACE_RE = re.compile(r'[/(){}\[\]\|@,;]')
-    BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
-    STOPWORDS = set(stopwords.words('english'))
-
-    text = text.lower() # lowercase text
-    text = re.sub(REPLACE_BY_SPACE_RE, " ", text) # replace REPLACE_BY_SPACE_RE symbols by space in text
-    text = re.sub(BAD_SYMBOLS_RE, "", text) # delete symbols which are in BAD_SYMBOLS_RE from text
-    text = " ".join([word for word in text.split() if not word in STOPWORDS]) # delete stopwords from text
+    text = text.lower()  # lowercase text
+    text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
+    text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
+    text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
     return text
 
 
@@ -39,7 +39,7 @@ def tfidf_features(X_train_, X_val_, X_test_):
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
     tfidf_vectorizer = TfidfVectorizer(
-        min_df=5, max_df=0.9, ngram_range=(1,2), token_pattern=r'(\S+)')
+        min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r'(\S+)')
     X_train_ = tfidf_vectorizer.fit_transform(X_train_)
     X_val_ = tfidf_vectorizer.transform(X_val_)
     X_test_ = tfidf_vectorizer.transform(X_test_)
@@ -73,9 +73,9 @@ if __name__ == '__main__':
             else:
                 words_counts[word] = 1
 
-    DICT_SIZE = 5000 # TODO: find out why 5000
+    DICT_SIZE = 5000  # TODO: find out why 5000
     INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[:DICT_SIZE]
-    WORDS_TO_INDEX = {word:i for i, word in enumerate(INDEX_TO_WORDS)}
+    WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
     ALL_WORDS = list(WORDS_TO_INDEX.keys())
 
     with open(ROOT_DIR / 'data/derivates/cleaned_train_dataset_properties.pkl', 'wb') as f:
