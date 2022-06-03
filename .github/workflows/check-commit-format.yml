@@ -4,6 +4,8 @@ on: [push]
 
 jobs:
   build:
+    # Do not run commit check on merge commits
+    if: github.event.pull_request.merged == 'false'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
