@@ -38,6 +38,7 @@ def tfidf_features(X_train_, X_val_, X_test_):
     # Create TF-IDF vectorizer with a proper parameters choice
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
+
     tfidf_vectorizer = TfidfVectorizer(
         min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r'(\S+)')
     X_train_ = tfidf_vectorizer.fit_transform(X_train_)
