@@ -25,7 +25,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
       run: |
-        pip install dvc[s3]==2.10.2
+        pip install "$(grep dvc requirements.txt)"
         dvc pull
         IMAGE=ghcr.io/cathrinepaulsen/remla-group13
         docker build \
