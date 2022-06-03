@@ -46,12 +46,13 @@ def test_pairwise_feature_correlations():
     lib.pairwise_feature_correlations(tfidf, sample_size=100000)
 
 
-# def test_feature_target_correlations():
-#     mybag, tfidf, labels_matrix = prepare_correlation_analysis()
-#
-#     for i in range(3):
-#         lib.feature_target_correlations(mybag, labels_matrix[:, i])
-#         lib.feature_target_correlations(tfidf, labels_matrix[:, i])
+def test_feature_target_correlations():
+    mybag, tfidf, labels_matrix = prepare_correlation_analysis()
+
+    for i in range(2):
+        print(f"starting {i}")
+        lib.feature_target_correlations(mybag, labels_matrix[:, i])
+        lib.feature_target_correlations(tfidf, labels_matrix[:, i])
 
 
 def test_feature_values():

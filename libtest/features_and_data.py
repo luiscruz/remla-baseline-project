@@ -31,6 +31,8 @@ def feature_target_correlations(dataset, target, sample_size=10000):
 
     correlations = np.corrcoef(np.transpose(dataset[:sample_size].toarray()), target[:sample_size])
 
+    print("correlation coefficients calculated")
+
     # None of the correlations should be exactly 0
     assert np.all(correlations), "At least one feature has 0 correlation with the target. " \
                                  "Perhaps increasing the sample_size solves the issue."
