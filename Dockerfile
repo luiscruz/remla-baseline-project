@@ -24,4 +24,7 @@ COPY .git .git
 COPY data data
 COPY models models
 
-# TODO: Add entrypoint to ML application here
+# Dynamic interaction with the model
+EXPOSE 8080
+
+CMD ["python", "src/models/serve_model.py"]

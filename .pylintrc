@@ -8,3 +8,4 @@ argument-rgx=[A-Za-z_][a-z0-9_]{0,30}$
 [MESSAGES CONTROL]
 # Allow TODOs in code to facilitate experimental development
 disable=fixme
+

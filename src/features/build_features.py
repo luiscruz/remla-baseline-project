@@ -27,6 +27,7 @@ def text_prepare(text):
     text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
     text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
     text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
+
     return text
 
 
@@ -38,13 +39,14 @@ def tfidf_features(X_train_, X_val_, X_test_):
     # Create TF-IDF vectorizer with a proper parameters choice
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
-    tfidf_vectorizer = TfidfVectorizer(
-        min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r'(\S+)')  ####### YOUR CODE HERE #######
-    X_train_ = tfidf_vectorizer.fit_transform(X_train_)
-    X_val_ = tfidf_vectorizer.transform(X_val_)
-    X_test_ = tfidf_vectorizer.transform(X_test_)
 
-    return X_train_, X_val_, X_test_, tfidf_vectorizer.vocabulary_
+    tfidf_vectorizer_ = TfidfVectorizer(
+        min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern=r'(\S+)')
+    X_train_ = tfidf_vectorizer_.fit_transform(X_train_)
+    X_val_ = tfidf_vectorizer_.transform(X_val_)
+    X_test_ = tfidf_vectorizer_.transform(X_test_)
+
+    return X_train_, X_val_, X_test_, tfidf_vectorizer_, tfidf_vectorizer_.vocabulary_
 
 
 if __name__ == '__main__':
@@ -87,8 +89,10 @@ if __name__ == '__main__':
         }
         pickle.dump(properties, f)
 
-    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
+    X_train_tfidf, X_val_tfidf, X_test_tfidf, tfidf_vectorizer, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
 
+    with open(ROOT_DIR / 'data/derivates/tfidf_vectorizer.pkl', 'wb') as f:
+        pickle.dump(tfidf_vectorizer, f)
     with open(ROOT_DIR / 'data/derivates/tfidf_vocab.pkl', 'wb') as f:
         pickle.dump(tfidf_vocab, f)
 
