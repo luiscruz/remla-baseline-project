@@ -50,7 +50,6 @@ def test_feature_target_correlations():
     mybag, tfidf, labels_matrix = prepare_correlation_analysis()
 
     for i in range(2):
-        print(f"starting {i}")
         lib.feature_target_correlations(mybag, labels_matrix[:, i])
         lib.feature_target_correlations(tfidf, labels_matrix[:, i])
 
