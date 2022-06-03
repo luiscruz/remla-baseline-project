@@ -27,6 +27,7 @@ def text_prepare(text):
     text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
     text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
     text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
+    
     return text
 
 

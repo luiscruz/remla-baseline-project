@@ -1,3 +1,8 @@
+# Install helm
+# Install kube-prometheus stack
+# To access prometheus dash: kubectl port-forward <name-of-main-prometheus-pod> 9090
+# To access grafana: kubectl port-forward <name-of-grafana-pod> 3000
+#   default login credentials: admin / prom-operator
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +10,7 @@ metadata:
   labels:
     app: remla
 spec:
-  replicas: 1
+  replicas: 1 # Add more replicas to enable load-balancing
   selector:
     matchLabels:
       app: remla-app
@@ -16,7 +21,7 @@ spec:
     spec:
       containers:
       - name: remla-app
-        image: crpaulsen/remla-app:dev
+        image: crpaulsen/remla-app:dev-1
         ports:
         - containerPort: 8080
 ---
@@ -24,6 +29,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-service
+  labels:
+    app: my-service
 spec:
   selector:
     app: remla-app
@@ -31,6 +38,21 @@ spec:
       # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
     - port: 1234
       targetPort: 8080
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: my-monitor
+  labels:
+    release: promstack
+spec:
+  selector:
+    matchLabels:
+      app: my-service
+  endpoints:
+  - targetPort: 8080
+    path: "/metrics"
+    interval: 1s
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

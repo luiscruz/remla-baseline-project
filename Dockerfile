@@ -26,5 +26,5 @@ COPY models models
 
 # Dynamic interaction with the model
 EXPOSE 8080
-ENTRYPOINT ["python"]
-CMD ["src/models/serve_model.py"]
+
+CMD ["python", "src/models/serve_model.py"]

@@ -40,8 +40,8 @@ stages:
       md5: 5744b597d0c60b1b49653dc10d643c28
       size: 142
     - path: src/features/build_features.py
-      md5: 107fdf019e8ebedb97e9afcfab39c755
-      size: 3855
+      md5: c6ab3e1da9d8fa238d052642182ef638
+      size: 3977
     outs:
     - path: data/derivates/cleaned_train_dataset_properties.pkl
       md5: 29c600e89cf8129ebc8b7a75dbad48f4
@@ -80,6 +80,9 @@ stages:
   data_validation:
     cmd: pytest tests/test_data_validation.py
     deps:
+    - path: data/raw/schema
+      md5: 14a5f225b46ff5db9f0d4c1d8fda9006
+      size: 412
     - path: data/raw/test.tsv
       md5: f06925444bd9e4b12b382e0e267345a7
       size: 1041379
@@ -89,3 +92,6 @@ stages:
     - path: data/raw/validation.tsv
       md5: 508e1de849c33ba2f38f0b118590a4cd
       size: 2166270
+    - path: tests/test_data_validation.py
+      md5: c241ad26bc5e600a763dd29fd6e4d832
+      size: 1355
