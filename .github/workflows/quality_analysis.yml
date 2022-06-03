@@ -47,10 +47,10 @@
           run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
 
         - name: run text_preprocessing
-          run: python text_preprocessing.py
+          run: python src/text_preprocessing.py
 
         - name: run vectorization
-          run: python vectorization.py
+          run: python src/vectorization.py
 
         - name: run tests
           run: python -m pytest
