@@ -9,5 +9,3 @@ argument-rgx=[A-Za-z_][a-z0-9_]{0,30}$
 # Allow TODOs in code to facilitate experimental development
 disable=fixme
 
-#Allow global variables
-disable=global-variable
