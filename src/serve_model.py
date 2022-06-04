@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-@author hielke
+@author Hielke, Mark
 """
+
 import os
-from flask import Flask
+from flask import Flask, Response
+import random
 
 app = Flask(__name__)
 
@@ -14,6 +16,14 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 # TODO: Add a predict endpoint...
+
+@app.route("/metrics")
+def metrics():
+    text = "# HELP my_random A random number\n"
+    text += "# TYPE my_random gauge\n"
+    text += f"my random {random.random()}\n\n"
+
+    return Response(text, mimetype='text/plain')
 
 
 if __name__ == '__main__':
