@@ -25,6 +25,7 @@ jobs:
         run: |
           if [[ $(cat VERSION.txt) != "${{ env.version }}-SNAPSHOT" ]]; then
             echo "Update VERSION.txt to be equal to release version tag (but with -SNAPSHOT appended)"
+            git push origin :v${{ env.version }}
             exit 1
           fi
 
