@@ -30,16 +30,18 @@ jobs:
       #     echo "VERSION.txt version: $(cat VERSION.txt)"
       #     exit 1
 
-      # - name: Registry Login (ghcr.io)
-      #   run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Registry Login (ghcr.io)
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # - name: Build and Push Docker Image (Pipeline)
-      #   run: |
-      #     IMG=ghcr.io/${{ github.repository }}
-      #     docker build -f server/Dockerfile \
-      #       --tag $IMG:${{ env.version }} \
-      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-      #       --tag $IMG:${{ env.version_major }}.latest \
-      #       --tag $IMG:latest \
-      #       .
-      #     docker push --all-tags $IMG
+      - name: Build Docker image and push to ghcr.io
+        run: |
+          IMG=ghcr.io/${REPOSITORY,,}
+          docker build \
+            --tag $IMG:${{ env.version }} \
+            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+            --tag $IMG:${{ env.version_major }}.latest \
+            --tag $IMG:latest \
+            .
+          docker push --all-tags $IMG
+        env:
+          REPOSITORY: "${{ github.repository }}"
