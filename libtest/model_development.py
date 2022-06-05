@@ -12,6 +12,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
 
 def compare_against_baseline(scores, X_train, X_test, Y_train, Y_test, model="linear"):
     """
@@ -102,3 +103,36 @@ def data_slices(model, slices, X_val, Y_val):
             max = score
 
     print(max - min)
+
+def model_staleness(new_model_metrics, old_model_metrics):
+    # X_train_old, X_test_old, y_train_old, y_test_old = train_test_split(old_data_X, old_data_y)
+    # X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(new_data_X, new_data_y)
+    #
+    # X_train = X_train_old.extend(X_train_new)
+    # y_train = y_train_old.extend(y_train_new)
+    # X_test = X_test_old.extend(X_test_new)
+    # y_test = y_test_old.extend(y_test_new)
+    #
+    # classifier.fit(X_train, y_train)
+    # y_pred = classifier.predict(X_test)
+
+    score_differences = {}
+    if "ACC" in old_model_metrics.keys() & "ACC" in new_model_metrics.keys():
+        # acc = accuracy_score(y_test, y_pred)
+        score_differences["ACC"] = old_model_metrics["ACC"] - new_model_metrics["ACC"]
+    if "AP" in old_model_metrics.keys() & "AP" in new_model_metrics.keys():
+        # aps = average_precision_score(y_test, y_pred)
+        score_differences["AP"] = old_model_metrics["AP"] - new_model_metrics["AP"]
+    if "F1" in old_model_metrics.keys() & "F1" in new_model_metrics.keys():
+        # f1 = f1_score(y_test, y_pred)
+        score_differences["F1"] = old_model_metrics["F1"] - new_model_metrics["F1"]
+    if "ROC_AUC" in old_model_metrics.keys() & "ROC_AUC" in new_model_metrics.keys():
+        # auc_roc = roc_auc_score(y_test, y_pred)
+        score_differences["ROC_AUC"] = old_model_metrics["ROC_AUC"] - new_model_metrics["ROC_AUC"]
+
+    return score_differences
+
+
+
+
+

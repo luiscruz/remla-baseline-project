@@ -11,6 +11,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
+import math
 import pandas as pd
 
 output_directory = "../output"
@@ -120,6 +121,33 @@ def test_data_slicing():
 
 
 
+def test_model_staleness():
+    X_train, X_val, _ = joblib.load(output_directory + "/X_preprocessed.joblib")
+    Y_train, Y_val = joblib.load(output_directory + "/y_preprocessed.joblib")
+
+    three_fourth_x_train = math.floor(len(X_train)*0.75)
+    three_fourth_y_train = math.floor(len(Y_train) * 0.75)
+    old_train_x = X_train[:three_fourth_x_train]
+    new_train_x = X_train[three_fourth_x_train:]
+    old_train_y = Y_train[:three_fourth_y_train]
+    new_train_y = Y_train[three_fourth_y_train:]
+
+    three_fourth_x_test = math.floor(len(X_val) * 0.75)
+    three_fourth_y_test = math.floor(len(Y_val) * 0.75)
+    old_test_x = X_val[:three_fourth_x_test]
+    new_val_x = X_val[three_fourth_x_test:]
+    old_val_y = Y_val[:three_fourth_y_test]
+    new_val_y = Y_val[three_fourth_y_test:]
+
+#     Train model for old set
+
+# Train model for new set
+
+# get metrics for both sets
+old_model_metrics = {}
+new_model_metrics = {}
+
+lib.model_staleness(new_model_metrics, old_model_metrics)
 
 
 
