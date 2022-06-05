@@ -38,7 +38,6 @@ jobs:
 
       - name: Commit and tag the release version
         run: |
-          git pull
           git add .
           git commit -m "Release of version ${{ env.version }}"
           git push origin HEAD:docker-image-release
