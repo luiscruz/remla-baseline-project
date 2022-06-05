@@ -42,8 +42,24 @@ spec:
   selector:
     app: group7
   ports:
-    - port: 1234
+    - port: 8080
       targetPort: 8080 # Should match the port our pods are running on   
+---
+# ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: my-monitor
+  labels:
+    release: promstack
+spec:
+  selector: 
+    matchLabels:
+      app: sms-web-service
+  endpoints:
+  - targetPort: 8080
+    path: "/metrics"
+    interval: 1s
 ---
 # Ingress
 apiVersion: networking.k8s.io/v1
@@ -55,7 +71,7 @@ spec:
     service:
       name: group7-service
       port:
-        number: 1234 # Should match the port our service is running on   
+        number: 8080 # Should match the port our service is running on   
 ---
 # ConfigMap
 apiVersion: v1
