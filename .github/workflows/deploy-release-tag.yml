@@ -40,22 +40,24 @@ jobs:
         run: |
           git add .
           git commit -m "Release of version ${{ env.version }}"
-          git push origin HEAD:dev
+          git push origin HEAD:docker-image-release
           git tag "v${{ env.version }}"
           git push origin "v${{ env.version }}"
 
-      # - name: Build Docker image and push to ghcr.io
-      #   run: |
-      #     echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      #     IMG=ghcr.io/${{ github.repository }}
-      #     docker build \
-      #       --tag $IMG:${{ env.version }} \
-      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-      #       --tag $IMG:${{ env.version_major }}.latest \
-      #       --tag $IMG:latest \
-      #       .
-      #     docker push --all-tags $IMG
-          
+      - name: Registry Login (ghcr.io)
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image and push to ghcr.io
+        run: |
+          IMG=ghcr.io/${{ github.repository }}
+          docker build \
+            --tag $IMG:${{ env.version }} \
+            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+            --tag $IMG:${{ env.version_major }}.latest \
+            --tag $IMG:latest \
+            .
+          docker push --all-tags $IMG
+
       - name: Update VERSION.txt to next snapshot release
         run: |
           echo "${{ env.version_next }}" > VERSION.txt
@@ -64,4 +66,4 @@ jobs:
         run: |
           git add .
           git commit -m "Bump version to ${{ env.version_next }}"
-          git push origin HEAD:dev
+          git push origin HEAD:docker-image-release
