@@ -23,7 +23,7 @@ jobs:
 
       - name: Check if VERSION.txt is equal to version tag
         run: |
-          if [[ $(cat VERSION.txt) != "${{ env.version }}-SNAPSHOT" ]]; then
+          if [[ $(cat VERSION.txt | cut -d"-" -f1) != "${{ env.version }}" ]]; then
             echo "Update VERSION.txt to be equal to release version tag (but with -SNAPSHOT appended)"
             echo "Don't forget to delete local tag by running: git tag -d v${{ env.version }}"
             echo "Release tag version: ${{ env.version }}"
