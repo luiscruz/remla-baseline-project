@@ -19,19 +19,6 @@
         - name: debug pyenv
           run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
 
-        - name: run tests
-          run: python -m pytest
+        - name: mllint
+          run: mllint run
 
-        - name: run static analysis
-          run: pylint --load-plugins=dslinter --disable=invalid-name,too-many-locals --max-line-length=120 --output-format=text:report.txt,colorized --reports=n src/
-
-        - name: Archive static analysis report
-          uses: actions/upload-artifact@v3
-          with:
-            name: generate-reports
-            path: output/report.txt
-
-        - name: Download a single artifact
-          uses: actions/download-artifact@v3
-          with:
-            path: output
