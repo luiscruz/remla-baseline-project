@@ -25,6 +25,9 @@ jobs:
         run: |
           if [[ $(cat VERSION.txt) != "${{ env.version }}-SNAPSHOT" ]]; then
             echo "Update VERSION.txt to be equal to release version tag (but with -SNAPSHOT appended)"
+            echo "Don't forget to delete local tag by running: git tag -d v${{ env.version }}"
+            echo "Release tag version: ${{ env.version }}"
+            echo "VERSION.txt version: $(cat VERSION.txt | cut -d"-" -f1)"
             git push origin :v${{ env.version }}
             exit 1
           fi
