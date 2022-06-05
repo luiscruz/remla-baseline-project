@@ -17,21 +17,21 @@ spec:
     spec:
       # Pod
       containers:
-      - name: group7
-        image: proksch/showenv # TODO: Change this to our application Docker image
-        ports:
-        - containerPort: 8080
-        env:
-        - name: MODEL_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: my-config # Refer to ConfigMap
-              key: host-name
-        - name: DB_PWD
-          valueFrom:
-            secretKeyRef:
-              name: my-secret # Refer to Secret
-              key: db.pwd     
+        - name: group7
+          image: proksch/showenv # TODO: Change this to our application Docker image
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MODEL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-config # Refer to ConfigMap
+                  key: host-name
+            - name: DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret # Refer to Secret
+                  key: db.pwd
 ---
 # Service
 apiVersion: v1
@@ -43,7 +43,7 @@ spec:
     app: group7
   ports:
     - port: 8080
-      targetPort: 8080 # Should match the port our pods are running on   
+      targetPort: 8080 # Should match the port our pods are running on
 ---
 # ServiceMonitor
 apiVersion: monitoring.coreos.com/v1
@@ -53,13 +53,13 @@ metadata:
   labels:
     release: promstack
 spec:
-  selector: 
+  selector:
     matchLabels:
       app: sms-web-service
   endpoints:
-  - targetPort: 8080
-    path: "/metrics"
-    interval: 1s
+    - targetPort: 8080
+      path: "/metrics"
+      interval: 1s
 ---
 # Ingress
 apiVersion: networking.k8s.io/v1
@@ -71,7 +71,7 @@ spec:
     service:
       name: group7-service
       port:
-        number: 8080 # Should match the port our service is running on   
+        number: 8080 # Should match the port our service is running on
 ---
 # ConfigMap
 apiVersion: v1
