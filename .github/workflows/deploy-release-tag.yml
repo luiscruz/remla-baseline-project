@@ -40,7 +40,7 @@ jobs:
         run: |
           git add .
           git commit -m "Release of version ${{ env.version }}"
-          git push origin HEAD:docker-image-release
+          git push origin HEAD:dev
           git tag "v${{ env.version }}"
           git push origin "v${{ env.version }}"
 
@@ -68,4 +68,4 @@ jobs:
         run: |
           git add .
           git commit -m "Bump version to ${{ env.version_next }}"
-          git push origin HEAD:docker-image-release
+          git push origin HEAD:dev
