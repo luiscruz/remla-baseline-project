@@ -25,14 +25,9 @@ jobs:
       - name: Check if VERSION.txt is equal to version tag
         # if: $(cat VERSION.txt) != "${{ env.version }}"
         run: |
-          echo "Update VERSION.txt to be equal to release version tag"
-          echo "Release tag version: ${{ env.version }}"
-          echo "VERSION.txt version: $(cat VERSION.txt)"
-          echo "$(cat VERSION.txt) != ${{ env.version }}"
           if [[ $(cat VERSION.txt) != "${{ env.version }}-SNAPSHOT" ]]; then
-            echo "If"
-          else
-            echo "Else"
+            echo "Update VERSION.txt to be equal to release version tag"
+            exit 1
           fi
 
       - name: Registry Login (ghcr.io)
