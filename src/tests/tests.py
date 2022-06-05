@@ -1,4 +1,5 @@
 """Module to test ML pipeline logic"""
+import os
 import unittest
 
 from src.features.build_features import (
@@ -8,6 +9,8 @@ from src.preprocess.preprocess_data import (  # pylint: disable=no-name-in-modul
     init_data,
     text_prepare,
 )
+
+os.environ["PROMETHEUS_MULTIPROC_DIR"] = "/tmp/prom"  # nosec
 from src.serve_model import app
 
 

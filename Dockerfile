@@ -14,13 +14,11 @@ COPY src src
 COPY data data
 COPY reports reports
 
+RUN echo $(pwd)
+RUN echo $(ls /root/src/data)
+
 COPY params.yaml .
 COPY dvc.yaml .
-COPY gateway_nginx.conf .
-COPY Makefile .
-COPY pre-commit.sh .
-COPY test_environment.py .
-COPY tox.ini .
 
 RUN mkdir models &&\
     dvc init --no-scm &&\
@@ -31,20 +29,13 @@ FROM python:3.8.13-slim
 WORKDIR /root/
 
 RUN mkdir models
-COPY --from=model_build /root/models /models
-COPY --from=model_build /root/models /models
+COPY --from=model_build /root/models models
 
 COPY src src
 
-COPY requirements.txt .
 COPY params.yaml .
-COPY setup.py .
-COPY pyproject.toml .
 
 RUN python -m pip install --upgrade pip &&\
-    pip install -r requirements.txt
+    pip install -r src/requirements.txt
 
-EXPOSE 8080
-
-ENTRYPOINT ["python"]
-CMD ["src/serve_model.py"]
+EXPOSE 5000

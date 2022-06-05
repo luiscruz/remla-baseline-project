@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inference-service
+  labels:
+    app: inference-service
+spec:
+  type: ClusterIP
+  selector:
+    component: inference-app
+  ports:
+    - port: 5000
+      name: http
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: inference-app
+  template:
+    metadata:
+      labels:
+        component: inference-app
+    spec:
+      containers:
+        - name: inference-app
+          image: inference-service:latest
+          imagePullPolicy: Never
+          command: ["sh"]
+          args: ["src/startup.sh"]
+          ports:
+            - containerPort: 5000
+          environment:
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: "/tmp/prometheus/"
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mymonitor
+  labels:
+    release: promstack
+spec:
+  selector:
+    matchLabels:
+      app: inference-service
+  endpoints:
+    - targetPort: 5000
+      path: "/metrics"
+      interval: 10s
