@@ -45,7 +45,7 @@ def main():
     _, _, X_val_mybag, X_val_tfidf = joblib.load(output_directory + "/vectorized_x.joblib")
     mlb = joblib.load(output_directory + "/mlb.joblib")
     _, X_val, _ = joblib.load(output_directory + "/X_preprocessed.joblib")
-    y_val =joblib.load(output_directory + "/fitted_y_val.joblib")
+    _, y_val =joblib.load(output_directory + "/fitted_y.joblib")
 
     # Now you can create predictions for the data. You will need two types of predictions: labels and scores.
     y_val_predicted_labels_mybag = classifier_mybag.predict(X_val_mybag)
