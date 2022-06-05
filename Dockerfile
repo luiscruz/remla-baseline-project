@@ -6,15 +6,14 @@ WORKDIR /root/
 RUN python -m venv ./venv
 ENV PATH=./venv/bin:$PATH
 
-# Keep setuptools and wheel up to date
-RUN pip install -U \
+# Keep pip, setuptools and wheel up to date
+RUN pip install --upgrade \
+    pip \
     setuptools \
     wheel
 
 COPY requirements.txt .
-# Keep pip up to date and install packages from requirements.txt
-RUN python -m pip install --upgrade pip &&\
-    pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 ARG GIT_HASH=dev
 ENV GIT_HASH=$GIT_HASH
