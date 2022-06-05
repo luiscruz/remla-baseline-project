@@ -1,0 +1,5 @@
+grafana:
+  grafana.ini:
+    server:
+      root_url: http://localhost:3000/dashboard
+      serve_from_sub_path: true
