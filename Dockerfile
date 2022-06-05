@@ -21,7 +21,7 @@ ENV GIT_HASH=$GIT_HASH
 LABEL git_hash=$GIT_HASH
 
 COPY . .
-RUN dvc pull
+# RUN dvc pull # TODO: Enable when dvc pull works with authorization
 
 ARG PORT=5000
 ENV PORT=$PORT
