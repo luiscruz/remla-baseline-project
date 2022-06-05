@@ -44,15 +44,17 @@ jobs:
       #     git tag "v${{ env.version }}"
       #     git push origin "v${{ env.version }}"
 
-      - name: Registry Login (ghcr.io)
+      - name: Print repository in lower case
         run: |
-          echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           echo "${{ github.repository }}"
-          echo "${${{ github.repository }},,}"
-          echo "${github.repository,,}"
           echo "OWNER_LC=${OWNER,,}"
+          echo "${github.repository,,}"
+          echo "${${{ github.repository }},,}"
         env:
           OWNER: "${{ github.repository_owner }}"
+
+      # - name: Registry Login (ghcr.io)
+      #   run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       # - name: Build Docker image and push to ghcr.io
       #   run: |
