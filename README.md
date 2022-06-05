@@ -72,3 +72,27 @@ To use pushed artifacts you can simply use:
 dvc pull
 ```
 
+# Kubernetes
+
+First [install minikube](https://minikube.sigs.k8s.io/docs/start/) to run a local cluster (only applicable for this project as you normally don't want to run a local cluster).
+Once installed, start the cluster by:
+
+```console
+minikube start
+```
+
+Next, apply the Kubernetes deployment to the cluster by running:
+
+```console
+kubectl apply -f kubernetes-deploy.yml
+```
+
+Then to get the Prometheus real-time database for monitoring and Grafana for visualizations set up, we first need to [install Helm](https://helm.sh/docs/intro/install/)
+
+Once Helm is installed, perform the following commands (based on the [ArtifactHub information](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack)):
+
+```console
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install promstack prometheus-community/kube-prometheus-stack
+```
