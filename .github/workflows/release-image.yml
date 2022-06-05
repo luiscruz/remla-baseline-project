@@ -27,6 +27,7 @@ jobs:
       run: |
         pip install "$(grep dvc requirements.txt)"
         dvc pull
+        dvc repro
         IMAGE=ghcr.io/cathrinepaulsen/remla-group13
         docker build \
           -t $IMAGE:latest \
