@@ -22,26 +22,26 @@ jobs:
           echo "version_patch=$PATCH" >> $GITHUB_ENV
 
       # TODO: Try to get the "if condition" to work. So we get an error when the VERSION.txt file hasn't been updated
-      # - name: Check if VERSION.txt is equal to version tag
-      #   if: $(cat VERSION.txt) != "${{ env.version }}"
-      #   run: |
-      #     echo "Update VERSION.txt to be equal to release version tag"
-      #     echo "Release tag version: ${{ env.version }}"
-      #     echo "VERSION.txt version: $(cat VERSION.txt)"
-      #     exit 1
+      - name: Check if VERSION.txt is equal to version tag
+        if: $(cat VERSION.txt) != "${{ env.version }}"
+        run: |
+          echo "Update VERSION.txt to be equal to release version tag"
+          echo "Release tag version: ${{ env.version }}"
+          echo "VERSION.txt version: $(cat VERSION.txt)"
+          echo "$(cat VERSION.txt) != ${{ env.version }}"
 
       - name: Registry Login (ghcr.io)
         run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Docker image and push to ghcr.io
-        run: |
-          IMG=ghcr.io/${REPOSITORY,,}
-          docker build \
-            --tag $IMG:${{ env.version }} \
-            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-            --tag $IMG:${{ env.version_major }}.latest \
-            --tag $IMG:latest \
-            .
-          docker push --all-tags $IMG
-        env:
-          REPOSITORY: "${{ github.repository }}"
+      # - name: Build Docker image and push to ghcr.io
+      #   run: |
+      #     IMG=ghcr.io/${REPOSITORY,,}
+      #     docker build \
+      #       --tag $IMG:${{ env.version }} \
+      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+      #       --tag $IMG:${{ env.version_major }}.latest \
+      #       --tag $IMG:latest \
+      #       .
+      #     docker push --all-tags $IMG
+      #   env:
+      #     REPOSITORY: "${{ github.repository }}"
