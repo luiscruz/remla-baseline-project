@@ -40,8 +40,8 @@ stages:
       md5: 5744b597d0c60b1b49653dc10d643c28
       size: 142
     - path: src/features/build_features.py
-      md5: c6ab3e1da9d8fa238d052642182ef638
-      size: 3977
+      md5: e672b42b59806dda3e95e77ea0ed3115
+      size: 3981
     outs:
     - path: data/derivates/cleaned_train_dataset_properties.pkl
       md5: 29c600e89cf8129ebc8b7a75dbad48f4
@@ -72,11 +72,11 @@ stages:
       size: 1498
     outs:
     - path: models/mlb.pkl
-      md5: 5d180c30fd6da3e373bfa5ccb4fe0c2c
+      md5: 7eb3a94349cd226ac41a7c769be5b3ea
       size: 1880
     - path: models/tfidf.pkl
-      md5: 7e05594b9003f404d187600bc49dc9d3
-      size: 14666657
+      md5: 69e2d7be80fb1ba7b881df4d03a87e43
+      size: 14666653
   data_validation:
     cmd: pytest tests/test_data_validation.py
     deps:
