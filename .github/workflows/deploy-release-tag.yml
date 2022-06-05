@@ -10,27 +10,27 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Configure git
-      #   run: |
-      #     git config --global committer.email "noreply@github.com"
-      #     git config --global committer.name "GitHub"
-      #     git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
-      #     git config --global author.name "Build Server"
+      - name: Configure git
+        run: |
+          git config --global committer.email "noreply@github.com"
+          git config --global committer.name "GitHub"
+          git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global author.name "Build Server"
 
-      # - name: Parse and provide version info
-      #   run: |
-      #     VERSION_RAW=`cat VERSION.txt`
-      #     VERSION=`echo $VERSION_RAW | cut -d"-" -f1` # get rid of -SNAPSHOT
-      #     MAJOR=`echo "$VERSION" | cut -d . -f 1`
-      #     MINOR=`echo "$VERSION" | cut -d . -f 2`
-      #     PATCH=`echo "$VERSION" | cut -d . -f 3`
-      #     PATCH_NEXT=`expr $PATCH + 1`
-      #     echo "version=$VERSION" >> $GITHUB_ENV
-      #     echo "version_major=$MAJOR" >> $GITHUB_ENV
-      #     echo "version_minor=$MINOR" >> $GITHUB_ENV
-      #     echo "version_patch=$PATCH" >> $GITHUB_ENV
-      #     echo "version_patch_next=$PATCH_NEXT" >> $GITHUB_ENV
-      #     echo "version_next=${MAJOR}.${MINOR}.${PATCH_NEXT}-SNAPSHOT" >> $GITHUB_ENV
+      - name: Parse and provide version info
+        run: |
+          VERSION_RAW=`cat VERSION.txt`
+          VERSION=`echo $VERSION_RAW | cut -d"-" -f1` # get rid of -SNAPSHOT
+          MAJOR=`echo "$VERSION" | cut -d . -f 1`
+          MINOR=`echo "$VERSION" | cut -d . -f 2`
+          PATCH=`echo "$VERSION" | cut -d . -f 3`
+          PATCH_NEXT=`expr $PATCH + 1`
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version_major=$MAJOR" >> $GITHUB_ENV
+          echo "version_minor=$MINOR" >> $GITHUB_ENV
+          echo "version_patch=$PATCH" >> $GITHUB_ENV
+          echo "version_patch_next=$PATCH_NEXT" >> $GITHUB_ENV
+          echo "version_next=${MAJOR}.${MINOR}.${PATCH_NEXT}-SNAPSHOT" >> $GITHUB_ENV
 
       # - name: Update VERSION.txt to release version
       #   run: |
@@ -44,27 +44,21 @@ jobs:
       #     git tag "v${{ env.version }}"
       #     git push origin "v${{ env.version }}"
 
-      - name: Print repository in lower case
+      - name: Registry Login (ghcr.io)
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image and push to ghcr.io
         run: |
-          echo "${{ github.repository }}"
-          echo "OWNER_LC=${OWNER,,}"
-          echo "${${{ github.repository }},,}"
+          IMG=ghcr.io/${REPOSITORY,,}
+          docker build \
+            --tag $IMG:${{ env.version }} \
+            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+            --tag $IMG:${{ env.version_major }}.latest \
+            --tag $IMG:latest \
+            .
+          docker push --all-tags $IMG
         env:
-          OWNER: "${{ github.repository }}"
-
-      # - name: Registry Login (ghcr.io)
-      #   run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      # - name: Build Docker image and push to ghcr.io
-      #   run: |
-      #     IMG=ghcr.io/${{ github.repository }}
-      #     docker build \
-      #       --tag $IMG:${{ env.version }} \
-      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-      #       --tag $IMG:${{ env.version_major }}.latest \
-      #       --tag $IMG:latest \
-      #       .
-      #     docker push --all-tags $IMG
+          REPOSITORY: "${{ github.repository }}"
 
       # - name: Update VERSION.txt to next snapshot release
       #   run: |
