@@ -79,6 +79,7 @@ Once installed, start the cluster by:
 
 ```console
 minikube start
+minikube addons enable ingress
 ```
 
 Next, apply the Kubernetes deployment to the cluster by running:
