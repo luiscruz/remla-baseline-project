@@ -1,0 +1,12 @@
+/X_train.pickle
+/X_val.pickle
+/X_test.pickle
+/bow_train.pickle
+/bow_val.pickle
+/bow_test.pickle
+/tfidf_train.pickle
+/tfidf_val.pickle
+/tfidf_test.pickle
+/mlb.pickle
+/mlb_val.pickle
+/mlb_train.pickle
