@@ -1,6 +1,6 @@
 """Flask API of the Stack Overflow tag prediction model."""
 import joblib
-from flask import Flask, jsonify, request, Response
+from flask import Flask, Response, jsonify, request
 
 # from flasgger import Swagger
 from preprocess import text_prepare
@@ -50,7 +50,11 @@ def submission() -> Response:
     shareChosenTags = len(overlapping_tag_set) / len(classifier_tags)
     shareManualTags = len(manual_tag_set) / len(user_tags)
     shareNewTags = len(new_tag_set) / len(user_tags)
-    res = {"shareChosenTags": shareChosenTags, "shareManualTags": shareManualTags, "shareNewTags": shareNewTags}
+    res = {
+        "shareChosenTags": shareChosenTags,
+        "shareManualTags": shareManualTags,
+        "shareNewTags": shareNewTags,
+    }
     return jsonify(res)
 
 
@@ -58,7 +62,7 @@ def predict(title: str) -> list[int]:
     """Predict tags identifiers for the input title."""
     processed_title_tfidf = TFIDF_VECTORIZER.transform([text_prepare(title)])
     prediction = MLB.inverse_transform(MODEL.predict(processed_title_tfidf))[0]
-    return [int(id) for id in prediction]
+    return prediction
 
 
 if __name__ == "__main__":

@@ -72,8 +72,6 @@ def main():
 
     sorted_tags = list((set((tag for question in y_train for tag in question))))
     sorted_tags.sort()
-    y_train = [[sorted_tags.index(tag) for tag in question] for question in y_train]
-    y_val = [[sorted_tags.index(tag) for tag in question] for question in y_val]
 
     dump((X_train_tfidf, y_train), "output/train_tfidf.joblib")
     dump((X_val_tfidf, y_val), "output/validation_tfidf.joblib")
