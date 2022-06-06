@@ -14,3 +14,11 @@ services:
     command: sh src/startup.sh
     environment:
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+
+  training-service:
+    build: ../../src/training_service
+    image: training-service:latest
+    command: sh src/startup.sh
+    environment:
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+      - TRAIN_INTERVAL_MINUTES=30
