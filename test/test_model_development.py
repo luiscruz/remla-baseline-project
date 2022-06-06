@@ -14,7 +14,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 import math
 import pandas as pd
 
-output_directory = "../output"
+output_directory = "output"
 
 
 def test_tfidf_against_baseline():
