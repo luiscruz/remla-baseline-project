@@ -113,16 +113,14 @@ def data_slices(model, slices, X_val, Y_val):
     print(max - min)
 
 def model_staleness(new_model_metrics, old_model_metrics):
-    # X_train_old, X_test_old, y_train_old, y_test_old = train_test_split(old_data_X, old_data_y)
-    # X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(new_data_X, new_data_y)
-    #
-    # X_train = X_train_old.extend(X_train_new)
-    # y_train = y_train_old.extend(y_train_new)
-    # X_test = X_test_old.extend(X_test_new)
-    # y_test = y_test_old.extend(y_test_new)
-    #
-    # classifier.fit(X_train, y_train)
-    # y_pred = classifier.predict(X_test)
+    """
+        Compares the metrics of the old model to the metrics of a new model
+    :param new_model_metrics: dictionary of scores for the new model (Accuracy, Average Precision score, F1-score, ROC-AUC score)
+        {"ACC": , "AP": , "F1": , "ROC_AUC": }
+    :param old_model_metrics: dictionary of scores for the old model (Accuracy, Average Precision score, F1-score, ROC-AUC score)
+        {"ACC": , "AP": , "F1": , "ROC_AUC": }
+    :return dictionary of differences in the scores of the old model and new model
+    """
 
     score_differences = {}
     if "ACC" in old_model_metrics.keys() & "ACC" in new_model_metrics.keys():
