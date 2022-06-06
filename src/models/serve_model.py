@@ -48,16 +48,19 @@ def predict():
 
     with open(ROOT_DIR / 'models/tfidf.pkl', 'rb') as file:
         model = pickle.load(file)
-    prediction = model.predict(processed_title)[0]
+    prediction = model.predict(processed_title)
+
+    with open(ROOT_DIR / 'models/mlb.pkl', 'rb') as file:
+        mlb = pickle.load(file)
+    tags = mlb.inverse_transform(prediction)
+
     # global statement is used to keep track of predictions, this is the simplest solution
     # pylint: disable=global-statement
     global NUM_PRED
     NUM_PRED = NUM_PRED + 1  # Increment number of total predictions made
 
-    # TODO: Convert preediction: binary array -> list of tags as strings ?
-
     return jsonify({
-        "result": prediction.tolist(),
+        "result": tags,
         "classifier": "tfifd multi-label-binarizer ",
         "title": title
     })
