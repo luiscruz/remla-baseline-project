@@ -8,7 +8,7 @@ from preprocess import text_prepare
 MODEL = None
 TFIDF_VECTORIZER = None
 MLB = None
-SORTED_TAGS = None
+SORTED_TAGS_DICT = None
 app = Flask(__name__)
 # swagger = Swagger(app)
 
@@ -16,8 +16,7 @@ app = Flask(__name__)
 @app.route("/tags", methods=["GET"])
 def tags():
     """Give a sorted list of the known tags."""
-    res = {"result": SORTED_TAGS}
-    return jsonify(res)
+    return jsonify(SORTED_TAGS_DICT)
 
 
 @app.route("/predict", methods=["POST"])
@@ -36,5 +35,5 @@ if __name__ == "__main__":
     MODEL = joblib.load("output/model_tfidf.joblib")
     TFIDF_VECTORIZER = joblib.load("output/tfidf_vectorizer.joblib")
     MLB = joblib.load("output/mlb.joblib")
-    SORTED_TAGS = joblib.load("output/sorted_tags.joblib")
+    SORTED_TAGS_DICT = {"result": joblib.load("output/sorted_tags.joblib")}
     app.run(host="0.0.0.0", port=8080, debug=False)  # nosec
