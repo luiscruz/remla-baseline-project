@@ -5,6 +5,9 @@
       types: [opened, reopened]
       branches:
         - main
+    push:
+      branches:
+        - main
 
   jobs:
     static-analysis:
@@ -45,6 +48,9 @@
 
         - name: debug pyenv
           run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+
+        - name: run dvc pipeline
+          run: dvc repro
 
         - name: run tests
           run: python -m pytest

@@ -47,6 +47,7 @@ def main():
     _, X_val, _ = joblib.load(output_directory + "/X_preprocessed.joblib")
     _, y_val =joblib.load(output_directory + "/fitted_y.joblib")
 
+
     # Now you can create predictions for the data. You will need two types of predictions: labels and scores.
     y_val_predicted_labels_mybag = classifier_mybag.predict(X_val_mybag)
     y_val_predicted_scores_mybag = classifier_mybag.decision_function(X_val_mybag)
