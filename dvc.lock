@@ -34,6 +34,9 @@ stages:
   train:
     cmd: python src/train.py
     deps:
+    - path: output/sorted_tags.joblib
+      md5: db9bf2f0d7c02305a8524d5430b2c414
+      size: 997
     - path: output/train_tfidf.joblib
       md5: 2c6ace40f30da1709657d06bcd527fd7
       size: 12255794
@@ -41,8 +44,8 @@ stages:
       md5: e18ea65d439f35d0afae28ed48b41bac
       size: 3622568
     - path: src/train.py
-      md5: dd09074f7e1b59587d4ac88df80faceb
-      size: 3384
+      md5: 547143a0ef1276ad5e6d6c6c819fd5da
+      size: 3153
     outs:
     - path: output/mlb.joblib
       md5: fe5c9a09e5441e81fd81da984584844e

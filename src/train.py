@@ -62,18 +62,9 @@ def main():
     """Is the main function."""
     X_train_tfidf, y_train = load("output/train_tfidf.joblib")
     X_val_tfidf, y_val = load("output/validation_tfidf.joblib")
+    sorted_tags = load("output/sorted_tags.joblib")
 
-    # Dictionary of all tags from train corpus with their counts.
-    tags_counts = {}
-
-    for tags in y_train:
-        for tag in tags:
-            if tag in tags_counts:
-                tags_counts[tag] += 1
-            else:
-                tags_counts[tag] = 1
-
-    mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
+    mlb = MultiLabelBinarizer(classes=sorted(sorted_tags))
     y_train = mlb.fit_transform(y_train)
     y_val = mlb.fit_transform(y_val)
 
