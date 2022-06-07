@@ -18,4 +18,4 @@ RUN poetry run python src/preprocess.py &&\
 EXPOSE 8080
 
 ENTRYPOINT ["poetry", "run"]
-CMD ["python", "src/serve.py"]
+CMD ["python", "src/serve.py", "8080"]

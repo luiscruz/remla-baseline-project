@@ -1,4 +1,6 @@
 """Flask API of the Stack Overflow tag prediction model."""
+from sys import argv
+
 import joblib
 from flask import Flask, Response, jsonify, request
 
@@ -72,4 +74,4 @@ if __name__ == "__main__":
     sorted_tags = joblib.load("output/sorted_tags.joblib")
     SET_TAGS = set(sorted_tags)
     SORTED_TAGS_DICT = {"result": sorted_tags}
-    app.run(host="0.0.0.0", port=8080, debug=False)  # nosec
+    app.run(host="0.0.0.0", port=argv[1], debug=False)  # nosec
