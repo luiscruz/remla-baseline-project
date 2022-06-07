@@ -136,8 +136,10 @@ def model_staleness(new_model_metrics, old_model_metrics):
         # auc_roc = roc_auc_score(y_test, y_pred)
         score_differences["ROC_AUC"] = old_model_metrics["ROC_AUC"] - new_model_metrics["ROC_AUC"]
 
-    return score_differences
-
+    # return score_differences
+    for score_type in score_differences.keys():
+        assert score_differences[score_type] < 0.1, f"difference less than 0.1 expected, got: {score_differences[score_type]} " \
+                                             f"for {score_type}"
 
 
 
