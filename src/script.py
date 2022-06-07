@@ -1,5 +1,11 @@
 # flake8: noqa
-"""Script for reading, preparing and training the input data. The true and predicted labels are listed, followed by the evaluation scores for Bag-of-words and TF-IDF. Next, the top positive and negative words are printed for different tags."""
+"""
+Script for reading, preparing and training the input data.
+
+The true and predicted labels are listed, followed by the evaluation scores for Bag-of-words and TF-IDF.
+Next, the top positive and negative words are printed for different tags.
+It is merely a transposed version of the original notebook into a standalone script, only used for reference!
+"""
 
 import re
 from ast import literal_eval
