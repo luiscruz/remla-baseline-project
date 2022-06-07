@@ -54,6 +54,10 @@ def main():
     test = pd.read_csv("data/test.tsv", sep="\t", dtype={"title": str})
     test = test[["title"]]
 
+    extra = read_data("data/extra.tsv")
+    train = pd.concat([train, extra], copy=False, ignore_index=True)
+    validation = pd.concat([validation, extra], copy=False, ignore_index=True)
+
     X_train, y_train = train["title"].values, train["tags"].values
     X_val, y_val = validation["title"].values, validation["tags"].values
     X_test = test["title"].values
@@ -70,7 +74,7 @@ def main():
     X_val_tfidf = tfidf_vectorizer.transform(X_val)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
 
-    sorted_tags = list((set((tag for question in y_train for tag in question))))
+    sorted_tags = list(set(tag for question in y_train for tag in question))
     sorted_tags.sort()
 
     dump((X_train_tfidf, y_train), "output/train_tfidf.joblib")

@@ -3,6 +3,9 @@ stages:
   preprocess:
     cmd: python src/preprocess.py
     deps:
+    - path: data/extra.tsv
+      md5: d9f218d6bfb7d611607cd53da735517b
+      size: 89
     - path: data/test.tsv
       md5: f06925444bd9e4b12b382e0e267345a7
       size: 1061380
@@ -13,46 +16,46 @@ stages:
       md5: 508e1de849c33ba2f38f0b118590a4cd
       size: 2196271
     - path: src/preprocess.py
-      md5: 6050cd2f935b11a391988831abdaf0bc
-      size: 2992
+      md5: 6be6bdb0675c5356ca8545965cabd5da
+      size: 3181
     outs:
     - path: output/sorted_tags.joblib
-      md5: db9bf2f0d7c02305a8524d5430b2c414
-      size: 997
+      md5: 8487ed9f256e15d7bbdcbce077aa41ac
+      size: 1027
     - path: output/test_tfidf.joblib
-      md5: 130692199758f571993b30bfe6860e5d
+      md5: 227233ac059730dcc0edb71a87e75fff
       size: 1652814
     - path: output/tfidf_vectorizer.joblib
-      md5: 4718cabf1eaece79bb1efd498b6f2c8c
-      size: 5381522
+      md5: 15de0917625b21f6943b0625adcc289e
+      size: 5381536
     - path: output/train_tfidf.joblib
-      md5: 2c6ace40f30da1709657d06bcd527fd7
-      size: 12255794
+      md5: ebee3f7b400e21f71afc5dc8eb9a91b8
+      size: 12255981
     - path: output/validation_tfidf.joblib
-      md5: e18ea65d439f35d0afae28ed48b41bac
-      size: 3622568
+      md5: 1fbfa641f6844d2d97f53a4b7eac31a9
+      size: 3622755
   train:
     cmd: python src/train.py
     deps:
     - path: output/sorted_tags.joblib
-      md5: db9bf2f0d7c02305a8524d5430b2c414
-      size: 997
+      md5: 8487ed9f256e15d7bbdcbce077aa41ac
+      size: 1027
     - path: output/train_tfidf.joblib
-      md5: 2c6ace40f30da1709657d06bcd527fd7
-      size: 12255794
+      md5: ebee3f7b400e21f71afc5dc8eb9a91b8
+      size: 12255981
     - path: output/validation_tfidf.joblib
-      md5: e18ea65d439f35d0afae28ed48b41bac
-      size: 3622568
+      md5: 1fbfa641f6844d2d97f53a4b7eac31a9
+      size: 3622755
     - path: src/train.py
       md5: 547143a0ef1276ad5e6d6c6c819fd5da
       size: 3153
     outs:
     - path: output/mlb.joblib
-      md5: fe5c9a09e5441e81fd81da984584844e
-      size: 3299
+      md5: 8bb5dbfdaad072e3b9b0c0e956f4e7bd
+      size: 3383
     - path: output/model_tfidf.joblib
-      md5: a3ee724e69c8fed5a6a7dce07c9a451e
-      size: 14668735
+      md5: 9c5875eb5cb4618b2fbcadaf6fba3bcc
+      size: 15108769
     - path: output/stats.txt
-      md5: 5a5841269c5dd92727e32a64e9d3e2bc
-      size: 135
+      md5: 5a42fc7a9112d242b7ffa5e7f03ad77e
+      size: 145
