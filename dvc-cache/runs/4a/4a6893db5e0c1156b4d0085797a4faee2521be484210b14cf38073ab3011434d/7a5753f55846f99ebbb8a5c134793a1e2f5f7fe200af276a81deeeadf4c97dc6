@@ -1,0 +1,24 @@
+cmd: python src/models/train_model.py
+deps:
+- path: data/interim/train_featurized.pkl
+  md5: 884930a11acdff791999c415fcfb2349
+  size: 48485366
+- path: src/models/train_model.py
+  md5: e65d2668936eea4b0b42ec9dee64696b
+  size: 3484
+params:
+  params.yaml:
+    featurize:
+      script: src/features/build_features.py
+      output_train: data/interim/train_featurized.pkl
+      output_val: data/interim/validation_featurized.pkl
+      output_test: data/interim/test_featurized.pkl
+      mlb_out: models/mlb.pkl
+      tfidf_vectorizer_out: models/tfidf_vectorizer.pkl
+    train:
+      script: src/models/train_model.py
+      model_out: models/model.pkl
+outs:
+- path: models/model.pkl
+  md5: ade63e8a02b9a8507828c4e414ec0ac6
+  size: 14663131

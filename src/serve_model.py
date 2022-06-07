@@ -4,6 +4,7 @@ Flask API of the SMS Spam detection model model.
 import os
 import pickle
 import shutil
+import subprocess as sp
 
 import yaml
 from flasgger import Swagger
@@ -62,6 +63,11 @@ def init_app():
 
 init_app()
 
+@app.route("/pull_new_model", methods=["GET"])
+def pull_new_model_dvc():
+    process = sp.Popen(["dvc","pull"])
+    process.wait()
+    return '', 200
 
 @app.route("/predict", methods=["POST"])
 @duration_metric.time()

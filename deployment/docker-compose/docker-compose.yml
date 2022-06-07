@@ -12,5 +12,18 @@ services:
     build: ../../
     image: inference-service:latest
     command: sh src/startup.sh
+    volumes:
+      - ../../:/data/shared/
     environment:
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+      - DVC_CACHE_PATH=/data/shared/dvc-cache/
+
+  test-service:
+    build: ../../test_dep
+    image: test-service:latest
+    command: sh src/startup_test.sh
+    volumes:
+      - ../../:/data/shared/
+    environment:
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+      - DVC_CACHE_PATH=/data/shared/dvc-cache/

@@ -1,0 +1,32 @@
+cmd: python src/models/evaluate_model.py
+deps:
+- path: data/interim/validation_featurized.pkl
+  md5: bc0d877f6a51fb4cdecfc190ab6f0acc
+  size: 14487048
+- path: models/model.pkl
+  md5: ade63e8a02b9a8507828c4e414ec0ac6
+  size: 14663131
+- path: src/models/evaluate_model.py
+  md5: 6e55f449bfd03142e7dee8c6cbb529dc
+  size: 3821
+params:
+  params.yaml:
+    evaluate:
+      script: src/models/evaluate_model.py
+      scores_path: reports/scores.json
+      roc_json: reports/roc_plot.json
+      prc_json: reports/prc_plot.json
+    featurize:
+      script: src/features/build_features.py
+      output_train: data/interim/train_featurized.pkl
+      output_val: data/interim/validation_featurized.pkl
+      output_test: data/interim/test_featurized.pkl
+      mlb_out: models/mlb.pkl
+      tfidf_vectorizer_out: models/tfidf_vectorizer.pkl
+    train:
+      script: src/models/train_model.py
+      model_out: models/model.pkl
+outs:
+- path: reports/scores.json
+  md5: d71a69ce5e7dc4449f900c5be135a9ea
+  size: 174
