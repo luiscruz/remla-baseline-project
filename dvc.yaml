@@ -3,9 +3,7 @@ stages:
     cmd: python src/data/make_dataset.py
     deps:
     - src/data/make_dataset.py
-    - data/raw/test.tsv
-    - data/raw/validation.tsv
-    - data/raw/train.tsv
+    - data/raw/
     outs:
     - data/interim/test.tsv
     - data/interim/train.tsv
