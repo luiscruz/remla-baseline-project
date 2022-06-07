@@ -12,7 +12,6 @@ TFIDF_VECTORIZER = None
 MLB = None
 SET_TAGS = None
 SORTED_TAGS_DICT = None
-EXT_DS = set()
 app = Flask(__name__)
 # swagger = Swagger(app)
 
@@ -35,13 +34,11 @@ def prediction() -> Response:
 
 @app.route("/submit", methods=["POST"])
 def submission() -> Response:
-    """Process user-submitted tags for a title."""
+    """Process user-submitted tags for a title. Assume all user tags are distinct."""
     input_data = request.get_json()
     title = input_data.get("title")
     user_tags = input_data.get("result")
     classifier_tags = predict(title)
-
-    EXT_DS.add((title, tuple(user_tags)))
 
     user_tag_set = set(user_tags)
     overlapping_tag_set = user_tag_set & set(classifier_tags)
@@ -49,9 +46,16 @@ def submission() -> Response:
     manual_tag_set = unpredicted_tag_set & SET_TAGS
     new_tag_set = unpredicted_tag_set - manual_tag_set
 
-    shareChosenTags = len(overlapping_tag_set) / len(classifier_tags)
-    shareManualTags = len(manual_tag_set) / len(user_tags)
-    shareNewTags = len(new_tag_set) / len(user_tags)
+    if len(classifier_tags) == 0:
+        shareChosenTags = int(len(user_tags) == 0)
+    else:
+        shareChosenTags = len(overlapping_tag_set) / len(classifier_tags)
+    if len(user_tags) == 0:
+        shareManualTags = 0
+        shareNewTags = 0
+    else:
+        shareManualTags = len(manual_tag_set) / len(user_tags)
+        shareNewTags = len(new_tag_set) / len(user_tags)
     res = {
         "shareChosenTags": shareChosenTags,
         "shareManualTags": shareManualTags,
