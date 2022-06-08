@@ -18,19 +18,19 @@ spec:
       # Pod
       containers:
         - name: group7
-          image: proksch/showenv # TODO: Change this to our application Docker image
+          image: ghcr.io/frostmegabyte/remla-project-group-7:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 5000
           env:
             - name: MODEL_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: my-config # Refer to ConfigMap
+                  name: group7-config # Refer to ConfigMap
                   key: host-name
             - name: DB_PWD
               valueFrom:
                 secretKeyRef:
-                  name: my-secret # Refer to Secret
+                  name: group7-secret # Refer to Secret
                   key: db.pwd
 ---
 # Service
@@ -42,8 +42,8 @@ spec:
   selector:
     app: group7
   ports:
-    - port: 8080
-      targetPort: 8080 # Should match the port our pods are running on
+    - port: 5000
+      targetPort: 5000 # Should match the port our pods are running on
 ---
 # ServiceMonitor
 apiVersion: monitoring.coreos.com/v1
@@ -57,7 +57,7 @@ spec:
     matchLabels:
       app: sms-web-service
   endpoints:
-    - targetPort: 8080
+    - targetPort: 5000
       path: "/metrics"
       interval: 1s
 ---
@@ -71,7 +71,7 @@ spec:
     service:
       name: group7-service
       port:
-        number: 8080 # Should match the port our service is running on
+        number: 5000 # Should match the port our service is running on
 ---
 # ConfigMap
 apiVersion: v1
