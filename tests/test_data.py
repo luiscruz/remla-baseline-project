@@ -9,14 +9,17 @@ from os.path import isfile, join
 
 from src.util.util import read_data
 
+
 @pytest.fixture()
-def all_data():
+def all_data(data_folder):
     all_data = []
-    input_filepath = '../data/interim/'
     directory = os.getcwd()
 
     print('########', directory)
-    onlyfiles = [join(input_filepath, f) for f in listdir(input_filepath) if isfile(join(input_filepath, f))]
+    onlyfiles = [join(data_folder, f) for f in listdir(data_folder) if isfile(join(data_folder, f))]
+
+    import pudb
+    pudb.set_trace()
 
     for f in onlyfiles:
         if ".tsv" not in f:
@@ -34,8 +37,6 @@ def test_no_duplicates(all_data):
         df['key'] = df['title'] + df['tags'].apply(lambda r: str(r))
         print('ROW: ', df.groupby(['key']).size().sort_values())
         assert df.groupby(['key']).size().max() == 1
-
-
 
 
 def test_no_duplicates_cross_dataset(all_data):
