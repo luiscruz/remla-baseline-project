@@ -39,6 +39,7 @@ jobs:
 
       - name: Commit and tag the release version
         run: |
+          git pull origin HEAD:${{ env.release_branch }}
           git add .
           git commit -m "Release of version ${{ env.version }}"
           git push origin HEAD:${{ env.release_branch }}
