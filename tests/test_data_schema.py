@@ -1,8 +1,8 @@
 import pickle
-import pytest
-import pandas as pd
-import tensorflow_data_validation as tfdv
 
+import pandas as pd
+import pytest
+import tensorflow_data_validation as tfdv
 
 REFRESH_SCHEMAS = True
 

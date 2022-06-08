@@ -1,11 +1,11 @@
 import logging
+import pickle
 
 import numpy as np
 import pandas as pd
 from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
-import pickle
 
 from src.util.util import read_data, write_data
 

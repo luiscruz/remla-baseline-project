@@ -1,8 +1,8 @@
 import logging
 import pickle
 
-from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.multiclass import OneVsRestClassifier
 
 
 def train_classifier(X_train, y_train, penalty="l1", C=1):

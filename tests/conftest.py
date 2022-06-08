@@ -8,9 +8,9 @@ any file named `conftest.py` and there are more ways to "discover" fixtures.
 
 @author hielke
 """
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture()

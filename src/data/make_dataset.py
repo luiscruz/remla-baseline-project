@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
-from nltk.corpus import stopwords
-import os
-from ast import literal_eval
-import re
-
-import click
 import logging
+import os
+import re
+from ast import literal_eval
+from os import listdir
+from os.path import isfile, join
 from pathlib import Path
 
+import click
+import nltk
+import pandas as pd
+from dotenv import find_dotenv, load_dotenv
+from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 
 from src.util.util import read_data, write_data
-from os import listdir
-from os.path import isfile, join
-
-import pandas as pd
-from dotenv import find_dotenv, load_dotenv
-
-import nltk
 
 nltk.download("stopwords")
 
