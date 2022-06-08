@@ -8,15 +8,15 @@ any file named `conftest.py` and there are more ways to "discover" fixtures.
 
 @author hielke
 """
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture()
 def root_folder():
     cwd = Path().absolute()
-    if 'test' in cwd.parts[-1]:
+    if "test" in cwd.parts[-1]:
         # run inside the tests folder
         return cwd.parent
     return cwd
@@ -24,9 +24,9 @@ def root_folder():
 
 @pytest.fixture()
 def data_folder(root_folder):
-    yield root_folder / 'data'
+    yield root_folder / "data"
 
 
 @pytest.fixture()
 def test_folder(root_folder):
-    yield root_folder / 'tests'
+    yield root_folder / "tests"
