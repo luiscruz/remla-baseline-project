@@ -6,7 +6,7 @@ metadata:
   labels:
     app: group7
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: group7
@@ -21,17 +21,6 @@ spec:
           image: ghcr.io/frostmegabyte/remla-project-group-7:latest
           ports:
             - containerPort: 5000
-          env:
-            - name: MODEL_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: group7-config # Refer to ConfigMap
-                  key: host-name
-            - name: DB_PWD
-              valueFrom:
-                secretKeyRef:
-                  name: group7-secret # Refer to Secret
-                  key: db.pwd
 ---
 # Service
 apiVersion: v1
@@ -57,9 +46,9 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: group7-service
+      app: group7-service # Should match the label of our service
   endpoints:
-    - targetPort: 5000
+    - targetPort: 5000 # Should match the port our pods with `/metrics` endpoint are running on
       path: "/metrics"
       interval: 1s
 ---
@@ -74,19 +63,3 @@ spec:
       name: group7-service
       port:
         number: 5000 # Should match the port our service is running on
----
-# ConfigMap
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: group7-config
-data:
-  host-name: http://whatever
----
-# Secret (base64 encoded) --> echo -n 'Text to encode' | base64
-apiVersion: v1
-kind: Secret
-metadata:
-  name: group7-secret
-data:
-  db.pwd: Zm9vYmFy
