@@ -11,13 +11,14 @@ REFRESH_SCHEMAS = True
     'data_step, data_set',
     [
         # ('raw', 'test'),       ('raw', 'train'),       ('raw', 'validation'),
-         ('interim', 'test'),   ('interim', 'train'),   ('interim', 'validation')
+        ('interim', 'test'),   ('interim', 'train'),   ('interim', 'validation')
     ]
 )
 def test_schema(data_folder, test_folder, data_step, data_set):
     """test schema"""
     data_path = data_folder / '{}/{}.tsv'.format(data_step, data_set)
-    schema_path = test_folder / 'schemas/{}/{}_schema.pbtxt'.format(data_step, data_set)
+    schema_path = test_folder / \
+        'schemas/{}/{}_schema.pbtxt'.format(data_step, data_set)
 
     # infer schema from data
     stats = tfdv.generate_statistics_from_csv(str(data_path), delimiter='\t')

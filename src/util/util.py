@@ -9,6 +9,7 @@ def read_data(filename, delim='\t'):
         data['tags'] = data['tags'].apply(literal_eval)
     return data
 
+
 def write_data(data, filename, delim='\t'):
     data.to_csv(filename, sep=delim)
     return True

@@ -14,7 +14,8 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
     # Create and fit LogisticRegression wraped into OneVsRestClassifier.
 
-    clf = LogisticRegression(penalty=penalty, C=C, dual=False, solver='liblinear')
+    clf = LogisticRegression(penalty=penalty, C=C,
+                             dual=False, solver='liblinear')
     clf = OneVsRestClassifier(clf)
     clf.fit(X_train, y_train)
 
@@ -28,7 +29,8 @@ def main():
     logger.info('Load data')
     input_filepath = 'data/processed/'
     bow_train = pickle.load(open(input_filepath + "bow_train.pickle", "rb"))
-    tfidf_train = pickle.load(open(input_filepath + "tfidf_train.pickle", "rb"))
+    tfidf_train = pickle.load(
+        open(input_filepath + "tfidf_train.pickle", "rb"))
     mlb_y_train = pickle.load(open(input_filepath + "mlb_train.pickle", "rb"))
 
     logger.info('Train BOW classifier')
@@ -38,8 +40,10 @@ def main():
 
     logger.info('Store model')
     output_filepath = 'models/'
-    pickle.dump(classifier_mybag, open(output_filepath + "bow_model.pickle", "wb"))
-    pickle.dump(classifier_tfidf, open(output_filepath + "tfidf_model.pickle", "wb"))
+    pickle.dump(classifier_mybag, open(
+        output_filepath + "bow_model.pickle", "wb"))
+    pickle.dump(classifier_tfidf, open(
+        output_filepath + "tfidf_model.pickle", "wb"))
 
 
 if __name__ == '__main__':

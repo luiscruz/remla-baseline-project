@@ -17,7 +17,8 @@ def all_data(data_folder):
     folder = data_folder / 'interim'
 
     print('########', directory)
-    onlyfiles = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f))]
+    onlyfiles = [join(folder, f)
+                 for f in listdir(folder) if isfile(join(folder, f))]
 
     for f in onlyfiles:
         if ".tsv" not in f:
@@ -44,7 +45,8 @@ def test_no_duplicates_cross_dataset(all_data):
             df["tags"] = " "
         df_cross = pd.concat([df_cross, df])
 
-    df_cross['key'] = df_cross['title'] + df_cross['tags'].apply(lambda r: str(r))
+    df_cross['key'] = df_cross['title'] + \
+        df_cross['tags'].apply(lambda r: str(r))
     print('ROW: ', df_cross.groupby(['key']).size().sort_values())
     assert df_cross.groupby(['key']).size().max() == 1
 

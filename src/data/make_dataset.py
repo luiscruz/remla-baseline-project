@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from nltk.corpus import stopwords
 import os
 from ast import literal_eval
 import re
@@ -19,7 +20,6 @@ from dotenv import find_dotenv, load_dotenv
 import nltk
 
 nltk.download('stopwords')
-from nltk.corpus import stopwords
 
 DATA_WINDOW_SIZE = 3
 
@@ -70,8 +70,9 @@ def main(input_filepath='data/raw/', output_filepath='data/interim/'):
     # validation = read_data(input_filepath + validation_file_name)
     # test = pd.read_csv(input_filepath + test_file_name, sep='\t')
 
-    onlyfiles = [join(input_filepath, f) for f in listdir(input_filepath) if isfile(join(input_filepath, f))]
-    all_data = pd.DataFrame(columns=['title','tags'])
+    onlyfiles = [join(input_filepath, f) for f in listdir(
+        input_filepath) if isfile(join(input_filepath, f))]
+    all_data = pd.DataFrame(columns=['title', 'tags'])
     file_count = 0
     for f in onlyfiles:
         if file_count >= DATA_WINDOW_SIZE:
@@ -84,7 +85,7 @@ def main(input_filepath='data/raw/', output_filepath='data/interim/'):
         file_count = file_count + 1
 
     X_train, X_test, y_train, y_test = train_test_split(all_data['title'], all_data['tags'], test_size=0.1,
-                                                      random_state=1)
+                                                        random_state=1)
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25,
                                                       random_state=1)
 
@@ -127,9 +128,12 @@ def text_prepare(text):
         return: modified initial string
     """
     text = text.lower()  # lowercase text
-    text = re.sub(REPLACE_BY_SPACE_RE, " ", text)  # replace REPLACE_BY_SPACE_RE symbols by space in text
-    text = re.sub(BAD_SYMBOLS_RE, "", text)  # delete symbols which are in BAD_SYMBOLS_RE from text
-    text = " ".join([word for word in text.split() if not word in STOPWORDS])  # delete stopwords from text
+    # replace REPLACE_BY_SPACE_RE symbols by space in text
+    text = re.sub(REPLACE_BY_SPACE_RE, " ", text)
+    # delete symbols which are in BAD_SYMBOLS_RE from text
+    text = re.sub(BAD_SYMBOLS_RE, "", text)
+    # delete stopwords from text
+    text = " ".join([word for word in text.split() if not word in STOPWORDS])
     return text
 
 

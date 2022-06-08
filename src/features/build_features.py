@@ -20,7 +20,7 @@ def tfidf_features(X_train, X_val, X_test):
     # Transform the train, test, and val sets and return the result
 
     tfidf_vectorizer = TfidfVectorizer(min_df=5, max_df=0.9, ngram_range=(1, 2),
-                                       token_pattern='(\S+)')  ####### YOUR CODE HERE #######
+                                       token_pattern='(\S+)')  # YOUR CODE HERE #######
 
     X_train = tfidf_vectorizer.fit_transform(X_train)
     X_val = tfidf_vectorizer.transform(X_val)
@@ -72,7 +72,8 @@ def bow_features(X_train, X_val, X_test):
     words_counts = count_words_strings(X_train)
 
     DICT_SIZE = 5000
-    INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[:DICT_SIZE]
+    INDEX_TO_WORDS = sorted(words_counts, key=words_counts.get, reverse=True)[
+        :DICT_SIZE]
     WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
 
     X_train_mybag = sp_sparse.vstack(
@@ -126,7 +127,8 @@ def main(input_filepath='data/interim/', output_filepath='data/processed/'):
     bow_train, bow_val, bow_test = bow_features(X_train, X_val, X_test)
     logger.info('Finished generating the bag of words matrices')
 
-    tfidf_train, tfidf_val, tfidf_test, tfidf_vocab = tfidf_features(X_train, X_val, X_test)
+    tfidf_train, tfidf_val, tfidf_test, tfidf_vocab = tfidf_features(
+        X_train, X_val, X_test)
     logger.info('Finished generating the tfidf')
 
     mlb, mlb_y_train, mlb_y_val = mlb_labels(y_train, y_val)
@@ -137,19 +139,21 @@ def main(input_filepath='data/interim/', output_filepath='data/processed/'):
                              columns=['title', 'tags', 'bow', 'tfidf'])
     val_out = pd.DataFrame(list(zip(X_val, y_val, bow_val, tfidf_val)),
                            columns=['title', 'tags', 'bow', 'tfidf'])
-    test_out = pd.DataFrame(list(zip(X_test, bow_test, tfidf_test)), columns=['title', 'bow', 'tfidf'])
+    test_out = pd.DataFrame(list(zip(X_test, bow_test, tfidf_test)), columns=[
+                            'title', 'bow', 'tfidf'])
 
-    pickle.dump(X_train, open(output_filepath +     "X_train.pickle", "wb"))
-    pickle.dump(X_val, open(output_filepath +     "X_val.pickle", "wb"))
-    pickle.dump(X_test, open(output_filepath +     "X_test.pickle", "wb"))
+    pickle.dump(X_train, open(output_filepath + "X_train.pickle", "wb"))
+    pickle.dump(X_val, open(output_filepath + "X_val.pickle", "wb"))
+    pickle.dump(X_test, open(output_filepath + "X_test.pickle", "wb"))
 
-    pickle.dump(bow_train, open(output_filepath +   "bow_train.pickle", "wb"))
-    pickle.dump(bow_val, open(output_filepath +     "bow_val.pickle", "wb"))
-    pickle.dump(bow_test, open(output_filepath +    "bow_test.pickle", "wb"))
+    pickle.dump(bow_train, open(output_filepath + "bow_train.pickle", "wb"))
+    pickle.dump(bow_val, open(output_filepath + "bow_val.pickle", "wb"))
+    pickle.dump(bow_test, open(output_filepath + "bow_test.pickle", "wb"))
 
-    pickle.dump(tfidf_train, open(output_filepath +   "tfidf_train.pickle", "wb"))
-    pickle.dump(tfidf_val, open(output_filepath +     "tfidf_val.pickle", "wb"))
-    pickle.dump(tfidf_test, open(output_filepath +    "tfidf_test.pickle", "wb"))
+    pickle.dump(tfidf_train, open(
+        output_filepath + "tfidf_train.pickle", "wb"))
+    pickle.dump(tfidf_val, open(output_filepath + "tfidf_val.pickle", "wb"))
+    pickle.dump(tfidf_test, open(output_filepath + "tfidf_test.pickle", "wb"))
 
     pickle.dump(mlb, open(output_filepath + "mlb.pickle", "wb"))
     pickle.dump(mlb_y_train, open(output_filepath + "mlb_train.pickle", "wb"))
