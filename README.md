@@ -113,15 +113,7 @@ minikube start
 minikube addons enable ingress
 ```
 
-Next, apply the Kubernetes deployment to the cluster by running:
-
-```console
-kubectl apply -f kubernetes-deploy.yml
-```
-
-This will run the Machine Learning model application of group 7 on the IP address of minikube on port 5000. This IP can be found via `minikube ip`)
-
-Then to get the Prometheus real-time database for monitoring and Grafana for visualizations set up, we first need to [install Helm](https://helm.sh/docs/intro/install/)
+Next, to get the Prometheus real-time database for monitoring and Grafana for visualizations set up, we first need to [install Helm](https://helm.sh/docs/intro/install/)
 
 Once Helm is installed, perform the following commands (based on the [ArtifactHub information](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack)):
 
@@ -130,6 +122,14 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 helm install promstack prometheus-community/kube-prometheus-stack
 ```
+
+Then, apply the Kubernetes deployment to the cluster by running:
+
+```console
+kubectl apply -f kubernetes-deploy.yml
+```
+
+This will run the Machine Learning model application of group 7 on the IP address of minikube on port 5000. This IP can be found via `minikube ip`)
 
 You can visit the Prometheus or Grafana applications by running the following commands:
 
