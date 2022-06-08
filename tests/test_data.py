@@ -14,12 +14,10 @@ from src.util.util import read_data
 def all_data(data_folder):
     all_data = []
     directory = os.getcwd()
+    folder = data_folder / 'interim'
 
     print('########', directory)
-    onlyfiles = [join(data_folder, f) for f in listdir(data_folder) if isfile(join(data_folder, f))]
-
-    import pudb
-    pudb.set_trace()
+    onlyfiles = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f))]
 
     for f in onlyfiles:
         if ".tsv" not in f:

@@ -9,8 +9,10 @@ REFRESH_SCHEMAS = True
 
 @pytest.mark.parametrize(
     'data_step, data_set',
-    [('raw', 'test'),       ('raw', 'train'),       ('raw', 'validation'),
-     ('interim', 'test'),   ('interim', 'train'),   ('interim', 'validation')]
+    [
+        # ('raw', 'test'),       ('raw', 'train'),       ('raw', 'validation'),
+         ('interim', 'test'),   ('interim', 'train'),   ('interim', 'validation')
+    ]
 )
 def test_schema(data_folder, test_folder, data_step, data_set):
     """test schema"""
