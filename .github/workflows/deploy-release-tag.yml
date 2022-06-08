@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Configure Git
         run: |
@@ -16,7 +16,7 @@ jobs:
           git config --global committer.name "GitHub"
           git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global author.name "Build Server"
-          git config pull.rebase false
+          git reset --hard HEAD
           echo "release_branch=dev" >> $GITHUB_ENV
 
       - name: Parse and provide version info
@@ -41,7 +41,6 @@ jobs:
         run: |
           git add .
           git commit -m "Release of version ${{ env.version }}"
-          git pull origin HEAD:${{ env.release_branch }}
           git push origin HEAD:${{ env.release_branch }}
           git tag "v${{ env.version }}"
           git push origin "v${{ env.version }}"
