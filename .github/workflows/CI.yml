@@ -23,6 +23,12 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
 
+      - name: DVC pull
+        run: |
+          mkdir .dvc/tmp
+          mv gdrive-creds.json .dvc/tmp/gdrive-user-credentials.json
+          dvc pull
+
       - name: Run mllint
         run:
           mllint -o mllint-report.md
