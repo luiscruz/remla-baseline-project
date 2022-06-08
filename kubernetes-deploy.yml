@@ -38,6 +38,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: group7-service
+  labels:
+    app: group7-service
 spec:
   selector:
     app: group7
@@ -55,7 +57,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: sms-web-service
+      app: group7-service
   endpoints:
     - targetPort: 5000
       path: "/metrics"

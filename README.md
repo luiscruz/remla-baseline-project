@@ -135,7 +135,7 @@ You can visit the Prometheus or Grafana applications by running the following co
 
 ```console
 kubectl get pods # Find pod names
-kubectl port-forward prometheus-promstack-kube-prometheus-prometheus 9090 # --> Prometheus on localhost:9090
+kubectl port-forward prometheus-promstack-kube-prometheus-prometheus-0 9090 # --> Prometheus on localhost:9090
 kubectl port-forward promstack-grafana-[hash] 3000 # --> Grafana on localhost:3000
 ```
 

@@ -21,7 +21,7 @@ def hello_world():
 def metrics():
     text = "# HELP my_random A random number\n"
     text += "# TYPE my_random gauge\n"
-    text += f"my random {random.random()}\n\n"
+    text += f"my_random {random.random()}\n\n"
 
     return Response(text, mimetype='text/plain')
 
