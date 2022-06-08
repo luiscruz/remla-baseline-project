@@ -42,6 +42,9 @@ jobs:
           name: report.txt
           path: report.txt
 
+      - name: Install pytest plugin
+        run: pip install pytest-github-actions-annotate-failures
+
       - name: Test with pytest
         run: |
           pip install pytest

@@ -1,0 +1,8 @@
+rules:
+  disabled:
+testing:
+  report: tests-report.xml # JUnit-report for rule testing/pass
+  coverage:
+    report: coverage.xml
+    targets:
+      line: 80 # percent line coverage. Default is 80%
