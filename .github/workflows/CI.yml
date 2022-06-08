@@ -1,0 +1,75 @@
+name: CI
+
+# Build on every branch every push and pull request change.
+on: push
+
+jobs:
+  build:
+    name: Check project quality with `mllint` and `dslinter` and run pytest
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
+
+      - name: DVC pull
+        run: |
+          mkdir .dvc/tmp
+          mv gdrive-creds.json .dvc/tmp/gdrive-user-credentials.json
+          dvc pull
+
+      - name: Run mllint
+        run:
+          mllint -o mllint-report.md
+
+      - name: Upload `mllint` report
+        uses: actions/upload-artifact@v3
+        with:
+          name: mllint-report.md
+          path: mllint-report.md
+
+      - name: Lint with pylint
+        run: pylint $(git ls-files '*.py')
+
+      - name: Upload `pylint` report
+        uses: actions/upload-artifact@v3
+        with:
+          name: report.txt
+          path: report.txt
+
+      - name: Install pytest plugin
+        run: pip install pytest-github-actions-annotate-failures
+
+      - name: Test with pytest
+        run: |
+          pip install pytest
+          pip install pytest-cov
+          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml tests/
+
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-results
+          path: junit/test-results.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
+      - name: Upload pytest-cov results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-cov
+          path: coverage.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
