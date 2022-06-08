@@ -3,7 +3,6 @@ import os
 import pandas
 import pandas as pd
 import pytest
-from src.util import util
 
 from os import listdir
 from os.path import isfile, join
