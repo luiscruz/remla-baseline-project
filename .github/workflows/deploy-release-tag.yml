@@ -44,18 +44,22 @@ jobs:
           git tag "v${{ env.version }}"
           git push origin "v${{ env.version }}"
 
-      # - name: Build Docker image and push to ghcr.io
-      #   run: |
-      #     echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      #     IMG=ghcr.io/${{ github.repository }}
-      #     docker build \
-      #       --tag $IMG:${{ env.version }} \
-      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-      #       --tag $IMG:${{ env.version_major }}.latest \
-      #       --tag $IMG:latest \
-      #       .
-      #     docker push --all-tags $IMG
-          
+      - name: Registry Login (ghcr.io)
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image and push to ghcr.io
+        run: |
+          IMG=ghcr.io/${REPOSITORY,,}
+          docker build \
+            --tag $IMG:${{ env.version }} \
+            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+            --tag $IMG:${{ env.version_major }}.latest \
+            --tag $IMG:latest \
+            .
+          docker push --all-tags $IMG
+        env:
+          REPOSITORY: "${{ github.repository }}"
+
       - name: Update VERSION.txt to next snapshot release
         run: |
           echo "${{ env.version_next }}" > VERSION.txt
