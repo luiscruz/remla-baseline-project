@@ -8,20 +8,21 @@ REFRESH_SCHEMAS = True
 
 
 @pytest.mark.parametrize(
-    'data_step, data_set',
+    "data_step, data_set",
     [
         # ('raw', 'test'),       ('raw', 'train'),       ('raw', 'validation'),
-        ('interim', 'test'),   ('interim', 'train'),   ('interim', 'validation')
-    ]
+        ("interim", "test"),
+        ("interim", "train"),
+        ("interim", "validation"),
+    ],
 )
 def test_schema(data_folder, test_folder, data_step, data_set):
     """test schema"""
-    data_path = data_folder / '{}/{}.tsv'.format(data_step, data_set)
-    schema_path = test_folder / \
-        'schemas/{}/{}_schema.pbtxt'.format(data_step, data_set)
+    data_path = data_folder / "{}/{}.tsv".format(data_step, data_set)
+    schema_path = test_folder / "schemas/{}/{}_schema.pbtxt".format(data_step, data_set)
 
     # infer schema from data
-    stats = tfdv.generate_statistics_from_csv(str(data_path), delimiter='\t')
+    stats = tfdv.generate_statistics_from_csv(str(data_path), delimiter="\t")
     inferred_schema = tfdv.infer_schema(stats)
 
     # load schema from file
