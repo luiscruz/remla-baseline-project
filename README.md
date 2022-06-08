@@ -50,9 +50,29 @@ The application is now served at 127.0.0.1:5000.
 
 # DVC
 
-DVC is used to manage the ML pipeline version control artifacts. The artifacts are pushed to a project google drive repo which, the first time you connect to it, needs authentication.
+DVC is used to manage the ML pipeline version control artifacts.
+The artifacts are pushed to a project google drive repo which,
+the first time you connect to it, it needs authentication.
 
-To use DVC, first pull the artifacts by:
+There is a data folder in a Google Drive folder.
+This folder has read-only access to a gmail account of which the credentials
+are available in the `gdrive-creds.json` file.
+You can move this file to the dvc location to get read-only access.
+
+```
+mkdir .dvc/tmp
+mv gdrive-creds.json .dvc/tmp/gdrive-user-credentials.json
+```
+
+This is the same account used in the CI/CD pipelines.
+
+As this is just a regular account it might get eventually blocked by Google
+because of suspicious activity. For more robust usage create a service account
+using a Google Cloud (GC) account:
+
+https://github.com/iterative/dvc.org/blob/master/content/docs/user-guide/setup-google-drive-remote.md#using-service-accounts
+
+To use get the data from DVC, first pull the artifacts by:
 
 ```console
 dvc pull

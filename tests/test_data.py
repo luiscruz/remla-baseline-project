@@ -3,22 +3,21 @@ import os
 import pandas
 import pandas as pd
 import pytest
-from src.util import util
 
 from os import listdir
 from os.path import isfile, join
 
-from util.util import read_data
+from src.util.util import read_data
 
 
 @pytest.fixture()
-def all_data():
+def all_data(data_folder):
     all_data = []
-    input_filepath = '../data/interim/'
     directory = os.getcwd()
+    folder = data_folder / 'interim'
 
     print('########', directory)
-    onlyfiles = [join(input_filepath, f) for f in listdir(input_filepath) if isfile(join(input_filepath, f))]
+    onlyfiles = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f))]
 
     for f in onlyfiles:
         if ".tsv" not in f:
@@ -36,8 +35,6 @@ def test_no_duplicates(all_data):
         df['key'] = df['title'] + df['tags'].apply(lambda r: str(r))
         print('ROW: ', df.groupby(['key']).size().sort_values())
         assert df.groupby(['key']).size().max() == 1
-
-
 
 
 def test_no_duplicates_cross_dataset(all_data):
