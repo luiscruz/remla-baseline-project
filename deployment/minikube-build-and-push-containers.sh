@@ -22,11 +22,11 @@ minikube status || minikube start
 # minikube status && minikube start
 # minikube start --mount --mount-string $PROJECT_ROOT_PATH:$MOUNTING_PERSISTENT_STORAGE_MINIKUBE
 
-# eval $(minikube docker-env --shell bash)
+eval $(minikube docker-env --shell bash)
 
 # NOTE: use docker-compose to create the images beforehand, since minikube uses those images for deployment
-minikube image load inference-service:latest
-minikube image load test-service:latest
+minikube image load inference-service:latest --overwrite 
+minikube image load test-service:latest --overwrite 
 # docker-compose -f docker-compose/docker-compose.yml build
 
 minikube mount $PROJECT_ROOT_PATH:$MOUNTING_PERSISTENT_STORAGE_MINIKUBE

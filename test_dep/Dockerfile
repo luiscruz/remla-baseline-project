@@ -17,11 +17,11 @@ COPY data data
 
 # Including .dvc is optional. 
 # But if you don't include this, then add `dvc init --no-scp` in the beginning of startup scripts
-COPY .dvc .dvc
+# COPY .dvc .dvc
 
 # .git must be included for dvc repro to execute. 
 # Don't think it matters what .git folder to include, as long as it is a valid git folder
-COPY .git .git 
+# COPY .git .git 
 
 RUN python -m pip install --upgrade pip &&\
     pip install -r src/requirements.txt
