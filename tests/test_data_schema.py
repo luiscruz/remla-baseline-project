@@ -25,6 +25,8 @@ def test_schema(data_folder, test_folder, data_step, data_set):
 
     # load schema from file
     if REFRESH_SCHEMAS:
+        schema_path.parent.mkdir(parents=True, exist_ok=True)
+        schema_path.touch()
         tfdv.write_schema_text(inferred_schema, str(schema_path))
     expected_schema = tfdv.load_schema_text(str(schema_path))
 
