@@ -1,0 +1,60 @@
+feature {
+  name: ""
+  type: INT
+  presence {
+    min_fraction: 1.0
+    min_count: 1
+  }
+  shape {
+    dim {
+      size: 1
+    }
+  }
+}
+feature {
+  name: "title"
+  type: BYTES
+  domain: "title"
+  presence {
+    min_fraction: 1.0
+    min_count: 1
+  }
+  shape {
+    dim {
+      size: 1
+    }
+  }
+}
+string_domain {
+  name: "title"
+  value: "acces data relation using parsecom"
+  value: "ajax upload jquery php"
+  value: "best practice handle backing bean initialization jsf 20 jsf20"
+  value: "cannot cast dictionary valuecollection ienumarablet missing"
+  value: "create border triangle using java loops"
+  value: "dynamically change images height using codebehind"
+  value: "embedding trycatch blocks within trycatch blocks java"
+  value: "entity framework mvc multiple databases"
+  value: "find manhattan distance continuous twodimensional matrix"
+  value: "get cxf log exceptions error channel"
+  value: "get mysql primary key foreign keys constraints php"
+  value: "group list objects attribute java"
+  value: "hex unicode php u014d"
+  value: "increase number something using sessions"
+  value: "installation pymongo works fails import python3"
+  value: "java sudoku squares 3x3 checking validity"
+  value: "javalangruntimeexception error occured executing doinbackground caused javalangnullpointerexception"
+  value: "jquery ui autocomplete widget trying use time add row table"
+  value: "linq searching collection within collection single object"
+  value: "load html page dynamically div jquery"
+  value: "modify qt stylesheet"
+  value: "pass parameters docker entrypoint"
+  value: "pass querystring ajax webservice"
+  value: "put sqlalchemy label result arithmetic expression"
+  value: "return jsonp classic asp javascript server side coding"
+  value: "set end date plus one start date using jquery datepicker"
+  value: "stop infinite loop within thread"
+  value: "stringnpos mean"
+  value: "use ngchange angular typeahead search"
+  value: "vs tells add reference seemingly unrelated assembly find"
+}
