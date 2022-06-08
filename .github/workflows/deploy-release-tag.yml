@@ -16,7 +16,6 @@ jobs:
           git config --global committer.name "GitHub"
           git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global author.name "Build Server"
-          git config pull.rebase false
           echo "release_branch=dev" >> $GITHUB_ENV
 
       - name: Parse and provide version info
@@ -37,38 +36,41 @@ jobs:
       - name: Update VERSION.txt to release version
         run: |
           echo "${{ env.version }}" > VERSION.txt
+          echo "${GITHUB_BASE_REF}"
+          echo "${GITHUB_HEAD_REF}"
+          echo "${GITHUB_REF_NAME}"
 
-      - name: Commit and tag the release version
-        run: |
-          git pull origin HEAD:${{ env.release_branch }}
-          git add .
-          git commit -m "Release of version ${{ env.version }}"
-          git push origin HEAD:${{ env.release_branch }}
-          git tag "v${{ env.version }}"
-          git push origin "v${{ env.version }}"
+      # - name: Commit and tag the release version
+      #   run: |
+      #     git pull origin HEAD:${{ env.release_branch }}
+      #     git add .
+      #     git commit -m "Release of version ${{ env.version }}"
+      #     git push origin HEAD:${{ env.release_branch }}
+      #     git tag "v${{ env.version }}"
+      #     git push origin "v${{ env.version }}"
 
-      - name: Registry Login (ghcr.io)
-        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      # - name: Registry Login (ghcr.io)
+      #   run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Docker image and push to ghcr.io
-        run: |
-          IMG=ghcr.io/${REPOSITORY,,}
-          docker build \
-            --tag $IMG:${{ env.version }} \
-            --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
-            --tag $IMG:${{ env.version_major }}.latest \
-            --tag $IMG:latest \
-            .
-          docker push --all-tags $IMG
-        env:
-          REPOSITORY: "${{ github.repository }}"
+      # - name: Build Docker image and push to ghcr.io
+      #   run: |
+      #     IMG=ghcr.io/${REPOSITORY,,}
+      #     docker build \
+      #       --tag $IMG:${{ env.version }} \
+      #       --tag $IMG:${{ env.version_major }}.${{ env.version_minor }}.latest \
+      #       --tag $IMG:${{ env.version_major }}.latest \
+      #       --tag $IMG:latest \
+      #       .
+      #     docker push --all-tags $IMG
+      #   env:
+      #     REPOSITORY: "${{ github.repository }}"
 
-      - name: Update VERSION.txt to next snapshot release
-        run: |
-          echo "${{ env.version_next }}" > VERSION.txt
+      # - name: Update VERSION.txt to next snapshot release
+      #   run: |
+      #     echo "${{ env.version_next }}" > VERSION.txt
 
-      - name: Commit the next snapshot release
-        run: |
-          git add .
-          git commit -m "Bump version to ${{ env.version_next }}"
-          git push origin HEAD:${{ env.release_branch }}
+      # - name: Commit the next snapshot release
+      #   run: |
+      #     git add .
+      #     git commit -m "Bump version to ${{ env.version_next }}"
+      #     git push origin HEAD:${{ env.release_branch }}
