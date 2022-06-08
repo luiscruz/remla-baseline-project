@@ -16,6 +16,7 @@ jobs:
           git config --global committer.name "GitHub"
           git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global author.name "Build Server"
+          git config pull.rebase true
           echo "release_branch=dev" >> $GITHUB_ENV
 
       - name: Parse and provide version info
@@ -34,11 +35,11 @@ jobs:
           echo "version_next=${MAJOR}.${MINOR}.${PATCH_NEXT}-SNAPSHOT" >> $GITHUB_ENV
 
       - name: Update VERSION.txt to release version
-        run: |
-          echo "${{ env.version }}" > VERSION.txt
+        run: echo "${{ env.version }}" > VERSION.txt
 
       - name: Commit and tag the release version
         run: |
+          git pull origin HEAD:${{ env.release_branch }}
           git add .
           git commit -m "Release of version ${{ env.version }}"
           git push origin HEAD:${{ env.release_branch }}
