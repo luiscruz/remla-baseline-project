@@ -1,29 +1,29 @@
 services:
-  gateway:
-    image: nginx:latest
-    depends_on:
-      - inference-service
-    volumes:
-      - ./gateway_nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "8000:80"
+  # gateway:
+  #   image: nginx:latest
+  #   depends_on:
+  #     - inference-service
+  #   volumes:
+  #     - ./gateway_nginx.conf:/etc/nginx/nginx.conf:ro
+  #   ports:
+  #     - "8000:80"
 
   inference-service:
     build: ../../
     image: inference-service:latest
-    command: sh src/startup.sh
-    volumes:
-      - ../../:/data/shared/
-    environment:
-      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
-      - DVC_CACHE_PATH=/data/shared/dvc-cache/
+    # command: sh src/startup.sh
+    # volumes:
+    #   - ../../:/data/shared/
+    # environment:
+    #   - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+    #   - DVC_CACHE_PATH=/data/shared/dvc-cache/
 
   test-service:
     build: ../../test_dep
     image: test-service:latest
-    command: sh src/startup_test.sh
-    volumes:
-      - ../../:/data/shared/
-    environment:
-      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
-      - DVC_CACHE_PATH=/data/shared/dvc-cache/
+    # command: sh src/startup_test.sh
+    # volumes:
+    #   - ../../:/data/shared/
+    # environment:
+    #   - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+    #   - DVC_CACHE_PATH=/data/shared/dvc-cache/

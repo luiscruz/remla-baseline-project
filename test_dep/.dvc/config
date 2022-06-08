@@ -1,0 +1,4 @@
+[core]
+    analytics = false
+[cache]
+    dir = ../dvc-cache/
