@@ -3,6 +3,13 @@ FROM python:3.7.10-slim
 
 WORKDIR /root/
 
+RUN : \
+    && apt-get update \
+    && DEBIAN_FRONTED=noninteractive apt-get install -y \
+        build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN python -m venv ./venv
 ENV PATH=./venv/bin:$PATH
 
