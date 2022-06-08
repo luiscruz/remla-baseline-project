@@ -16,7 +16,7 @@ jobs:
           git config --global committer.name "GitHub"
           git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global author.name "Build Server"
-          echo "release_branch=monitoring" >> $GITHUB_ENV
+          echo "release_branch=dev" >> $GITHUB_ENV
 
       - name: Parse and provide version info
         run: |
@@ -61,11 +61,15 @@ jobs:
           REPOSITORY: "${{ github.repository }}"
 
       - name: Update VERSION.txt to next snapshot release
-        run: |
-          echo "${{ env.version_next }}" > VERSION.txt
+        run: echo "${{ env.version_next }}" > VERSION.txt
 
       - name: Commit the next snapshot release
         run: |
           git add .
           git commit -m "Bump version to ${{ env.version_next }}"
           git push origin HEAD:${{ env.release_branch }}
+
+      - name: Remove release tag
+        run: |
+          git push origin :release
+          echo "Don't forget to delete local tag by running: git tag -d release"
