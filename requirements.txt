@@ -19,4 +19,4 @@ Flask==2.1.2
 
 # Packages used for testing
 pytest==7.1.2
-tensorflow-data-validation[visualization]==1.8.0
+# tensorflow-data-validation[visualization]==1.8.0
