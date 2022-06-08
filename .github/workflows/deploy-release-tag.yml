@@ -16,8 +16,8 @@ jobs:
           git config --global committer.name "GitHub"
           git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global author.name "Build Server"
-          git reset --hard HEAD
           echo "release_branch=dev" >> $GITHUB_ENV
+          git pull origin HEAD:${{ env.release_branch }}
 
       - name: Parse and provide version info
         run: |
