@@ -28,7 +28,7 @@ def test_tfidf_against_baseline():
 
     # Assert every score differs at least 10 percent from the baseline
     for score, diff in score_differences.items():
-        print(score, " score difference: ", diff)
+        # print(score, " score difference: ", diff)
         assert (diff > 0.1)
 
 
@@ -60,41 +60,33 @@ def test_tunable_hyperparameters():
 
 
 def test_data_slicing():
-    X_train, X_val, _ = joblib.load(output_directory + "/X_preprocessed.joblib")
+    X_train, _, _ = joblib.load(output_directory + "/X_preprocessed.joblib")
     Y_train, Y_val = joblib.load(output_directory + "/y_preprocessed.joblib")
-    # print("x train", X_train[:5])
-    # print("y train", Y_train[:5])
-    length = (len(x.split()) for x in X_train)
+
+
     X_train_mybag, _, X_val_mybag, _ = joblib.load(output_directory + "/vectorized_x.joblib")
+    length = (len(x.split()) for x in X_train)
     tuples = list((x, y, z) for x, y, z in zip(X_train_mybag, Y_train, length))
     tuples.sort(key=lambda y: y[2])
 
-    # print(len(tuples))
+
 
     slices = {}
-    # count = 0
     for t in tuples:
-        # count += 1
-        # print(count)
-        if t[2] not in slices.keys():
-            slices[t[2]] = []
-        slices[t[2]].append((t[0], t[1]))
+        slice = t[2]%5
+        if slice not in slices.keys():
+            slices[slice] = []
+        slices[slice].append((t[0], t[1]))
 
     model = OneVsRestClassifier(LogisticRegression(penalty='l1', C=1, dual=False, solver='liblinear'))
-    # lib.data_slices(model, slices, X_val, Y_val)
-    min = 100
-    max = 0
-
     tags_counts = joblib.load(output_directory + "/tags_counts.joblib")
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
-    # y_train = mlb.fit_transform(y_train)
     Y_val = mlb.fit_transform(Y_val)
+
 
     for key in slices.keys():
         x_slice = []
         for x in slices[key]:
-            # nsamples, nx, ny = x[0].toarray().shape
-            # to_add = x[0].reshape((nsamples,nx*ny))
             x_slice.append(x[0].toarray())
         x_slice = np.stack(x_slice, axis=0)
 
@@ -102,20 +94,14 @@ def test_data_slicing():
         for y in slices[key]:
             y_slice.append(y[1])
         y_slice = mlb.fit_transform(y_slice)
-        #
-        # print(x_slice.ndim)
-        # print(y_slice.ndim)
+
         nsamples, nx, ny = x_slice.shape
         x_slice = x_slice.reshape((nsamples, nx * ny))
-        model.fit(x_slice, y_slice)
-        score = model.score(X_val_mybag, Y_val)
-        print(score)
-        if score < min:
-            min = score
-        if score > max:
-            max = score
 
-    assert max - min < 0.2
+        slices[key] = [x_slice, y_slice]
+
+    lib.data_slices(model, slices, X_val_mybag, Y_val)
+
 
 
 def test_model_staleness():
@@ -179,10 +165,8 @@ def test_model_staleness():
 
     # get metrics for both sets
 
-    # print("old score metrics", old_model_metrics)
-    # print("new score metrics", new_model_metrics)
 
-    score_diff = lib.model_staleness(new_model_metrics, old_model_metrics)
+    lib.model_staleness(new_model_metrics, old_model_metrics)
 
 
 if __name__ == '__main__':
