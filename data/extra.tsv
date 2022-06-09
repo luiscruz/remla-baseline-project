@@ -1,2 +1,11 @@
 title	tags
-400 Bad request angular .net core	['.net', 'angular', 'api', 'bad-request']
+agda: How do I tell the type system that two types are equal?	['agda']
+Need help converting number to string in Agda	['agda']
+How does one use GHC in agda with VSCode?	['agda', 'agda-mode']
+Emacs doesn't see agda when launched from an .sh script	['agda', 'agda-mode']
+How to use Agda's auto proof search effectively?	['agda']
+How to learn agda	['agda']
+A definition for finite sets in Agda	['agda']
+Assisting Agda's termination checker	['agda']
+Is Agda without K less powerful?	['agda']
+What are the general forms for type ascription in Agda?	['agda', 'agda-mode']
