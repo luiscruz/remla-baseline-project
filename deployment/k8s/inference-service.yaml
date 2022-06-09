@@ -36,8 +36,8 @@ spec:
           ports:
             - containerPort: 5000
           env:
-            - name: DVC_CACHE_PATH
-              value: /data/shared/dvc-cache/
+            - name: DVC_SHARED_ROOT_PROJECT
+              value: /data/shared/
             - name: PROMETHEUS_MULTIPROC_DIR
               value: "/tmp/prometheus/"
           volumeMounts:
