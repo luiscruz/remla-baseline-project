@@ -6,12 +6,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # DVC_CONFIG_PATH=$PROJECT_ROOT_PATH/.dvc
 elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
     # PROJECT_ROOT_PATH=$(pwd | sed -e 's!/!//!g' | sed -e 's!^//c!C:!g')//..//.dvc//
-    PROJECT_ROOT_PATH=$(pwd | sed -e 's!/!//!g' | sed -e 's!^//c!C:!g')//..//
+    PROJECT_ROOT_PATH=$(pwd | sed -e 's!/!//!g' | sed -e 's!^//c!C:!g')//..//dvc-cache
     # DVC_CONFIG_PATH=$PROJECT_ROOT_PATH//.dvc
 fi
 
 # MOUNTING_PERSISTENT_STORAGE_MINIKUBE=/data/shared/.dvc/
-MOUNTING_PERSISTENT_STORAGE_MINIKUBE=/data/shared/
+MOUNTING_PERSISTENT_STORAGE_MINIKUBE=/data/shared/dvc-cache/
 # MOUNTING__CONF_PATH=$MOUNTING_PERSISTENT_STORAGE_MINIKUBE/.dvc
 
 echo "Starting Minikube and mounting $PROJECT_ROOT_PATH:$MOUNTING_PERSISTENT_STORAGE_MINIKUBE"
@@ -19,14 +19,12 @@ echo "Starting Minikube and mounting $PROJECT_ROOT_PATH:$MOUNTING_PERSISTENT_STO
 echo "$PROJECT_ROOT_PATH:$MOUNTING_PERSISTENT_STORAGE_MINIKUBE"
 
 minikube status || minikube start
-# minikube status && minikube start
-# minikube start --mount --mount-string $PROJECT_ROOT_PATH:$MOUNTING_PERSISTENT_STORAGE_MINIKUBE
 
 eval $(minikube docker-env --shell bash)
 
 # NOTE: use docker-compose to create the images beforehand, since minikube uses those images for deployment
-minikube image load inference-service:latest --overwrite 
-minikube image load test-service:latest --overwrite 
-# docker-compose -f docker-compose/docker-compose.yml build
+# minikube image load inference-service:latest --overwrite
+# minikube image load test-service:latest --overwrite
+docker-compose -f docker-compose/docker-compose.yml build --no-cache
 
 minikube mount $PROJECT_ROOT_PATH:$MOUNTING_PERSISTENT_STORAGE_MINIKUBE

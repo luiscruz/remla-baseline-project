@@ -14,6 +14,7 @@ COPY params.yaml .
 COPY dvc.yaml .
 COPY src src
 COPY data data
+# COPY dvc.lock dvc.lock
 
 # Including .dvc is optional. 
 # But if you don't include this, then add `dvc init --no-scp` in the beginning of startup scripts
