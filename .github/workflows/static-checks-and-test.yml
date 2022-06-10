@@ -19,7 +19,7 @@ jobs:
       with:
         python-version: '3.8'
     - name: build environment
-      run: make requirements
+      run: pip install --upgrade pip && pip install -r requirements.txt
     - name: check black
       if: always()
       run: make check-black
@@ -55,7 +55,7 @@ jobs:
         with:
           python-version: '3.8'
       - name: build environment
-        run: make requirements
+        run: pip install --upgrade pip && pip install -r requirements.txt
       - name: dvc make models
         run: dvc repro
       - name: Test with pytest
