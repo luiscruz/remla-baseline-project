@@ -5,7 +5,7 @@ WORKDIR /root/
 COPY requirements.txt pyproject.toml setup.py ./
 
 RUN python -m pip install --upgrade pip &&\
-  python -m pip install -r requirements.txt
+    python -m pip install -r requirements.txt
 
 COPY src src
 COPY services-shared-folder/data data
@@ -17,19 +17,19 @@ RUN mkdir models &&\
  dvc init --no-scm &&\
  dvc repro
 
-#FROM python:3.8.13-slim
-#
-#WORKDIR /root/
-#
-#RUN mkdir models
-#COPY --from=model_build /root/models /models
+FROM python:3.8.13-slim
 
-#COPY src src
+WORKDIR /root/
 
-#COPY requirements.txt params.yaml ./
+RUN mkdir models
+COPY --from=model_build /root/models models
 
-#RUN python -m pip install --upgrade pip &&\
-#    python -m pip install -r requirements.txt
+COPY src src
+
+COPY requirements.txt params.yaml pyproject.toml setup.py ./
+
+RUN python -m pip install --upgrade pip &&\
+ python -m pip install -r src/requirements.txt
 
 EXPOSE 5000
 
