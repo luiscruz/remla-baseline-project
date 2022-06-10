@@ -4,7 +4,7 @@ bandit
 black
 
 # terminal dependencies
-dvc[gdrive]
+dvc
 
 # external requirements
 click

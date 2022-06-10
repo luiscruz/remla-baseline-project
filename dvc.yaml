@@ -26,10 +26,10 @@ stages:
       - ${featurize.output_train}
       - ${featurize.output_val}
       - ${featurize.output_test}
-      - ${featurize.mlb_out}:
-          cache: true
-      - ${featurize.tfidf_vectorizer_out}:
-          cache: true
+      - ${featurize.mlb_out}
+        # cache: true
+      - ${featurize.tfidf_vectorizer_out}
+        # cache: true
   train:
     cmd: python ${train.script}
     params:
@@ -39,8 +39,8 @@ stages:
       - ${train.script}
       - ${featurize.output_train}
     outs:
-      - ${train.model_out}:
-          cache: true
+      - ${train.model_out}
+        # cache: true
   evaluate:
     cmd: python ${evaluate.script}
     params:
@@ -56,8 +56,8 @@ stages:
     #   - ${evaluate.prc_img}
     #   - ${evaluate.roc_img}
     metrics:
-      - ${evaluate.scores_path}:
-          cache: false
+      - ${evaluate.scores_path}
+        # cache: false
     # plots:
     #   - ${evaluate.prc_json}:
     #       cache: false

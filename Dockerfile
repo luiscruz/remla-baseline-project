@@ -1,36 +1,57 @@
 # syntax=docker/dockerfile:1
-FROM python:3.8.13-slim AS model_build
+# FROM python:3.8.13-slim AS model_build
 
-WORKDIR /root/
+# WORKDIR /root/
 
-COPY requirements.txt .
-COPY setup.py .
-COPY pyproject.toml .
+# COPY requirements.txt .
+# COPY setup.py .
+# COPY pyproject.toml .
 
-RUN python -m pip install --upgrade pip &&\
-    python -m pip install -r requirements.txt
+# RUN python -m pip install --upgrade pip &&\
+#     pip install -r requirements.txt
 
-COPY src src
-COPY data data
-COPY reports reports
+# COPY src src
+# COPY data data
+# COPY reports reports
 
-COPY params.yaml .
-COPY dvc.yaml .
+# RUN echo $(pwd)
+# RUN echo $(ls /root/src/data)
 
-RUN mkdir models &&\
-    dvc init --no-scm &&\
-    dvc repro
+# COPY params.yaml .
+# COPY dvc.yaml .
+
+# RUN mkdir models &&\
+#     dvc init --no-scm &&\
+#     dvc repro
 
 FROM python:3.8.13-slim
 
 WORKDIR /root/
 
+# Must be included since we need to store models in it. 
+# DVC can raise error if this folder is not present.
 RUN mkdir models
-COPY --from=model_build /root/models models
+
+# Must be included for DVC to generate and store scores.json file
+# Otherwise it would complain about it.
+RUN mkdir reports
+
+# RUN mkdir -p data/raw
 
 COPY src src
-
 COPY params.yaml .
+COPY dvc.yaml .
+# COPY data data
+
+# COPY dvc.lock dvc.lock
+
+# Including .dvc is optional. 
+# But if you don't include this, then add `dvc init --no-scp` in the beginning of startup scripts
+# COPY .dvc .dvc
+
+# .git must be included for dvc repro to execute. 
+# Don't think it matters what .git folder to include, as long as it is a valid git folder
+# COPY .git .git 
 
 RUN python -m pip install --upgrade pip &&\
     pip install -r src/requirements.txt
