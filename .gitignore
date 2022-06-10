@@ -137,5 +137,3 @@ dmypy.json
 data/*
 models/*
 /reports/mllint_report.md
-
-dvc-cache/*

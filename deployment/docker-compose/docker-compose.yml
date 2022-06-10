@@ -19,7 +19,7 @@ services:
     #   - DVC_CACHE_PATH=/data/shared/dvc-cache/
 
   test-service:
-    build: ../../test_dep
+    build: ../../
     image: test-service:latest
     # command: sh src/startup_test.sh
     # volumes:

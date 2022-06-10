@@ -36,21 +36,23 @@ spec:
           ports:
             - containerPort: 5000
           env:
+            - name: SHARED_DATA_PATH
+              value: /data/shared/data
             - name: DVC_CACHE_PATH
               value: /data/shared/dvc-cache/
             - name: PROMETHEUS_MULTIPROC_DIR
               value: "/tmp/prometheus/"
           volumeMounts:
             - name: project-shared
-              mountPath: /data/shared/dvc-cache/
+              mountPath: /data/shared/
       volumes:
         - name: project-shared
           hostPath:
-            path: /data/shared/dvc-cache/
+            path: /data/shared/
           # persistentVolumeClaim:
           #   claimName: shared-pv-claim
 ---
-apiVersion: apps/v1 # TODO: delete this after testing
+apiVersion: apps/v1 # TODO: This should be the continous training service
 kind: Deployment
 metadata:
   name: test-deployment
@@ -73,17 +75,19 @@ spec:
           ports:
             - containerPort: 5000
           env:
+            - name: SHARED_DATA_PATH
+              value: /data/shared/data
             - name: DVC_CACHE_PATH
               value: /data/shared/dvc-cache/
             - name: PROMETHEUS_MULTIPROC_DIR
               value: "/tmp/prometheus/"
           volumeMounts:
             - name: project-shared
-              mountPath: /data/shared/dvc-cache/
+              mountPath: /data/shared/
       volumes:
         - name: project-shared
           hostPath:
-            path: /data/shared/dvc-cache/
+            path: /data/shared/
 # ---
 # apiVersion: monitoring.coreos.com/v1
 # kind: ServiceMonitor

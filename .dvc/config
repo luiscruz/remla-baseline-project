@@ -1,4 +1,4 @@
 [core]
     analytics = false
 [cache]
-    dir = ../dvc-cache/
+    dir = ../services-shared-folder/dvc-cache

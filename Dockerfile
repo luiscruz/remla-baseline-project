@@ -36,10 +36,13 @@ RUN mkdir models
 # Otherwise it would complain about it.
 RUN mkdir reports
 
+# RUN mkdir -p data/raw
+
 COPY src src
 COPY params.yaml .
 COPY dvc.yaml .
-COPY data data
+# COPY data data
+
 # COPY dvc.lock dvc.lock
 
 # Including .dvc is optional. 
