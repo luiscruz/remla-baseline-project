@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scraping-service
+  labels:
+    app: scraping-service
+spec:
+  type: ClusterIP
+  selector:
+    component: scraping-app
+  ports:
+    - port: 5000
+      name: http
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraping-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: scraping-app
+  template:
+    metadata:
+      labels:
+        component: scraping-app
+    spec:
+      containers:
+        - name: scraping-app
+          image: scraping-service:latest
+          imagePullPolicy: Never
+          command: ["sh"]
+          args: ["src/startup.sh"]
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: "/tmp/prometheus/"
+            - name: APP_MODULE
+              value: "scraper.app.scraper"
+            - name: CONTROLLER_HOST
+              value: "http://scraping-controller:5000"
+            - name: DATA_DIR
+              value: ""
+            - name: SCRAPE_SAVE_DIR
+              value: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scraping-controller-service
+  labels:
+    app: scraping-controller-service
+spec:
+  type: ClusterIP
+  selector:
+    component: scraping-controller
+  ports:
+    - port: 5000
+      name: http
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraping-controller-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: scraping-controller
+  template:
+    metadata:
+      labels:
+        component: scraping-controller
+    spec:
+      containers:
+        - name: scraping-controller
+          image: scraping-controller:latest
+          imagePullPolicy: Never
+          command: ["sh"]
+          args: ["src/startup.sh"]
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: "/tmp/prometheus/"
+            - name: APP_MODULE
+              value: "scraper.controller.controller"
+            - name: api_keys
+              value: "http://scraping-controller:5000"
+            - name: DATA_DIR
+              value: ""
+            - name: SCRAPE_SAVE_DIR
+              value: ""

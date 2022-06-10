@@ -16,6 +16,36 @@ services:
       - APP_MODULE=serve_model
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
 
+  scraping-controller:
+    build:
+      context: ../../
+      dockerfile: src/scraper/controller/Dockerfile
+    image: scraping-controller:latest
+    command: sh src/startup.sh
+    environment:
+      - APP_MODULE=scraper.controller.controller
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+#      - SCRAPE_START_TIMESTAMP=
+#      - SCRAPE_INCREMENT_SECONDS=
+      - API_KEYS=thisisanapikey
+      - LOG_LEVEL=DEBUG
+
+  scraping-service:
+    build:
+      context: ../../
+      dockerfile: src/scraper/app/Dockerfile
+    image: scraping-service:latest
+    command: src/startup.sh
+    environment:
+      - APP_MODULE=scraper.app.scraper
+      - CONTROLLER_HOST=http://scraping-controller:5000
+      - SCRAPE_SAVE_DIR=/root/data/
+      - DATA_DIR=/root/data/raw/
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ../../data/:/root/data/
+
   training-service:
     build: ../../src/training_service
     image: training-service:latest

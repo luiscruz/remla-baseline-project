@@ -33,4 +33,5 @@ Flask
 markupsafe==2.0.1
 jinja2<3.1.0
 flasgger
+requests
 prometheus-client

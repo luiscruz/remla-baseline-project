@@ -56,7 +56,7 @@ check-bandit:
 	$(PYTHON_INTERPRETER) -m bandit -rc "pyproject.toml" ./src
 
 check-mllint:
-	$(PYTHON_INTERPRETER) -m mllint --output reports/mllint_report.md
+	$(PYTHON_INTERPRETER) -m mllint --output reports/mllint_report.md --force
 
 check-mypy:
 	$(PYTHON_INTERPRETER) -m mypy -p src
