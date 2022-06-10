@@ -45,6 +45,4 @@ dvc add $SHARED_DATA_PATH/raw/validation.tsv -o data/raw/validation.tsv
 # reproduce the models and output data
 dvc repro
 
-#TODO: uncomment this again after testing
-# gunicorn -c src/gunicorn_config.py -b 0.0.0.0:5000 src.serve_model:app
-sleep 2312323
+gunicorn -c src/gunicorn_config.py -b 0.0.0.0:5000 src.serve_model:app
