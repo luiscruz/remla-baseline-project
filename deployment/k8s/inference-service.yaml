@@ -35,7 +35,7 @@ spec:
           args: ["src/startup.sh"]
           ports:
             - containerPort: 5000
-          environment:
+          env:
             - name: PROMETHEUS_MULTIPROC_DIR
               value: "/tmp/prometheus/"
 
