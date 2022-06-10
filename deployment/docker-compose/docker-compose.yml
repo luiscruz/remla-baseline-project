@@ -26,20 +26,22 @@ services:
       - APP_MODULE=scraper.controller.controller
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
 #      - SCRAPE_START_TIMESTAMP=
-#      - SCRAPE_INCREMENT_SECONDS=
-      - API_KEYS=thisisanapikey
+      - SCRAPE_INCREMENT_SECONDS=600
+      - API_KEY_SECRET_NAME=api_keys.txt
       - LOG_LEVEL=DEBUG
+    volumes:
+      - ./api-keys.txt:/run/secrets/api_keys.txt
 
   scraping-service:
     build:
       context: ../../
       dockerfile: src/scraper/app/Dockerfile
     image: scraping-service:latest
-    command: src/startup.sh
+    command: sh src/startup.sh
     environment:
       - APP_MODULE=scraper.app.scraper
       - CONTROLLER_HOST=http://scraping-controller:5000
-      - SCRAPE_SAVE_DIR=/root/data/
+      - SCRAPE_SAVE_DIR=/root/data/scrape/
       - DATA_DIR=/root/data/raw/
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
       - LOG_LEVEL=DEBUG
@@ -47,10 +49,17 @@ services:
       - ../../data/:/root/data/
 
   training-service:
-    build: ../../src/training_service
+    build:
+      context: ../../
+      dockerfile: src/training_service/Dockerfile
     image: training-service:latest
     command: sh src/startup.sh
     environment:
       - APP_MODULE=train_app
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
-      - TRAIN_INTERVAL_MINUTES=30
+      - TRAIN_INTERVAL_SECONDS=30
+      - LOG_LEVEL=DEBUG
+      - SHARED_DATA_PATH=/root/data/
+      - SCRAPE_SAVE_DIR=/root/data/scrape/
+    volumes:
+      - ../../data:/root/data/

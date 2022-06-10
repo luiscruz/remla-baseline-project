@@ -1,6 +1,7 @@
 # Dockerfile needs to be built from root
 FROM python:3.8.13-slim
 WORKDIR /app/src
+
 COPY src/training_service/* .
 COPY src/gunicorn_config.py .
 COPY src/startup.sh .

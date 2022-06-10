@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 from threading import Thread
 from typing import Tuple
@@ -12,15 +13,23 @@ from prometheus_client import (
     Counter,
     Summary,
     generate_latest,
+    multiprocess,
 )
 
 import src.scraper.app.data_validation as data_validation
+
+PROMETHEUS_MULTIPROC_DIR = os.environ["PROMETHEUS_MULTIPROC_DIR"]
+# make sure the dir is clean
+shutil.rmtree(PROMETHEUS_MULTIPROC_DIR, ignore_errors=True)
+os.makedirs(PROMETHEUS_MULTIPROC_DIR)
 
 app_name = "scraping-service"
 app = Flask(app_name)
 app.logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 registry = CollectorRegistry()
+multiprocess.MultiProcessCollector(registry)
+
 
 num_queries = Summary("get_query", "Get query function")
 scrape_metric = Summary("scrape", "Scrape stackoverflow function")
@@ -34,17 +43,22 @@ def metrics():
     return Response(data, mimetype=CONTENT_TYPE_LATEST)
 
 
-def get_query(dateFrom, dateTo, page=1):
+def get_query(dateFrom, dateTo, page=1, key=None):
     return (
-        f"https://api.stackexchange.com/2.3/questions?"
-        f"page={page}&"
-        f"pagesize=100&"
-        f"fromdate={dateFrom}&"
-        f"todate={dateTo}&"
-        f"order=desc&"
-        f"sort=activity&"
-        f"site=stackoverflow&"
-        f"filter=!Fc7.FlqcJXCgmWba*Q45*UiJ(2"
+        (
+            f"https://api.stackexchange.com/2.3/questions?"
+            f"page={page}&"
+            f"pagesize=100&"
+            f"fromdate={dateFrom}&"
+            f"todate={dateTo}&"
+            f"order=desc&"
+            f"sort=activity&"
+            f"site=stackoverflow&"
+            f"filter=!Fc7.FlqcJXCgmWba*Q45*UiJ(2"
+        )
+        + f"key={key}"
+        if key
+        else ""
     )
 
 
@@ -70,14 +84,15 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
     app.logger.debug("Scrape and save")
     # Request data
     page = 1
-    success, response_dict = execute_query(get_query(fromdate, todate, page=page))
+    success, response_dict = execute_query(get_query(fromdate, todate, page=page, key=apikey))
     if not success:
         df = pd.DataFrame()
     else:
         items = response_dict["items"]
         while response_dict["has_more"]:
             items.append(response_dict["items"])
-            success, response_dict = execute_query(get_query(fromdate, todate, page=page + 1))
+            page += 1
+            success, response_dict = execute_query(get_query(fromdate, todate, page=page), key=apikey)
 
         df = pd.DataFrame(items)
 

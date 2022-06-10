@@ -28,10 +28,17 @@ multiprocess.MultiProcessCollector(registry)
 duration_metric = Summary("get_timerange_duration", "Time spent on training")
 timestamp_metric = Gauge("scrape_timestamp", "Latest epoch seconds given out by scraper controller")
 
-api_keys = {key: 10_000 for key in os.environ["API_KEYS"].split(",")}
-api_key_counters = {key: Gauge(f"api_key_{i}_quota", "Remaining quota per api key") for i, key in enumerate(api_keys)}
 CURRENT_TIMESTAMP = int(os.environ.get("SCRAPE_START_TIMESTAMP", time.time() - 3600 * 24))
 SCRAPE_INCREMENT = int(os.environ.get("SCRAPE_INCREMENT_SECONDS", 300))
+
+
+def load_api_keys():
+    with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", 'r') as f:
+        return {key: 10_000 for key in f.readlines()}
+
+
+api_keys = load_api_keys()
+api_key_counters = {key: Gauge(f"api_key_{i}_quota", "Remaining quota per api key") for i, key in enumerate(api_keys)}
 
 
 def get_next_apikey():
