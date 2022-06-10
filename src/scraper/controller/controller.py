@@ -33,7 +33,7 @@ SCRAPE_INCREMENT = int(os.environ.get("SCRAPE_INCREMENT_SECONDS", 300))
 
 
 def load_api_keys():
-    with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", 'r') as f:
+    with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", "r") as f:
         return {key: 10_000 for key in f.readlines()}
 
 
