@@ -4,7 +4,7 @@ WORKDIR /app/src
 
 COPY src/training_service/* .
 COPY src/gunicorn_config.py .
-COPY src/startup.sh .
+COPY src/startup_training.sh .
 COPY params.yaml .
 
 WORKDIR /app

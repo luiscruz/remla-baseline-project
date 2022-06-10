@@ -52,43 +52,6 @@ spec:
           # persistentVolumeClaim:
           #   claimName: shared-pv-claim
 ---
-apiVersion: apps/v1 # TODO: This should be the continous training service
-kind: Deployment
-metadata:
-  name: test-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      component: test-app
-  template:
-    metadata:
-      labels:
-        component: test-app
-    spec:
-      containers:
-        - name: test-app
-          image: test-service:latest
-          imagePullPolicy: Never
-          command: ["sh"]
-          args: ["src/startup_test.sh"]
-          ports:
-            - containerPort: 5000
-          env:
-            - name: SHARED_DATA_PATH
-              value: /data/shared/data
-            - name: DVC_CACHE_PATH
-              value: /data/shared/dvc-cache/
-            - name: PROMETHEUS_MULTIPROC_DIR
-              value: "/tmp/prometheus/"
-          volumeMounts:
-            - name: project-shared
-              mountPath: /data/shared/
-      volumes:
-        - name: project-shared
-          hostPath:
-            path: /data/shared/
----
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -97,8 +60,8 @@ metadata:
     release: promstack
 spec:
   selector:
-    matchLabels:
-      app: inference-service
+    matchExpressions:
+      - {key: app, operator: In, values: [inference-service, training-service, scraping-controller]}
   endpoints:
     - targetPort: 5000
       path: "/metrics"

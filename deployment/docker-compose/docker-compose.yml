@@ -11,7 +11,7 @@ services:
   inference-service:
     build: ../../
     image: inference-service:latest
-    command: sh src/startup.sh
+    command: sleep 500 && sh src/startup.sh
     environment:
       - APP_MODULE=serve_model
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus

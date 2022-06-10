@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: training-service
+  labels:
+    app: training-service
+spec:
+  type: ClusterIP
+  selector:
+    component: training-app
+  ports:
+    - port: 5000
+      name: http
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: training-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: training-app
+  template:
+    metadata:
+      labels:
+        component: training-app
+    spec:
+      containers:
+        - name: training-app
+          image: training-service:latest
+          imagePullPolicy: Never
+          command: ["sh"]
+          args: ["src/startup_training.sh"]
+          ports:
+            - containerPort: 5000
+          env:
+            - name: SHARED_DATA_PATH
+              value: /data/shared/data
+            - name: DVC_CACHE_PATH
+              value: /data/shared/dvc-cache/
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: "/tmp/prometheus/"
+            - name: SCRAPE_SAVE_DIR
+              value: /data/shared/scrape/
+          volumeMounts:
+            - name: project-shared
+              mountPath: /data/shared/
+      volumes:
+        - name: project-shared
+          hostPath:
+            path: /data/shared/
