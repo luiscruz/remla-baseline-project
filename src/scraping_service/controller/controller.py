@@ -33,14 +33,14 @@ SCRAPE_INCREMENT = int(os.environ.get("SCRAPE_INCREMENT_SECONDS", 300))
 
 def load_api_keys():
     # for run in k8s api keys are stored in the env var
-    if os.environ.get('API_KEY_SECRET'):
-        keys = os.environ['API_KEY_SECRET']
+    if os.environ.get("API_KEY_SECRET"):
+        keys = os.environ["API_KEY_SECRET"]
     else:
         # for run in docker compose they're stored in a mounted file
         with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", "r") as f:
             keys = f.read()
 
-    return {key: 10_000 for key in keys.split(',')}
+    return {key: 10_000 for key in keys.split(",")}
 
 
 api_keys = load_api_keys()
