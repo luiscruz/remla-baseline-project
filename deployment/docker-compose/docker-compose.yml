@@ -19,11 +19,11 @@ services:
   scraping-controller:
     build:
       context: ../../
-      dockerfile: src/scraper/controller/Dockerfile
+      dockerfile: src/scraping_service/controller/Dockerfile
     image: scraping-controller:latest
     command: sh src/startup.sh
     environment:
-      - APP_MODULE=scraper.controller.controller
+      - APP_MODULE=scraping_service.controller.controller
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
 #      - SCRAPE_START_TIMESTAMP=
       - SCRAPE_INCREMENT_SECONDS=600
@@ -35,11 +35,11 @@ services:
   scraping-service:
     build:
       context: ../../
-      dockerfile: src/scraper/app/Dockerfile
+      dockerfile: src/scraping_service/app/Dockerfile
     image: scraping-service:latest
     command: sh src/startup.sh
     environment:
-      - APP_MODULE=scraper.app.scraper
+      - APP_MODULE=scraping_service.app.scraper
       - CONTROLLER_HOST=http://scraping-controller:5000
       - SCRAPE_SAVE_DIR=/root/data/scrape/
       - DATA_DIR=/root/data/raw/

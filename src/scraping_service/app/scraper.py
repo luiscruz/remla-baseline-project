@@ -16,7 +16,7 @@ from prometheus_client import (
     multiprocess,
 )
 
-import src.scraper.app.data_validation as data_validation
+import src.scraping_service.app.data_validation as data_validation
 
 PROMETHEUS_MULTIPROC_DIR = os.environ["PROMETHEUS_MULTIPROC_DIR"]
 # make sure the dir is clean

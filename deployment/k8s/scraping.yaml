@@ -39,7 +39,7 @@ spec:
             - name: PROMETHEUS_MULTIPROC_DIR
               value: "/tmp/prometheus/"
             - name: APP_MODULE
-              value: "scraper.app.scraper"
+              value: "scraping_service.app.scraper"
             - name: CONTROLLER_HOST
               value: "http://scraping-controller:5000"
             - name: DATA_DIR
@@ -88,7 +88,7 @@ spec:
             - name: PROMETHEUS_MULTIPROC_DIR
               value: "/tmp/prometheus/"
             - name: APP_MODULE
-              value: "scraper.controller.controller"
+              value: "scraping_service.controller.controller"
             - name: api_keys
               value: "http://scraping-controller:5000"
             - name: DATA_DIR
