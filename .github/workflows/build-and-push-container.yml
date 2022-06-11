@@ -45,11 +45,12 @@ jobs:
           do
             echo $img_name
             echo ${IMG}/$img_name
-            docker-compose -f deployment/docker-compose/docker-compose.yml build $img_name \
-              -t ${IMG}/$img_name:latest \
-              -t ${IMG}/$img_name:${{ env.version_major }}-latest \
-              -t ${IMG}/$img_name:${{ env.version_major }}.${{ env.version_minor }}-latest \
-              -t ${IMG}/$img_name:${{ env.version }}
+            
+            docker-compose -f deployment/docker-compose/docker-compose.yml build $img_name
 
-            docker-compose push --all-tags ${IMG}/$img_name
+            docker tag ${IMG}/$img_name:latest ${IMG}/$img_name:${{ env.version_major }}-latest
+            docker tag ${IMG}/$img_name:latest ${IMG}/$img_name:${{ env.version_major }}.${{ env.version_minor }}-latest
+            docker tag ${IMG}/$img_name:latest ${IMG}/$img_name:${{ env.version }}
+
+            docker push --all-tags ${IMG}/$img_name
           done
