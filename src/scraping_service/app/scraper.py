@@ -1,6 +1,7 @@
 import os
 import shutil
 import time
+from pathlib import Path
 from threading import Thread
 from typing import Tuple
 
@@ -30,7 +31,6 @@ app.logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 registry = CollectorRegistry()
 multiprocess.MultiProcessCollector(registry)
 
-
 num_queries = Summary("get_query", "Get query function")
 scrape_metric = Summary("scrape", "Scrape stackoverflow function")
 question_count = Counter("num_questions_retrieved", "Number of questions scraped from SO")
@@ -45,25 +45,21 @@ def metrics():
 
 def get_query(dateFrom, dateTo, page=1, key=None):
     return (
-        (
-            f"https://api.stackexchange.com/2.3/questions?"
-            f"page={page}&"
-            f"pagesize=100&"
-            f"fromdate={dateFrom}&"
-            f"todate={dateTo}&"
-            f"order=desc&"
-            f"sort=activity&"
-            f"site=stackoverflow&"
-            f"filter=!Fc7.FlqcJXCgmWba*Q45*UiJ(2"
-        )
-        + f"&key={key}"
-        if key
-        else ""
-    )
+        f"https://api.stackexchange.com/2.3/questions?"
+        f"page={page}&"
+        f"pagesize=100&"
+        f"fromdate={dateFrom}&"
+        f"todate={dateTo}&"
+        f"order=desc&"
+        f"sort=activity&"
+        f"site=stackoverflow&"
+        f"filter=!Fc7.FlqcJXCgmWba*Q45*UiJ(2"
+    ) + (f"&key={key}" if key else "")
 
 
 @num_queries.time()
 def execute_query(query) -> Tuple[bool, dict]:
+    app.logger.debug(f"Sending request to {query}")
     res = requests.get(query)
     success = False
     if res:
@@ -107,6 +103,7 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
 
         if num_anomalies == 0:
             question_count.inc(len(df))
+            Path(save_dir).mkdir(exist_ok=True)
             file_name = f"{save_dir}/result_{fromdate}-{todate}.tsv"
             app.logger.debug(f"Saving to {file_name}")
             df.to_csv(file_name, sep="\t", index=False)
@@ -146,7 +143,6 @@ def scrape_loop():
 
 main_loop = Thread(target=scrape_loop)
 main_loop.start()
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)  # nosec

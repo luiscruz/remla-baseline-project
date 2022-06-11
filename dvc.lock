@@ -7,14 +7,14 @@ stages:
       md5: f06925444bd9e4b12b382e0e267345a7
       size: 1061380
     - path: data/raw/train.tsv
-      md5: 2502592a16c44c1e33cb827b2a647406
-      size: 7296139
+      md5: 4a9ed29cc204834896074c7b3b4e1279
+      size: 7566086
     - path: data/raw/validation.tsv
       md5: 508e1de849c33ba2f38f0b118590a4cd
       size: 2196271
     - path: src/preprocess/preprocess_data.py
-      md5: f7c54db720e80cc3ee4647ae97221e71
-      size: 4172
+      md5: 9941bb4a9120f91a80420afe7b3b5b98
+      size: 4206
     params:
       params.yaml:
         preprocess:
@@ -30,8 +30,8 @@ stages:
       md5: 560374031d4a9715559a6f248d37c25a
       size: 864828
     - path: data/processed/train_preprocessed.pkl
-      md5: 2d8f0094af314e5bec9253fd319904a1
-      size: 6387103
+      md5: 9789a554c0c5ff9b116718821962df81
+      size: 6621249
     - path: data/processed/validation_preprocessed.pkl
       md5: c6cbd9bc38a543e6f33b3885e2561774
       size: 1922854
@@ -42,8 +42,8 @@ stages:
       md5: 560374031d4a9715559a6f248d37c25a
       size: 864828
     - path: data/processed/train_preprocessed.pkl
-      md5: 2d8f0094af314e5bec9253fd319904a1
-      size: 6387103
+      md5: 9789a554c0c5ff9b116718821962df81
+      size: 6621249
     - path: data/processed/validation_preprocessed.pkl
       md5: c6cbd9bc38a543e6f33b3885e2561774
       size: 1922854
@@ -69,20 +69,20 @@ stages:
           output_test: data/processed/test_preprocessed.pkl
     outs:
     - path: data/interim/test_featurized.pkl
-      md5: b0a79cca2675fe19fec0a1764102c1d9
-      size: 1652795
+      md5: 3d1eb1d4933c2c8ce3fc48fbf12142c1
+      size: 1657247
     - path: data/interim/train_featurized.pkl
-      md5: 884930a11acdff791999c415fcfb2349
-      size: 48485366
+      md5: e8f74199c255d7559d436ea060ca06a3
+      size: 1066971891
     - path: data/interim/validation_featurized.pkl
-      md5: bc0d877f6a51fb4cdecfc190ab6f0acc
-      size: 14487048
+      md5: c055d101a9d6a53744b3ac935a3e129c
+      size: 311853349
     - path: models/mlb.pkl
-      md5: 24fa46aeefc134dab1c55eb64a7219de
-      size: 1880
+      md5: 6d85a15f493ab263ecf261b1e11fadd0
+      size: 65887
     - path: models/tfidf_vectorizer.pkl
-      md5: c0928b1f831a78e8e844af97dc8f8c2a
-      size: 5381454
+      md5: 042e99febc5d66e5899a2102fcc05306
+      size: 5576286
   train:
     cmd: python src/models/train_model.py
     deps:

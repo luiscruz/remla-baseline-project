@@ -48,10 +48,13 @@ def merge_scraped():
     with open(train_file, "a+", encoding="utf-8") as train_f:
         if os.path.exists(scrape_save_dir):
             for scraped_file in os.listdir(scrape_save_dir):
-                with open(f"{scrape_save_dir}/{scraped_file}", "r", encoding="utf-8") as scraped:
-                    train_f.write(scraped.read())
-            shutil.rmtree(scrape_save_dir)
-        num_samples = len(train_f.readlines()) - 1
+                scrape_file = f"{scrape_save_dir}/{scraped_file}"
+                app.logger.debug(f"Merging scraped file: {scrape_file} to train data")
+                with open(scrape_file, "r", encoding="utf-8") as scraped:
+                    train_f.write("\n".join(scraped.readlines()[1:]))
+                os.remove(scrape_file)
+    with open(train_file, "r", encoding="utf-8") as f:
+        num_samples = len(f.readlines()) - 1
 
     app.logger.info("Finished merging scraped files")
     return num_samples
@@ -62,7 +65,7 @@ def merge_scraped():
 def train():
     app.logger.info("Running training")
     num_train_samples = merge_scraped()
-    output = subprocess.run(["sh", "src/train.sh"], capture_output=True)  # nosec
+    output = subprocess.run(["sh", "src/training_service/train.sh"], capture_output=True)  # nosec
     if output.returncode == 0:
         # get scores and update counters
         with open("reports/scores.json", "r") as f:
@@ -75,7 +78,7 @@ def train():
             f"train.sh returned non zero exit code: \nstdout:{output.stdout}" f"\n stderr: {output.stderr}"
         )
 
-    app.logger.info("Training finished")
+    app.logger.info(f"Training finished, trained on {num_train_samples} samples")
 
 
 @app.route("/metrics")

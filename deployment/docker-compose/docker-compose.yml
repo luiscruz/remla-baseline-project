@@ -54,9 +54,9 @@ services:
     image: training-service:latest
     command: sh src/startup_training.sh
     environment:
-      - APP_MODULE=train_app
+      - APP_MODULE=training_service.train_app
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
-      - TRAIN_INTERVAL_SECONDS=30
+      - TRAIN_INTERVAL_SECONDS=120
       - LOG_LEVEL=DEBUG
       - SHARED_DATA_PATH=/root/data/
       - SCRAPE_SAVE_DIR=/root/data/scrape/

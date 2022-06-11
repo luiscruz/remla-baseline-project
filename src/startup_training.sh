@@ -27,4 +27,4 @@ dvc add $SHARED_DATA_PATH/raw/validation.tsv -o data/raw/validation.tsv
 # this also updates the cache if something has changed in the data
 dvc repro
 
-gunicorn -c src/gunicorn_config.py -b 0.0.0.0:5000 src.train_app:app
+gunicorn -c src/gunicorn_config.py -b 0.0.0.0:5000 src.$APP_MODULE:app

@@ -3,4 +3,7 @@ flask
 prometheus-client
 gunicorn
 PyYAML
-dvc
+dvc[gdrive]
+nltk
+pandas
+sklearn
