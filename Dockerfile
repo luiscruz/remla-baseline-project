@@ -6,12 +6,9 @@ WORKDIR /root/
 # Install build-essential package to let the tensorflow-data-validation package work
 RUN : \
     && apt-get update \
-    && DEBIAN_FRONTED=noninteractive apt-get install -y build-essential \
+    && DEBIAN_FRONTED=noninteractive apt-get install -y build-essential curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-RUN python -m venv ./venv
-ENV PATH=./venv/bin:$PATH
 
 # Keep pip, setuptools and wheel up to date
 RUN pip install --upgrade \
@@ -19,8 +16,13 @@ RUN pip install --upgrade \
     setuptools \
     wheel
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN curl -sSL -o install-poetry.py https://install.python-poetry.org
+RUN python3 install-poetry.py --pre
+ENV PATH=/root/.local/bin/:$PATH
+RUN poetry config virtualenvs.in-project true
+RUN poetry install
+RUN echo "source /root/.venv/bin/activate" >> /root/.profile
+SHELL ["sh", "-lc"]
 
 ARG GIT_HASH=dev
 ENV GIT_HASH=$GIT_HASH
