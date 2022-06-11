@@ -1,10 +1,10 @@
 name: Build workflow
 on:
-  workflow_run:
-    workflows:
-      - Test workflow
-    types:
-      - completed
+  # workflow_run:
+  #   workflows:
+  #     - Test workflow
+  #   types:
+  #     - completed
   push:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
@@ -13,7 +13,8 @@ permissions:
 
 jobs:
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} & startsWith(github.ref, 'refs/tags/v')
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }} & startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-20.04
     steps:
       - name: tmp
