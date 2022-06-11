@@ -39,12 +39,12 @@ jobs:
       - name: Build and push
         run: |
           IMG=ghcr.io/${REPO}
-          IMG-INFERENCE-SERVICE=inference-service
-          IMG-TRAIN-SERVICE=training-service
-          IMG-SCRAPING-SERVICE=scraping-service
-          IMG-SCRAPING-CONTROLLER=scraping-controller
+          IMG-INFERENCE-SERVICE="inference-service"
+          IMG-TRAIN-SERVICE="training-service"
+          IMG-SCRAPING-SERVICE="scraping-service"
+          IMG-SCRAPING-CONTROLLER="scraping-controller"
           # TODO: add this when web frontend is integrated in the docker-compose file
-          IMG-WEB-FRONTEND=web-frontend
+          IMG-WEB-FRONTEND="web-frontend"
 
           IMG-NAMES=(IMG-INFERENCE-SERVICE, IMG-TRAIN-SERVICE, IMG-SCRAPING-SERVICE, IMG-SCRAPING-CONTROLLER)
           for img-name in "${IMG-NAMES[@]}";
