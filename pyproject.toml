@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "closed-as-duplicate"
+version = "0.1.28"
+description = "This project is created to experience setting up an ML environment for a team with different expertieces. This repo is created for the Release Engeneering for Machine Learning Applications taught at the TU Delft."
+authors = ['Chiel de Vries <c.devries-1@student.tudelft.nl>', 'Hielke Walinga <hielkewalinga@gmail.com>', 'Lars van Koetsveld van Ankeren <l.koetsveld22@gmail.com>', 'Mark Bekooy <mark.bekooy@gmail.com>', 'Melchior Oudemans <melchior.oudemans@gmail.com>']
+license = "MIT"
+readme = "README.md"
+packages = [{include = "closed_as_duplicate"}]
+
+[tool.poetry.dependencies]
+python = ">=3.7.2,<3.10"
+dvc = {extras = ["gdrive"], version = "^2.10.2"}
+numpy = "^1.21.6"
+pandas = "^1.3.5"
+scikit-learn = "^1.0.2"
+nltk = "^3.7"
+scipy = "^1.7.3"
+markupsafe = "^2.1.1"
+Flask = "^2.1.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.1.2"
+Sphinx = "^5.0.0"
+coverage = "^6.4"
+awscli = "^1.25.0"
+flake8 = "^3.9.2"
+pytest-cov = "^3.0.0"
+tensorflow-data-validation = {extras = ["visualization"], version = "^1.8.0"}
+mllint = "^0.12.1"
+pylint = "^2.14.1"
+mypy = "^0.961"
+black = "^22.3.0"
+isort = "^5.10.1"
+bandit = "^1.7.4"
+
+[build-system]
+requires = ["poetry-core", "setuptools", "poetry>=0.12"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.run]
+parallel = true
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 88  # 88 is black default
+disable = """
+invalid-name,C0326
+"""
+# invalid-name: For ML applications it doesn't matter too much to use one-letter variables
+# C0326: White space is sometimes helpfull for aligning
