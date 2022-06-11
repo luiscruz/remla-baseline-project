@@ -39,21 +39,16 @@ jobs:
       - name: Build and push
         run: |
           IMG=ghcr.io/${REPO}
-          IMG_INFERENCE_SERVICE=inference-service
-          IMG_TRAIN_SERVICE=training-service
-          IMG_SCRAPING_SERVICE=scraping-service
-          IMG_SCRAPING_CONTROLLER=scraping-controller
+
           # TODO: add this when web frontend is integrated in the docker-compose file
-          IMG_WEB_FRONTEND=web-frontend
-
-          IMG-NAMES=($IMG_INFERENCE_SERVICE, $IMG_TRAIN_SERVICE, $IMG_SCRAPING_SERVICE, $IMG_SCRAPING_CONTROLLER)
-          for img-name in "${IMG-NAMES[@]}";
+          IMG_NAMES=('inference-service', 'training-service', 'scraping-service', 'scraping-controller')
+          for img_name in "${IMG_NAMES[@]}";
           do
-            docker-compose -f deployment/docker-compose/docker-compose.yml build $img-name \
-              -t ${IMG}/$img-name:latest \
-              -t ${IMG}/$img-name:${{ env.version_major }}-latest \
-              -t ${IMG}/$img-name:${{ env.version_major }}.${{ env.version_minor }}-latest \
-              -t ${IMG}/$img-name:${{ env.version }}
+            docker-compose -f deployment/docker-compose/docker-compose.yml build $img_name \
+              -t ${IMG}/$img_name:latest \
+              -t ${IMG}/$img_name:${{ env.version_major }}-latest \
+              -t ${IMG}/$img_name:${{ env.version_major }}.${{ env.version_minor }}-latest \
+              -t ${IMG}/$img_name:${{ env.version }}
 
-            docker-compose push --all-tags ${IMG}/$img-name
+            docker-compose push --all-tags ${IMG}/$img_name
           done
