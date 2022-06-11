@@ -46,7 +46,7 @@ jobs:
           # TODO: add this when web frontend is integrated in the docker-compose file
           IMG_WEB_FRONTEND=web-frontend
 
-          IMG-NAMES=(IMG_INFERENCE_SERVICE, IMG_TRAIN_SERVICE, IMG_SCRAPING_SERVICE, IMG_SCRAPING_CONTROLLER)
+          IMG-NAMES=($IMG_INFERENCE_SERVICE, $IMG_TRAIN_SERVICE, $IMG_SCRAPING_SERVICE, $IMG_SCRAPING_CONTROLLER)
           for img-name in "${IMG-NAMES[@]}";
           do
             docker-compose -f deployment/docker-compose/docker-compose.yml build $img-name \
