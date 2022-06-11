@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: scraping-app
-          image: scraping-service:latest
+          image: ghcr.io/adam-tu/remla-project/scraping-service:latest
           imagePullPolicy: Never
           command: ["sh"]
           args: ["src/startup.sh"]
@@ -84,7 +84,7 @@ spec:
     spec:
       containers:
         - name: scraping-controller
-          image: scraping-controller:latest
+          image: ghcr.io/adam-tu/remla-project/scraping-controller:latest
           imagePullPolicy: Never
           command: ["sh"]
           args: ["src/startup.sh"]

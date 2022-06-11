@@ -29,8 +29,8 @@ spec:
     spec:
       containers:
         - name: inference-app
-          image: inference-service:latest
-          imagePullPolicy: Never
+          image: ghcr.io/adam-tu/remla-project/inference-service:latest
+          imagePullPolicy: Always
           command: ["sh"]
           args: ["src/startup.sh"]
           ports:
