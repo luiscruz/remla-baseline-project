@@ -1,4 +1,8 @@
 [core]
     analytics = false
+    remote = data-remote
 [cache]
     dir = ../services-shared-folder/dvc-cache
+['remote "data-remote"']
+    url = gdrive://1pwqW-DruetPFaUBeO2KnnnPwccOZGdZw
+    gdrive_use_service_account = true
