@@ -2,12 +2,14 @@
 FROM python:3.8.13-slim
 WORKDIR /app/src
 
-COPY src/training_service/* .
-COPY src/gunicorn_config.py .
-COPY src/startup_training.sh .
-COPY params.yaml .
+COPY src/training_service/* ./
+COPY src/gunicorn_config.py ./
+COPY src/startup_training.sh ./
+COPY params.yaml ./
 
 WORKDIR /app
+COPY dvc.yaml ./
+
 
 RUN apt-get update; apt-get install -y curl
 RUN python -m pip install --upgrade pip && python -m pip install -r src/requirements.txt

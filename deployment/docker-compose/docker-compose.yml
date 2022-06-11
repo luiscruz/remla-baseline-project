@@ -42,7 +42,6 @@ services:
       - APP_MODULE=scraping_service.app.scraper
       - CONTROLLER_HOST=http://scraping-controller:5000
       - SCRAPE_SAVE_DIR=/root/data/scrape/
-      - DATA_DIR=/root/data/raw/
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
       - LOG_LEVEL=DEBUG
     volumes:
@@ -53,7 +52,7 @@ services:
       context: ../../
       dockerfile: src/training_service/Dockerfile
     image: training-service:latest
-    command: sh src/startup.sh
+    command: sh src/startup_training.sh
     environment:
       - APP_MODULE=train_app
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus

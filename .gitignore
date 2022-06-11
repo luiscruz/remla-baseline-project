@@ -141,3 +141,4 @@ models/*
 
 # secrets
 deployment/docker-compose/api-keys.txt
+/deployment/k8s/secrets.yaml

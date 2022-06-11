@@ -23,11 +23,11 @@ WORKDIR /root/
 
 RUN mkdir models
 COPY --from=model_build /root/models models
+COPY --from=model_build /root/nltk_data nltk_data
 
 COPY src src
 
 COPY requirements.txt params.yaml pyproject.toml setup.py ./
-
 RUN python -m pip install --upgrade pip &&\
  python -m pip install -r src/requirements.txt
 

@@ -1,6 +1,5 @@
 gunicorn
 flask
 prometheus-client
-#tensorflow-data-validation
 pandas
 requests

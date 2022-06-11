@@ -56,7 +56,7 @@ def get_query(dateFrom, dateTo, page=1, key=None):
             f"site=stackoverflow&"
             f"filter=!Fc7.FlqcJXCgmWba*Q45*UiJ(2"
         )
-        + f"key={key}"
+        + f"&key={key}"
         if key
         else ""
     )
@@ -80,8 +80,7 @@ def execute_query(query) -> Tuple[bool, dict]:
 
 @scrape_metric.time()
 def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=""):
-    # TODO use api key
-    app.logger.debug("Scrape and save")
+    app.logger.info("Scrape and save")
     # Request data
     page = 1
     success, response_dict = execute_query(get_query(fromdate, todate, page=page, key=apikey))
@@ -115,7 +114,7 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
         else:
             app.logger.warning("Anomalies found, not saving results")
     else:
-        app.logger.info("Dataframe result empty (no questions found)")
+        app.logger.warning("Dataframe result empty (no questions found)")
 
 
 controller_host = os.environ["CONTROLLER_HOST"]

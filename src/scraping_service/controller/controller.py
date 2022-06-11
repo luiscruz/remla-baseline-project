@@ -6,7 +6,6 @@ from flask import Flask, Response
 from prometheus_client import (
     CONTENT_TYPE_LATEST,
     CollectorRegistry,
-    Counter,
     Gauge,
     Summary,
     generate_latest,
@@ -33,8 +32,15 @@ SCRAPE_INCREMENT = int(os.environ.get("SCRAPE_INCREMENT_SECONDS", 300))
 
 
 def load_api_keys():
-    with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", "r") as f:
-        return {key: 10_000 for key in f.readlines()}
+    # for run in k8s api keys are stored in the env var
+    if os.environ.get('API_KEY_SECRET'):
+        keys = os.environ['API_KEY_SECRET']
+    else:
+        # for run in docker compose they're stored in a mounted file
+        with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", "r") as f:
+            keys = f.read()
+
+    return {key: 10_000 for key in keys.split(',')}
 
 
 api_keys = load_api_keys()
@@ -64,7 +70,7 @@ def get_new_date_range(apikey=None, quota_remaining=None):
 
     CURRENT_TIMESTAMP += SCRAPE_INCREMENT
     timestamp_metric.set(CURRENT_TIMESTAMP)
-    app.logger.debug(f"Returning new date range: {res}")
+    app.logger.info(f"Returning new date range: {res['fromdate']}, {res['fromdate']}")
     return res, status_code
 
 

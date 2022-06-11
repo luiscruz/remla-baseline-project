@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-dvc init --no-scm
+dvc init --no-scm -f
 
 echo $DVC_CACHE_PATH
 

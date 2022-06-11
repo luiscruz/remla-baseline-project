@@ -8,6 +8,7 @@ import nltk
 import pandas as pd
 import yaml
 
+# nltk.set_proxy('SYSTEM PROXY')
 nltk.download("stopwords")
 from nltk.corpus import stopwords  # noqa: E402 pylint: disable=wrong-import-position
 

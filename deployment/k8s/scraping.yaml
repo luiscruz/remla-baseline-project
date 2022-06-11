@@ -18,7 +18,7 @@ kind: Deployment
 metadata:
   name: scraping-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       component: scraping-app
@@ -37,22 +37,28 @@ spec:
             - containerPort: 5000
           env:
             - name: PROMETHEUS_MULTIPROC_DIR
-              value: "/tmp/prometheus/"
+              value: /tmp/prometheus/
             - name: APP_MODULE
               value: "scraping_service.app.scraper"
             - name: CONTROLLER_HOST
               value: "http://scraping-controller:5000"
-            - name: DATA_DIR
-              value: ""
             - name: SCRAPE_SAVE_DIR
-              value: ""
+              value: /data/shared/scrape/
+          volumeMounts:
+            - name: project-shared
+              mountPath: /data/shared/
+      volumes:
+        - name: project-shared
+          hostPath:
+            path: /data/shared/
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: scraping-controller-service
+  name: scraping-controller
   labels:
-    app: scraping-controller-service
+    app: scraping-controller
 spec:
   type: ClusterIP
   selector:
@@ -89,9 +95,10 @@ spec:
               value: "/tmp/prometheus/"
             - name: APP_MODULE
               value: "scraping_service.controller.controller"
-            - name: api_keys
-              value: "http://scraping-controller:5000"
-            - name: DATA_DIR
-              value: ""
-            - name: SCRAPE_SAVE_DIR
-              value: ""
+            - name: SCRAPE_INCREMENT_SECONDS
+              value: "600"
+            - name: API_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys
+                  key: API_KEY

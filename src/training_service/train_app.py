@@ -46,11 +46,12 @@ def load_yaml_params():
 def merge_scraped():
     app.logger.info("Merging scraped files")
     with open(train_file, "a+", encoding="utf-8") as train_f:
-        for scraped_file in os.listdir(scrape_save_dir):
-            with open(f"{scrape_save_dir}/{scraped_file}", "r", encoding="utf-8") as scraped:
-                train_f.write(scraped.read())
+        if os.path.exists(scrape_save_dir):
+            for scraped_file in os.listdir(scrape_save_dir):
+                with open(f"{scrape_save_dir}/{scraped_file}", "r", encoding="utf-8") as scraped:
+                    train_f.write(scraped.read())
+            shutil.rmtree(scrape_save_dir)
         num_samples = len(train_f.readlines()) - 1
-    shutil.rmtree(scrape_save_dir)
 
     app.logger.info("Finished merging scraped files")
     return num_samples

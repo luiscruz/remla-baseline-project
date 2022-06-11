@@ -45,3 +45,5 @@ jobs:
 #            -t ${IMG}:${{ env.version }} \
 #            .
 #          docker push --all-tags $IMG
+
+docker compose -f deployment/docker-compose/docker-compose.yml build <service name> -t tag1 -t tag2 ...
