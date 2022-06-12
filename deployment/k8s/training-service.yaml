@@ -30,7 +30,7 @@ spec:
       containers:
         - name: training-app
           image: ghcr.io/adam-tu/remla-project/training-service:latest
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           command: ["sh"]
           args: ["src/startup_training.sh"]
           ports:

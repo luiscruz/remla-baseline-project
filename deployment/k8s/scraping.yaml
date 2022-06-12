@@ -30,7 +30,7 @@ spec:
       containers:
         - name: scraping-app
           image: ghcr.io/adam-tu/remla-project/scraping-service:latest
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           command: ["sh"]
           args: ["src/startup.sh"]
           ports:
@@ -85,7 +85,7 @@ spec:
       containers:
         - name: scraping-controller
           image: ghcr.io/adam-tu/remla-project/scraping-controller:latest
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           command: ["sh"]
           args: ["src/startup.sh"]
           ports:
