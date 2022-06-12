@@ -65,10 +65,12 @@ def push_dvc_cache():
     output = subprocess.run(["dvc", "push"], capture_output=True)  # nosec
     if output.returncode == 0:
         app.logger.info(f"DVC push completed. DVC cache is saved in GDrive and can be pulled using dvc pull.")
+        return "", 200
     else:
         app.logger.warning(
             f"train.sh returned non zero exit code: \nstdout:{output.stdout}" f"\n stderr: {output.stderr}"
         )
+        return "", 400
 
 
 @app.route("/train", methods=["POST"])
@@ -85,10 +87,12 @@ def train():
             score_metrics[score_key].set(scores[score_key])
         score_metrics["num_records"] = num_train_samples
         app.logger.info(f"Training finished, trained on {num_train_samples} samples")
+        return f"Training finished, trained on {num_train_samples} samples", 200
     else:
         app.logger.warning(
             f"train.sh returned non zero exit code: \nstdout:{output.stdout}" f"\n stderr: {output.stderr}"
         )
+        return f"train.sh returned non zero exit code: \nstdout:{output.stdout}" f"\n stderr: {output.stderr}", 400
 
 
 @app.route("/metrics")
