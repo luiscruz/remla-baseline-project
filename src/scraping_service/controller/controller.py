@@ -62,7 +62,7 @@ def get_new_date_range(apikey=None, quota_remaining=None):
     res, status_code = "No timerange available", 400
     if time.time() - SCRAPE_INCREMENT > CURRENT_TIMESTAMP:
         res = {
-            "fromdate": CURRENT_TIMESTAMP,
+            "fromdate": CURRENT_TIMESTAMP + 1,
             "todate": CURRENT_TIMESTAMP + SCRAPE_INCREMENT,
             "apikey": get_next_apikey(),
         }

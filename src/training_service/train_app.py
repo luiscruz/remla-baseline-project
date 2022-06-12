@@ -91,6 +91,6 @@ cron = BackgroundScheduler(daemon=True)
 # Explicitly kick off the background thread
 cron.start()
 
-TRAIN_INTERVAL_SECONDS = int(os.environ.get("TRAIN_INTERVAL_SECONDS", 30))
+TRAIN_INTERVAL_SECONDS = int(os.environ.get("TRAIN_INTERVAL_SECONDS", 300))
 # cron.add_job('training_service.train:train', 'interval', minutes=TRAIN_INTERVAL_MINUTES)
 cron.add_job(train, "interval", seconds=TRAIN_INTERVAL_SECONDS)
