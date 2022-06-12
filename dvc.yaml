@@ -23,7 +23,7 @@ stages:
     - output/y_preprocessed.joblib
     outs:
     - output/classifiers.joblib
-    - output/fitted_y_val.joblib
+    - output/fitted_y.joblib
     - output/mlb.joblib
   evaluation:
     cmd: python src/evaluation.py
@@ -32,6 +32,6 @@ stages:
     - output/vectorized_x.joblib
     - output/mlb.joblib
     - output/X_preprocessed.joblib
-    - output/fitted_y_val.joblib
+    - output/fitted_y.joblib
     outs:
     - output/accuracies.txt
