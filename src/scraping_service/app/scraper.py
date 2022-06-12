@@ -140,7 +140,7 @@ def scrape_loop():
                     f"sleeping for 1 minute before retrying"
                 )
                 time.sleep(60)
-        except ConnectionError:
+        except requests.exceptions.ConnectionError:
             app.logger.warning(f"Connection error, sleeping for one minute before retrying")
             time.sleep(30)
 
