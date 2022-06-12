@@ -57,6 +57,7 @@ def get_next_apikey():
 def get_new_date_range(apikey=None, quota_remaining=None):
     global CURRENT_TIMESTAMP
     if apikey and quota_remaining:
+        quota_remaining = int(quota_remaining)
         api_keys[apikey] = quota_remaining
         app.logger.debug(f"Updating counter for apikey to {quota_remaining}")
         api_key_counters[apikey].set(quota_remaining)
