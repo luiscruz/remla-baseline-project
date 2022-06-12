@@ -113,7 +113,7 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
             app.logger.warning("Anomalies found, not saving results")
     else:
         app.logger.warning("Dataframe result empty (no questions found)")
-    return apikey, response_dict.get('quota_remaining')
+    return apikey, response_dict.get("quota_remaining")
 
 
 controller_host = os.environ["CONTROLLER_HOST"]
