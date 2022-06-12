@@ -48,6 +48,11 @@ spec:
               value: training_service.train_app
             - name: TRAIN_INTERVAL_SECONDS
               value: "300"
+            - name: API_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: drive-secrets
+                  key: DRIVE_SVC_JSON
           volumeMounts:
             - name: project-shared
               mountPath: /data/shared/

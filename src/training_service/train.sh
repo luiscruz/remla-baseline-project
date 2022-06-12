@@ -10,4 +10,4 @@ dvc add $SHARED_DATA_PATH/raw/text_prepare_tests.tsv -o data/raw/text_prepare_te
 dvc add $SHARED_DATA_PATH/raw/train.tsv -o data/raw/train.tsv
 dvc add $SHARED_DATA_PATH/raw/validation.tsv -o data/raw/validation.tsv
 
-dvc repro
+dvc repro -q

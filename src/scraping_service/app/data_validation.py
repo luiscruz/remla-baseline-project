@@ -4,8 +4,6 @@ import pandas as pd
 
 
 def remove_anomalies(df_scraped: pd.DataFrame) -> Tuple[int, pd.DataFrame]:
-    print(f"df_scraped type {type(df_scraped)}")
-    print(f"df_scraped shape {df_scraped.shape}")
     valid_rows = df_scraped["tags"].map(lambda t: len(t)) > 0
     num_invalid_rows = len(df_scraped) - len(valid_rows)
     df_scraped = df_scraped[valid_rows]
