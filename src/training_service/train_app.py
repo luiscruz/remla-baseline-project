@@ -60,6 +60,17 @@ def merge_scraped():
     return num_samples
 
 
+@app.route("/push_dvc_cache", methods=["POST"])
+def push_dvc_cache():
+    output = subprocess.run(["dvc", "push"], capture_output=True)  # nosec
+    if output.returncode == 0:
+        app.logger.info(f"DVC push completed. DVC cache is saved in GDrive and can be pulled using dvc pull.")
+    else:
+        app.logger.warning(
+            f"train.sh returned non zero exit code: \nstdout:{output.stdout}" f"\n stderr: {output.stderr}"
+        )
+
+
 @app.route("/train", methods=["POST"])
 @duration_metric.time()
 def train():

@@ -11,9 +11,19 @@ COPY params.yaml dvc.yaml ./
 RUN python -m pip install --upgrade pip &&\
     python -m pip install -r src/requirements.txt
 
-RUN mkdir models &&\
-    dvc init --no-scm &&\
-    dvc repro
+# load google drive api key secret into file for use by DVC
+RUN echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
+
+RUN dvc init --no-scm -f
+
+# create config entries for gdrive authentication to go automatically 
+# by utilizing the API_KEY_SECRET json credentials
+# add dvc cache remote and link it with json creds (and set as default remote)
+RUN dvc remote add -d dvc-cache-remote gdrive://1pwqW-DruetPFaUBeO2KnnnPwccOZGdZw &&\
+    dvc remote modify dvc-cache-remote gdrive_use_service_account true &&\
+    dvc remote modify dvc-cache-remote --local gdrive_service_account_json_file_path remla-352721-99f80e5bc090.json
+
+RUN dvc pull
 
 FROM python:3.8.13-slim
 

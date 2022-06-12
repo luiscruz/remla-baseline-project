@@ -40,6 +40,11 @@ spec:
               value: /tmp/prometheus/
             - name: APP_MODULE
               value: serve_model
+            - name: API_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: drive-secrets
+                  key: DRIVE_SVC_JSON
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -50,7 +55,17 @@ metadata:
 spec:
   selector:
     matchExpressions:
-      - {key: app, operator: In, values: [inference-service, training-service, scraping-controller, scraping-service]}
+      - {
+          key: app,
+          operator: In,
+          values:
+            [
+              inference-service,
+              training-service,
+              scraping-controller,
+              scraping-service,
+            ],
+        }
   endpoints:
     - targetPort: 5000
       path: "/metrics"
