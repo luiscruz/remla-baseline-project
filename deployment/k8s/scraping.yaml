@@ -97,6 +97,8 @@ spec:
               value: "scraping_service.controller.controller"
             - name: SCRAPE_INCREMENT_SECONDS
               value: "600"
+            - name: SCRAPE_START_TIMESTAMP
+              value: "1641000000"
             - name: API_KEY_SECRET
               valueFrom:
                 secretKeyRef:

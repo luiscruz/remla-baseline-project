@@ -38,6 +38,7 @@ question_count = Counter("num_questions_retrieved", "Number of questions scraped
 
 @app.route("/metrics")
 def metrics():
+    app.logger.info(f"Num questions scraped: {question_count._value.get()}")
     data = generate_latest(registry)
     app.logger.debug(f"Metrics, returning: {data}")
     return Response(data, mimetype=CONTENT_TYPE_LATEST)
@@ -112,6 +113,7 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
             app.logger.warning("Anomalies found, not saving results")
     else:
         app.logger.warning("Dataframe result empty (no questions found)")
+    return apikey, response_dict.get('quota_remaining')
 
 
 controller_host = os.environ["CONTROLLER_HOST"]
@@ -130,9 +132,10 @@ def scrape_loop():
             params = f"/{apikey}/{quota_remaining}"
         url = f"{controller_host}/date_range{params}"
         try:
+            app.logger.debug(f"Requesting new date range using URL: {url}")
             response = requests.get(url)
             if response:
-                scrape_questions_and_save(**response.json(), save_dir=save_dir)
+                apikey, quota_remaining = scrape_questions_and_save(**response.json(), save_dir=save_dir)
             else:
                 app.logger.warning(
                     f"Response code for URL: {url}\n"

@@ -27,7 +27,7 @@ multiprocess.MultiProcessCollector(registry)
 duration_metric = Summary("get_timerange_duration", "Time spent on training")
 timestamp_metric = Gauge("scrape_timestamp", "Latest epoch seconds given out by scraper controller")
 
-CURRENT_TIMESTAMP = int(os.environ.get("SCRAPE_START_TIMESTAMP", time.time() - 3600 * 24))
+CURRENT_TIMESTAMP = int(os.environ.get("SCRAPE_START_TIMESTAMP", time.time() - 3600 * 24 * 31))
 SCRAPE_INCREMENT = int(os.environ.get("SCRAPE_INCREMENT_SECONDS", 300))
 
 
@@ -58,6 +58,7 @@ def get_new_date_range(apikey=None, quota_remaining=None):
     global CURRENT_TIMESTAMP
     if apikey and quota_remaining:
         api_keys[apikey] = quota_remaining
+        app.logger.debug(f"Updating counter for apikey to {quota_remaining}")
         api_key_counters[apikey].set(quota_remaining)
     res, status_code = "No timerange available", 400
     if time.time() - SCRAPE_INCREMENT > CURRENT_TIMESTAMP:
@@ -70,7 +71,7 @@ def get_new_date_range(apikey=None, quota_remaining=None):
 
         CURRENT_TIMESTAMP += SCRAPE_INCREMENT
         timestamp_metric.set(CURRENT_TIMESTAMP)
-        app.logger.info(f"Returning new date range: {res['todate']}, {res['fromdate']}")
+        app.logger.info(f"Returning new date range: {res['fromdate']}, {res['todate']}")
     else:
         app.logger.warning(f"no date range available, timestamp: {CURRENT_TIMESTAMP}")
     return res, status_code
