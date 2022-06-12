@@ -141,8 +141,9 @@ def scrape_loop():
                 )
                 time.sleep(60)
         except requests.exceptions.ConnectionError:
-            app.logger.warning(f"Connection error, sleeping for one minute before retrying")
-            time.sleep(30)
+            sleep_secs = 30
+            app.logger.warning(f"Connection error, sleeping for {sleep_secs} seconds before retrying")
+            time.sleep(sleep_secs)
 
 
 main_loop = Thread(target=scrape_loop)

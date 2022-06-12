@@ -51,7 +51,7 @@ def merge_scraped():
                 scrape_file = f"{scrape_save_dir}/{scraped_file}"
                 app.logger.debug(f"Merging scraped file: {scrape_file} to train data")
                 with open(scrape_file, "r", encoding="utf-8") as scraped:
-                    train_f.write("\n".join(scraped.readlines()[1:]))
+                    train_f.write("".join(scraped.readlines()[1:]))
                 os.remove(scrape_file)
     with open(train_file, "r", encoding="utf-8") as f:
         num_samples = len(f.readlines()) - 1
@@ -73,12 +73,12 @@ def train():
         for score_key in scores:
             score_metrics[score_key].set(scores[score_key])
         score_metrics["num_records"] = num_train_samples
+        app.logger.info(f"Training finished, trained on {num_train_samples} samples")
     else:
         app.logger.warning(
             f"train.sh returned non zero exit code: \nstdout:{output.stdout}" f"\n stderr: {output.stderr}"
         )
 
-    app.logger.info(f"Training finished, trained on {num_train_samples} samples")
 
 
 @app.route("/metrics")
