@@ -1,12 +1,8 @@
 import logging
 import pickle
 
-from sklearn.metrics import (
-    accuracy_score,
-    average_precision_score,
-    f1_score,
-    recall_score,
-)
+from sklearn.metrics import (accuracy_score, average_precision_score, f1_score,
+                             recall_score)
 from sklearn.metrics import roc_auc_score as roc_auc
 
 

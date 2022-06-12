@@ -10,17 +10,13 @@ from src.util.util import read_data
 
 
 @pytest.fixture()
-def all_data():
+def all_data(data_folder):
     all_data = []
-    input_filepath = "../data/interim/"
     directory = os.getcwd()
+    folder = data_folder / "interim"
 
     print("########", directory)
-    onlyfiles = [
-        join(input_filepath, f)
-        for f in listdir(input_filepath)
-        if isfile(join(input_filepath, f))
-    ]
+    onlyfiles = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f))]
 
     for f in onlyfiles:
         if ".tsv" not in f:

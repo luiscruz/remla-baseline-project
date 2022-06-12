@@ -3,6 +3,13 @@ FROM python:3.7.10-slim
 
 WORKDIR /root/
 
+# Install build-essential package to let the tensorflow-data-validation package work
+RUN : \
+    && apt-get update \
+    && DEBIAN_FRONTED=noninteractive apt-get install -y build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN python -m venv ./venv
 ENV PATH=./venv/bin:$PATH
 
@@ -20,7 +27,7 @@ ENV GIT_HASH=$GIT_HASH
 LABEL git_hash=$GIT_HASH
 
 COPY . .
-# RUN dvc pull # TODO: Enable when dvc pull works with authorization
+RUN dvc pull
 
 ARG PORT=5000
 ENV PORT=$PORT

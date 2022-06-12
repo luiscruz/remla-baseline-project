@@ -1,0 +1,65 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group7-deployment
+  labels:
+    app: group7
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: group7
+  template:
+    metadata:
+      labels:
+        app: group7
+    spec:
+      # Pod
+      containers:
+        - name: group7
+          image: ghcr.io/frostmegabyte/remla-project-group-7:latest
+          ports:
+            - containerPort: 5000
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: group7-service
+  labels:
+    app: group7-service
+spec:
+  selector:
+    app: group7
+  ports:
+    - port: 5000
+      targetPort: 5000 # Should match the port our pods are running on
+---
+# ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: group7-monitor
+  labels:
+    release: promstack
+spec:
+  selector:
+    matchLabels:
+      app: group7-service # Should match the label of our service
+  endpoints:
+    - targetPort: 5000 # Should match the port our pods with `/metrics` endpoint are running on
+      path: "/metrics"
+      interval: 1s
+---
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: group7-ingress
+spec:
+  defaultBackend:
+    service:
+      name: group7-service
+      port:
+        number: 5000 # Should match the port our service is running on

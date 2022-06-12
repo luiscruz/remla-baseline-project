@@ -8,14 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Configure git
+      - name: Configure Git
         run: |
           git config --global committer.email "noreply@github.com"
           git config --global committer.name "GitHub"
           git config --global author.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global author.name "Build Server"
+          echo "release_branch=dev" >> $GITHUB_ENV
 
       - name: Parse and provide version info
         run: |
@@ -33,14 +34,13 @@ jobs:
           echo "version_next=${MAJOR}.${MINOR}.${PATCH_NEXT}-SNAPSHOT" >> $GITHUB_ENV
 
       - name: Update VERSION.txt to release version
-        run: |
-          echo "${{ env.version }}" > VERSION.txt
+        run: echo "${{ env.version }}" > VERSION.txt
 
       - name: Commit and tag the release version
         run: |
           git add .
           git commit -m "Release of version ${{ env.version }}"
-          git push origin HEAD:dev
+          git push origin HEAD:${{ env.release_branch }}
           git tag "v${{ env.version }}"
           git push origin "v${{ env.version }}"
 
@@ -61,11 +61,15 @@ jobs:
           REPOSITORY: "${{ github.repository }}"
 
       - name: Update VERSION.txt to next snapshot release
-        run: |
-          echo "${{ env.version_next }}" > VERSION.txt
+        run: echo "${{ env.version_next }}" > VERSION.txt
 
       - name: Commit the next snapshot release
         run: |
           git add .
           git commit -m "Bump version to ${{ env.version_next }}"
-          git push origin HEAD:dev
+          git push origin HEAD:${{ env.release_branch }}
+
+      - name: Remove release tag
+        run: |
+          git push origin :release
+          echo "Don't forget to delete local tag by running: git tag -d release"

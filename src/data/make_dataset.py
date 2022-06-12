@@ -11,12 +11,12 @@ import click
 import nltk
 import pandas as pd
 from dotenv import find_dotenv, load_dotenv
+from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 
 from src.util.util import read_data, write_data
 
 nltk.download("stopwords")
-from nltk.corpus import stopwords
 
 DATA_WINDOW_SIZE = 3
 
@@ -128,15 +128,12 @@ def text_prepare(text):
     return: modified initial string
     """
     text = text.lower()  # lowercase text
-    text = re.sub(
-        REPLACE_BY_SPACE_RE, " ", text
-    )  # replace REPLACE_BY_SPACE_RE symbols by space in text
-    text = re.sub(
-        BAD_SYMBOLS_RE, "", text
-    )  # delete symbols which are in BAD_SYMBOLS_RE from text
-    text = " ".join(
-        [word for word in text.split() if not word in STOPWORDS]
-    )  # delete stopwords from text
+    # replace REPLACE_BY_SPACE_RE symbols by space in text
+    text = re.sub(REPLACE_BY_SPACE_RE, " ", text)
+    # delete symbols which are in BAD_SYMBOLS_RE from text
+    text = re.sub(BAD_SYMBOLS_RE, "", text)
+    # delete stopwords from text
+    text = " ".join([word for word in text.split() if not word in STOPWORDS])
     return text
 
 
