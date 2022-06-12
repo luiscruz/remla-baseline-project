@@ -1,6 +1,6 @@
 """
     Main logic of this stage:
-    * loads the loblibs
+    * loads the joblibs
     * trains two classifiers; one for bag-of-words and one for tf-idf
     * dumps the models in a joblib
 """
@@ -18,10 +18,11 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
       return: trained classifier
     """
-
+    joblib.dump(['l1', 1], output_directory + "/logistic_regression_params.joblib")
     # Create and fit LogisticRegression wrapped into OneVsRestClassifier.
 
     clf = LogisticRegression(penalty=penalty, C=C, dual=False, solver='liblinear')
+    joblib.dump(clf, output_directory + "/logistic_regression.joblib")
     clf = OneVsRestClassifier(clf)
     clf.fit(X_train, y_train)
 
@@ -48,7 +49,7 @@ def main():
     classifier_tfidf = train_classifier(X_train_tfidf, y_train)
 
     joblib.dump((classifier_mybag, classifier_tfidf), output_directory + "/classifiers.joblib")
-    joblib.dump(y_val, output_directory + "/fitted_y_val.joblib")
+    joblib.dump((y_train, y_val), output_directory + "/fitted_y.joblib")
     joblib.dump(mlb, output_directory + "/mlb.joblib")
 
 
