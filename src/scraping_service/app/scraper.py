@@ -129,16 +129,20 @@ def scrape_loop():
         if apikey and quota_remaining:
             params = f"/{apikey}/{quota_remaining}"
         url = f"{controller_host}/date_range{params}"
-        response = requests.get(url)
-        if response:
-            scrape_questions_and_save(**response.json(), save_dir=save_dir)
-        else:
-            app.logger.debug(
-                f"Response code for URL: {url}\n"
-                f"was error code: {response}, {response.text} "
-                f"sleeping for 1 minute before retrying"
-            )
-            time.sleep(60)
+        try:
+            response = requests.get(url)
+            if response:
+                scrape_questions_and_save(**response.json(), save_dir=save_dir)
+            else:
+                app.logger.warning(
+                    f"Response code for URL: {url}\n"
+                    f"was error code: {response}, {response.text} "
+                    f"sleeping for 1 minute before retrying"
+                )
+                time.sleep(60)
+        except ConnectionError:
+            app.logger.warning(f"Connection error, sleeping for one minute before retrying")
+            time.sleep(30)
 
 
 main_loop = Thread(target=scrape_loop)
