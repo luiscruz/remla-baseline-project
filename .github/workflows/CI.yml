@@ -5,7 +5,7 @@ on: push
 
 jobs:
   build:
-    name: Check project quality with `mllint` and `dslinter` and run pytest
+    name: Run linters  and test project
     runs-on: ubuntu-20.04
     steps:
       - name: Clone project
@@ -23,15 +23,14 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
 
-      - name: Run mllint
-        run:
-          mllint -o mllint-report.md
-
-      - name: Upload `mllint` report
-        uses: actions/upload-artifact@v3
+      - name: Run black
+        uses: psf/black@stable
         with:
-          name: mllint-report.md
-          path: mllint-report.md
+          options: "--check --diff"
+          src: "./src"
+
+      - name: Run isort
+        uses: isort/isort-action@master
 
       - name: Lint with pylint
         run: pylint $(git ls-files '*.py')
@@ -42,14 +41,39 @@ jobs:
           name: report.txt
           path: report.txt
 
+      - name: Run mypy
+        run: mypy src --lineprecision-report . --install-types --non-interactive
+
+      - name: Upload `mypy` report
+        uses: actions/upload-artifact@v3
+        with:
+          name: lineprecision.txt
+          path: lineprecision.txt
+
+      - name: Run bandit
+        run: bandit -r src -o bandit.txt -f txt
+
+      - name: Upload `bandit` report
+        uses: actions/upload-artifact@v3
+        with:
+          name: bandit.txt
+          path: bandit.txt
+
+      - name: Run mllint
+        run:
+          mllint -o mllint-report.md
+
+      - name: Upload `mllint` report
+        uses: actions/upload-artifact@v3
+        with:
+          name: mllint-report.md
+          path: mllint-report.md
+
       - name: Install pytest plugin
         run: pip install pytest-github-actions-annotate-failures
 
       - name: Test with pytest
-        run: |
-          pip install pytest
-          pip install pytest-cov
-          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml tests/
+        run: pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml tests/
 
       - name: Upload pytest test results
         uses: actions/upload-artifact@v3
