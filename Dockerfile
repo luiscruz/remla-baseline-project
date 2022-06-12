@@ -11,7 +11,10 @@ COPY params.yaml dvc.yaml ./
 RUN python -m pip install --upgrade pip &&\
     python -m pip install -r src/requirements.txt
 
-RUN mkdir -p data/processed && mkdir -p data/interim && mkdir -p data/external
+RUN mkdir -p data/processed &&\
+    mkdir -p data/interim &&\
+    mkdir -p data/external &&\
+    mkdir models
 
 # load google drive api key secret into file for use by DVC
 RUN echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
