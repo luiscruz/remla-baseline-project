@@ -26,7 +26,7 @@ jobs:
       - name: Run black
         uses: psf/black@stable
         with:
-          options: "--check --diff"
+          options: "--check"
           src: "./src"
 
       - name: Run isort
