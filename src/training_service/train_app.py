@@ -80,7 +80,6 @@ def train():
         )
 
 
-
 @app.route("/metrics")
 def metrics():
     data = generate_latest(registry)

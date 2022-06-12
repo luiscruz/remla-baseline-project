@@ -76,7 +76,7 @@ def execute_query(query) -> Tuple[bool, dict]:
 
 @scrape_metric.time()
 def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=""):
-    app.logger.info("Scrape and save")
+    app.logger.debug("Scrape and save")
     # Request data
     page = 1
     success, response_dict = execute_query(get_query(fromdate, todate, page=page, key=apikey))

@@ -68,9 +68,11 @@ def get_new_date_range(apikey=None, quota_remaining=None):
         }
         status_code = 200
 
-    CURRENT_TIMESTAMP += SCRAPE_INCREMENT
-    timestamp_metric.set(CURRENT_TIMESTAMP)
-    app.logger.info(f"Returning new date range: {res['fromdate']}, {res['fromdate']}")
+        CURRENT_TIMESTAMP += SCRAPE_INCREMENT
+        timestamp_metric.set(CURRENT_TIMESTAMP)
+        app.logger.info(f"Returning new date range: {res['todate']}, {res['fromdate']}")
+    else:
+        app.logger.warning(f"no date range available, timestamp: {CURRENT_TIMESTAMP}")
     return res, status_code
 
 
