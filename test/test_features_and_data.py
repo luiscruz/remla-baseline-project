@@ -1,5 +1,5 @@
 """
-    ML Testing the StackOverflow label predictor for features and data. Making use of the [todo library name] library.
+    ML Testing the StackOverflow label predictor for features and data. Making use of the mltest library.
 """
 import joblib
 import numpy as np
@@ -91,5 +91,3 @@ def test_preprocessing_bag_of_words():
                                  lambda x: my_bag_of_words(x, words_to_index, 4),
                                  equals=lambda a, b: (a == b).all())
 
-
-# todo add more

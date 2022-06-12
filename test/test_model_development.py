@@ -1,5 +1,5 @@
 """
-    ML Testing the StackOverflow label predictor for model development. Making use of the [todo library name] library.
+    ML Testing the StackOverflow label predictor for model development. Making use of the mltest library.
 """
 import math
 import joblib
