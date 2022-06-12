@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# load google drive api key secret into file for use by DVC
+echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
+
 dvc init --no-scm -f
 
 echo $DVC_CACHE_PATH
