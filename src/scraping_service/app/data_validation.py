@@ -13,9 +13,3 @@ def remove_anomalies(df_scraped: pd.DataFrame, valid_tags: Set[str]) -> Tuple[in
     num_invalid_rows = num_rows_in - len(df_scraped)
 
     return num_invalid_rows, df_scraped
-
-
-if __name__ == "__main__":
-    df = pd.DataFrame({"title": ["title 1", "title2"], "tags": [[1, 2, 3], [12, 23, 12]]})
-    print(df)
-    remove_anomalies(df)

@@ -44,4 +44,4 @@ class TestPipeLine(unittest.TestCase):
         num_removed, update_df = remove_anomalies(df, valid_tags={"python"})
         self.assertEqual(num_removed, 2, msg="Expected 2 entries to be removed, but num removed was not 2")
         self.assertEqual(len(update_df), 1, msg="Output df length was not 2")
-        self.assertIn("this is a test title", update_df.title)
+        self.assertIn("this is a test title", update_df.title.values)
