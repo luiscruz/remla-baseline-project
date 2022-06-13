@@ -11,7 +11,7 @@ MOUNTING_PERSISTENT_STORAGE_MINIKUBE=/data/shared/
 
 echo "$SHARED_FOLDER_HOSTPATH:$MOUNTING_PERSISTENT_STORAGE_MINIKUBE"
 
-minikube status || minikube start --cpus 4 --memory 8192
+minikube status || minikube start --cpus 4 --memory 8192 --driver docker
 
 #eval $(minikube docker-env --shell bash)
 ##eval $(minikube docker-env)

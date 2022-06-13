@@ -60,5 +60,6 @@ services:
       - LOG_LEVEL=DEBUG
       - SHARED_DATA_PATH=/root/data/
       - SCRAPE_SAVE_DIR=/root/data/scrape/
+      - KEY_FILE=src/gdrive_key.json
     volumes:
       - ../../data:/root/data/
