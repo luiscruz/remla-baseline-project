@@ -51,7 +51,7 @@ services:
     build:
       context: ../../
       dockerfile: src/training_service/Dockerfile
-    image: ghcr.io/adam-tu/remla-project/training-service:latest
+    image: training-service:latest
     command: sh src/startup_training.sh
     environment:
       - APP_MODULE=training_service.train_app
