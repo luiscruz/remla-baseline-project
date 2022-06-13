@@ -76,7 +76,7 @@ def execute_query(query) -> Tuple[bool, dict]:
         if backoff > 0:
             app.logger.debug(f"Waiting for {backoff} seconds before continuing")
             time.sleep(backoff)
-        success = True
+            success = True
     else:
         app.logger.debug(f"query got non OK response: \n{res.status_code = }, {res.json() = },\nsleeping for 60 secs")
         time.sleep(60)

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # load google drive api key secret into file for use by DVC
-echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
+echo $API_KEY_SECRET | tr -d '\n' > remla-352721-99f80e5bc090.json
 
 dvc init --no-scm -f
 
@@ -11,7 +11,9 @@ dvc init --no-scm -f
 # add dvc cache remote and link it with json creds (and set as default remote)
 dvc remote add -d dvc-cache-remote gdrive://1pwqW-DruetPFaUBeO2KnnnPwccOZGdZw
 dvc remote modify dvc-cache-remote gdrive_use_service_account true
-dvc remote modify dvc-cache-remote --local gdrive_service_account_json_file_path remla-352721-99f80e5bc090.json
+dvc remote modify dvc-cache-remote --local gdrive_service_account_json_file_path src/remla-352721-99f80e5bc090.json
+dvc remote modify dvc-cache-remote --local gdrive_service_account_user_email 'remla-project@remla-352721.iam.gserviceaccount.com'
+
 
 # add remote for fetching data from google drive and link it with json creds
 # dvc remote add data-remote gdrive://1fgdFNFF0YE-U0GHYPcpQA3I7erSSQ9iU

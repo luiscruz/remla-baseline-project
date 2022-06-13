@@ -44,6 +44,8 @@ spec:
               value: "http://scraping-controller:5000"
             - name: SCRAPE_SAVE_DIR
               value: /data/shared/scrape/
+            - name: LOG_LEVEL
+              value: DEBUG
           volumeMounts:
             - name: project-shared
               mountPath: /data/shared/
@@ -96,9 +98,11 @@ spec:
             - name: APP_MODULE
               value: "scraping_service.controller.controller"
             - name: SCRAPE_INCREMENT_SECONDS
-              value: "600"
+              value: "6000"
             - name: SCRAPE_START_TIMESTAMP
               value: "1641000000"
+            - name: LOG_LEVEL
+              value: DEBUG
             - name: API_KEY_SECRET
               valueFrom:
                 secretKeyRef:

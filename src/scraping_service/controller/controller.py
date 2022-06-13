@@ -36,9 +36,12 @@ def load_api_keys():
     if os.environ.get("API_KEY_SECRET"):
         keys = os.environ["API_KEY_SECRET"]
     else:
-        # for run in docker compose they're stored in a mounted file
-        with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", "r") as f:
-            keys = f.read()
+        try:
+            # for run in docker compose they're stored in a mounted file
+            with open(f"/run/secrets/{os.environ['API_KEY_SECRET_NAME']}", "r") as f:
+                keys = f.read()
+        except Exception:
+            keys = ""
 
     return {key: 10_000 for key in keys.split(",")}
 
@@ -48,7 +51,10 @@ api_key_counters = {key: Gauge(f"api_key_{i}_quota", "Remaining quota per api ke
 
 
 def get_next_apikey():
-    return max(api_keys, key=api_keys.get)
+    if api_keys and len(api_keys) > 0:
+        return max(api_keys, key=api_keys.get)
+    else:
+        return None
 
 
 @app.route("/date_range", methods=["GET"])
