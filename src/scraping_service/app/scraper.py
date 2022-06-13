@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import shutil
 import time
@@ -72,7 +73,7 @@ def execute_query(query) -> Tuple[bool, dict]:
         if backoff > 0:
             app.logger.debug(f"Waiting for {backoff} seconds before continuing")
             time.sleep(backoff)
-            success = True
+        success = True
     else:
         app.logger.debug(f"query got non OK response: \n{res.status_code = }, {res.json() = },\nsleeping for 60 secs")
         time.sleep(60)
@@ -90,31 +91,30 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
     else:
         items = response_dict["items"]
         while response_dict["has_more"]:
-            items.append(response_dict["items"])
+            items.extend(response_dict["items"])
             page += 1
             success, response_dict = execute_query(get_query(fromdate, todate, page=page, key=apikey))
 
         df = pd.DataFrame(items)
-
+    app.logger.debug(f"df shape: {df.shape}")
     # transform to dataframe and store as tsv file
     if not df.empty:
         df = df[["title", "tags"]]
+        app.logger.debug(f"df shape: {df.shape}")
+
         app.logger.debug(f"Removing anomalies from df with shape: {df.shape}")
         try:
             num_anomalies, df = data_validation.remove_anomalies(df, valid_tags)
         except Exception as e:
             app.logger.warning(f"Exception thrown during data validation, ignoring data: \n{e}")
             num_anomalies = 1
-
-        if num_anomalies == 0:
+        else:
             question_count.inc(len(df))
             Path(save_dir).mkdir(exist_ok=True)
             file_name = f"{save_dir}/result_{fromdate}-{todate}.tsv"
             app.logger.debug(f"Saving to {file_name}")
             df.to_csv(file_name, sep="\t", index=False)
             app.logger.debug(f"{len(df)} questions scraped")
-        else:
-            app.logger.warning("Anomalies found, not saving results")
     else:
         app.logger.warning("Dataframe result empty (no questions found)")
     return apikey, response_dict.get("quota_remaining")
@@ -157,4 +157,10 @@ main_loop = Thread(target=scrape_loop)
 main_loop.start()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)  # nosec
+    logging.getLogger().setLevel("DEBUG")
+    app.logger.setLevel("DEBUG")
+    # app.run(host="0.0.0.0", port=5001, debug=True)  # nosec
+    app.logger.warning("Anomalies found, not saving results")
+    # https: // api.stackexchange.com / 2.3 / questions?page = 1 & pagesize = 100 & fromdate = 1641570001 & todate = 1641576000 & order = desc & sort = act
+    # ivity & site = stackoverflow & filter =!Fc7.FlqcJXCgmWba * Q45 * UiJ(2 & & key = JXRyp5XuOzg * BPVdsz5moA((
+    scrape_questions_and_save("1641570001", "1641573000", apikey="JXRyp5XuOzg*BPVdsz5moA((", save_dir=".")
