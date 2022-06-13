@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mymonitor
+  labels:
+    release: promstack
+spec:
+  selector:
+    matchExpressions:
+      - {
+          key: app,
+          operator: In,
+          values:
+            [
+              inference-service,
+              training-service,
+              scraping-controller,
+              scraping-service,
+            ],
+        }
+  endpoints:
+    - targetPort: 5000
+      path: "/metrics"
+      interval: 10s
