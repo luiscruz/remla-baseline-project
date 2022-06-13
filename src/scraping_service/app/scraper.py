@@ -92,7 +92,7 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
         while response_dict["has_more"]:
             items.append(response_dict["items"])
             page += 1
-            success, response_dict = execute_query(get_query(fromdate, todate, page=page), key=apikey)
+            success, response_dict = execute_query(get_query(fromdate, todate, page=page, key=apikey))
 
         df = pd.DataFrame(items)
 
