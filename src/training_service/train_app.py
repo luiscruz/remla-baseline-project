@@ -85,7 +85,7 @@ def train():
             scores = json.load(f)
         for score_key in scores:
             score_metrics[score_key].set(scores[score_key])
-        score_metrics["num_records"].set(num_train_samples)
+        score_metrics["num_samples"].set(num_train_samples)
         app.logger.info(f"Training finished, trained on {num_train_samples} samples")
         return f"Training finished, trained on {num_train_samples} samples", 200
     else:
