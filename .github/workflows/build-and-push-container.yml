@@ -1,10 +1,5 @@
 name: Build workflow
 on:
-  # workflow_run:
-  #   workflows:
-  #     - Test workflow
-  #   types:
-  #     - completed
   push:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
@@ -13,7 +8,6 @@ permissions:
 
 jobs:
   build:
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }} & startsWith(github.ref, 'refs/tags/v')
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-20.04
     steps:
@@ -24,7 +18,7 @@ jobs:
       - name: Parse version info from tag
         run: |
           # GITHUB_REF is like refs/tags/v2.3.5, so strip the first 11 chars
-          VERSION='0.0.1-test'
+          VERSION=${GITHUB_REF:11}
           MAJOR=`echo "$VERSION" | cut -d . -f 1`
           MINOR=`echo "$VERSION" | cut -d . -f 2`
           PATCH=`echo "$VERSION" | cut -d . -f 3`
