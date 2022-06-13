@@ -45,4 +45,4 @@ dvc add $SHARED_DATA_PATH/raw/ -o data/raw/
 # this also updates the cache if something has changed in the data
 dvc repro
 
-gunicorn -c src/gunicorn_config.py -b 0.0.0.0:5000 src.$APP_MODULE:app
+gunicorn -c src/gunicorn_config.py -b 0.0.0.0:5000 --timeout 600 src.$APP_MODULE:app
