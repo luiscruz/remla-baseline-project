@@ -2,13 +2,12 @@
 import os
 import unittest
 
-from src.features.build_features import (
-    tfidf_features,  # pylint: disable=no-name-in-module,import-error
-)
+import pandas as pd
+
 from src.preprocess.preprocess_data import (  # pylint: disable=no-name-in-module,import-error
-    init_data,
     text_prepare,
 )
+from src.scraping_service.app.data_validation import remove_anomalies
 
 os.environ["PROMETHEUS_MULTIPROC_DIR"] = "/tmp/prom"  # nosec
 
@@ -34,14 +33,15 @@ class TestPipeLine(unittest.TestCase):
         message = f"Wrong answer for the case: '{wrong_case}'"
         self.assertFalse(check, message)
 
-    def test_token(self):
-        """Test tfidf"""
-        root = "./data/raw/"
-        X_train, X_val, X_test, _, _ = init_data(root + "train.tsv", root + "validation.tsv", root + "test.tsv")
-        _, _, _, tfidf_vocab, _ = tfidf_features(X_train, X_val, X_test)
-        tfidf_reversed_vocab = {i: word for word, i in tfidf_vocab.items()}
-        self.assertTrue("c#" in tfidf_vocab)
-        # During the built-in tokenization of TfidfVectorizer and use ‘(\S+)’
-        # regexp as a token_pattern in the constructor of the vectorizer.
-        expected_tag = "c#"
-        self.assertEqual(tfidf_reversed_vocab[4516], expected_tag)
+    def test_data_validation(self):
+        """Test data validation/cleaning"""
+        df = pd.DataFrame(
+            {
+                "title": ["this is a test title", "test 2", "test empty"],
+                "tags": [["test", "tags", "one", "python"], ["test tags two"], []],
+            }
+        )
+        num_removed, update_df = remove_anomalies(df, valid_tags={"python"})
+        self.assertEqual(num_removed, 2, msg="Expected 2 entries to be removed, but num removed was not 2")
+        self.assertEqual(len(update_df), 1, msg="Output df length was not 2")
+        self.assertIn("this is a test title", update_df.title)

@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import time
@@ -27,6 +28,9 @@ os.makedirs(PROMETHEUS_MULTIPROC_DIR)
 app_name = "scraping-service"
 app = Flask(app_name)
 app.logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
+
+with open("src/scraping_service/app/valid_tags.json", "r") as f:
+    valid_tags = set(json.load(f))
 
 registry = CollectorRegistry()
 multiprocess.MultiProcessCollector(registry)
@@ -97,7 +101,7 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
         df = df[["title", "tags"]]
         app.logger.debug(f"Removing anomalies from df with shape: {df.shape}")
         try:
-            num_anomalies, df = data_validation.remove_anomalies(df)
+            num_anomalies, df = data_validation.remove_anomalies(df, valid_tags)
         except Exception as e:
             app.logger.warning(f"Exception thrown during data validation, ignoring data: \n{e}")
             num_anomalies = 1

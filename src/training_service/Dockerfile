@@ -16,7 +16,6 @@ COPY src/gunicorn_config.py src/startup_training.sh ./
 WORKDIR /app
 
 COPY params.yaml dvc.yaml ./
-COPY dvc.yaml ./
 
 RUN mkdir models && mkdir reports
 
