@@ -50,20 +50,16 @@ def metrics():
 
 def get_query(dateFrom, dateTo, page=1, key=None):
     return (
-        (
-            f"https://api.stackexchange.com/2.3/questions?"
-            f"page={page}&"
-            f"pagesize=100&"
-            f"fromdate={dateFrom}&"
-            f"todate={dateTo}&"
-            f"order=desc&"
-            f"sort=activity&"
-            f"site=stackoverflow&"
-            f"filter=!Fc7.FlqcJXCgmWba*Q45*UiJ(2&"
-        )
-        + (f"tagged={';'.join(valid_tags)}" if len(valid_tags) > 0 else "")
-        + (f"&key={key}" if key else "")
-    )
+        f"https://api.stackexchange.com/2.3/questions?"
+        f"page={page}&"
+        f"pagesize=100&"
+        f"fromdate={dateFrom}&"
+        f"todate={dateTo}&"
+        f"order=desc&"
+        f"sort=activity&"
+        f"site=stackoverflow&"
+        f"filter=!Fc7.FlqcJXCgmWba*Q45*UiJ(2&"
+    ) + (f"&key={key}" if key else "")
 
 
 @num_queries.time()
