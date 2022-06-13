@@ -56,7 +56,5 @@ jobs:
           python-version: '3.8'
       - name: build environment
         run: pip install --upgrade pip && pip install -r requirements.txt
-      - name: dvc make models
-        run: dvc repro
       - name: Test with pytest
         run: make test

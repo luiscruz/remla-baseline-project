@@ -11,7 +11,6 @@ from src.preprocess.preprocess_data import (  # pylint: disable=no-name-in-modul
 )
 
 os.environ["PROMETHEUS_MULTIPROC_DIR"] = "/tmp/prom"  # nosec
-from src.serve_model import app
 
 
 class TestPipeLine(unittest.TestCase):
@@ -46,8 +45,3 @@ class TestPipeLine(unittest.TestCase):
         # regexp as a token_pattern in the constructor of the vectorizer.
         expected_tag = "c#"
         self.assertEqual(tfidf_reversed_vocab[4516], expected_tag)
-
-    def test_inference_api(self):
-        tester = app.test_client()
-        response = tester.post("/predict", json={"title": "this is a python title"})
-        self.assertIn(b"python", response.data)
