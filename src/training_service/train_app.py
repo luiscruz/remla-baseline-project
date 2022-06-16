@@ -47,6 +47,15 @@ scrape_save_dir = os.environ["SCRAPE_SAVE_DIR"]
 train_file = f"{os.environ['SHARED_DATA_PATH']}/raw/train.tsv"
 
 
+def update_scores():
+    score_file = "reports/scores.json"
+    if os.path.exists(score_file):
+        with open(score_file, "r") as f:
+            scores = json.load(f)
+        for score_key in scores:
+            score_metrics[score_key].set(scores[score_key])
+
+
 def load_yaml_params():
     # Fetch params from yaml params file
     with open("params.yaml", encoding="utf-8") as f:
@@ -91,6 +100,7 @@ def train():
     output = subprocess.run(["sh", "src/training_service/train.sh"], capture_output=True)  # nosec
     if output.returncode == 0:
         # get scores and update counters
+        update_scores()
         score_metrics["num_samples"].set(num_train_samples)
         app.logger.info(f"Training finished, trained on {num_train_samples} samples")
         return f"Training finished, trained on {num_train_samples} samples", 200
@@ -103,10 +113,7 @@ def train():
 
 @app.route("/metrics")
 def metrics():
-    with open("reports/scores.json", "r") as f:
-        scores = json.load(f)
-    for score_key in scores:
-        score_metrics[score_key].set(scores[score_key])
+    update_scores()
     data = generate_latest(registry)
     app.logger.debug(f"Metrics, returning: {data}")
     return Response(data, mimetype=CONTENT_TYPE_LATEST)
