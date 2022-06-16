@@ -160,8 +160,5 @@ if __name__ == "__main__":
     logging.getLogger().setLevel("DEBUG")
     app.logger.setLevel("DEBUG")
     # app.run(host="0.0.0.0", port=5001, debug=True)  # nosec
-    # https: // api.stackexchange.com / 2.3 / questions?page = 1 & pagesize = 100 & fromdate = 1641570001 & todate = 1641576000 & order = desc & sort = act
-    # ivity & site = stackoverflow & filter =!Fc7.FlqcJXCgmWba * Q45 * UiJ(2 & & key = JXRyp5XuOzg * BPVdsz5moA((
-    scrape_questions_and_save("1642650001", "1642656000", apikey="JXRyp5XuOzg*BPVdsz5moA((", save_dir=".")
 
     # 1642650001 - 1642656000
