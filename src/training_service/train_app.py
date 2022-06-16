@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import subprocess  # nosec
+from datetime import datetime
 
 import yaml
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -32,6 +33,15 @@ score_metrics = {
     score: Gauge(score, score)
     for score in ["accuracy_score", "f1_score", "avg_precision_score", "roc_auc_score", "num_samples"]
 }
+
+try:
+    # get scores and update counters
+    with open("reports/scores.json", "r") as f:
+        scores = json.load(f)
+    for score_key in scores:
+        score_metrics[score_key].set(scores[score_key])
+except Exception: # nosec
+    pass
 
 scrape_save_dir = os.environ["SCRAPE_SAVE_DIR"]
 train_file = f"{os.environ['SHARED_DATA_PATH']}/raw/train.tsv"
@@ -81,10 +91,6 @@ def train():
     output = subprocess.run(["sh", "src/training_service/train.sh"], capture_output=True)  # nosec
     if output.returncode == 0:
         # get scores and update counters
-        with open("reports/scores.json", "r") as f:
-            scores = json.load(f)
-        for score_key in scores:
-            score_metrics[score_key].set(scores[score_key])
         score_metrics["num_samples"].set(num_train_samples)
         app.logger.info(f"Training finished, trained on {num_train_samples} samples")
         return f"Training finished, trained on {num_train_samples} samples", 200
@@ -97,6 +103,10 @@ def train():
 
 @app.route("/metrics")
 def metrics():
+    with open("reports/scores.json", "r") as f:
+        scores = json.load(f)
+    for score_key in scores:
+        score_metrics[score_key].set(scores[score_key])
     data = generate_latest(registry)
     app.logger.debug(f"Metrics, returning: {data}")
     return Response(data, mimetype=CONTENT_TYPE_LATEST)
@@ -107,5 +117,6 @@ cron = BackgroundScheduler(daemon=True)
 cron.start()
 
 TRAIN_INTERVAL_SECONDS = int(os.environ.get("TRAIN_INTERVAL_SECONDS", 300))
-# cron.add_job('training_service.train:train', 'interval', minutes=TRAIN_INTERVAL_MINUTES)
 cron.add_job(train, "interval", seconds=TRAIN_INTERVAL_SECONDS)
+for job in cron.get_jobs():
+    job.modify(next_run_time=datetime.now())

@@ -90,10 +90,10 @@ def scrape_questions_and_save(fromdate: str, todate: str, apikey=None, save_dir=
         df = pd.DataFrame()
     else:
         items = response_dict["items"]
-        while response_dict["has_more"]:
-            items.extend(response_dict["items"])
+        while response_dict.get("has_more"):
             page += 1
             success, response_dict = execute_query(get_query(fromdate, todate, page=page, key=apikey))
+            items.extend(response_dict["items"])
 
         df = pd.DataFrame(items)
     app.logger.debug(f"df shape: {df.shape}")
@@ -160,7 +160,8 @@ if __name__ == "__main__":
     logging.getLogger().setLevel("DEBUG")
     app.logger.setLevel("DEBUG")
     # app.run(host="0.0.0.0", port=5001, debug=True)  # nosec
-    app.logger.warning("Anomalies found, not saving results")
     # https: // api.stackexchange.com / 2.3 / questions?page = 1 & pagesize = 100 & fromdate = 1641570001 & todate = 1641576000 & order = desc & sort = act
     # ivity & site = stackoverflow & filter =!Fc7.FlqcJXCgmWba * Q45 * UiJ(2 & & key = JXRyp5XuOzg * BPVdsz5moA((
-    scrape_questions_and_save("1641570001", "1641573000", apikey="JXRyp5XuOzg*BPVdsz5moA((", save_dir=".")
+    scrape_questions_and_save("1642650001", "1642656000", apikey="JXRyp5XuOzg*BPVdsz5moA((", save_dir=".")
+
+    # 1642650001 - 1642656000
