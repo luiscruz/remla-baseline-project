@@ -40,7 +40,7 @@ try:
         scores = json.load(f)
     for score_key in scores:
         score_metrics[score_key].set(scores[score_key])
-except Exception: # nosec
+except Exception:  # nosec
     pass
 
 scrape_save_dir = os.environ["SCRAPE_SAVE_DIR"]
