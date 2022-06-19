@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "closed-as-duplicate"
+name = "src"
 version = "0.1.28"
 description = "This project is created to experience setting up an ML environment for a team with different expertieces. This repo is created for the Release Engeneering for Machine Learning Applications taught at the TU Delft."
 authors = ['Chiel de Vries <c.devries-1@student.tudelft.nl>', 'Hielke Walinga <hielkewalinga@gmail.com>', 'Lars van Koetsveld van Ankeren <l.koetsveld22@gmail.com>', 'Mark Bekooy <mark.bekooy@gmail.com>', 'Melchior Oudemans <melchior.oudemans@gmail.com>']
 license = "MIT"
 readme = "README.md"
-packages = [{include = "closed_as_duplicate"}]
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = ">=3.7.2,<3.10"

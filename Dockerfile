@@ -20,6 +20,10 @@ RUN curl -sSL -o install-poetry.py https://install.python-poetry.org
 RUN python3 install-poetry.py --pre
 ENV PATH=/root/.local/bin/:$PATH
 RUN poetry config virtualenvs.in-project true
+
+COPY pyproject.toml . 
+COPY poetry.lock .
+
 RUN poetry install
 RUN echo "source /root/.venv/bin/activate" >> /root/.profile
 SHELL ["sh", "-lc"]
