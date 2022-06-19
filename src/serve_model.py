@@ -5,20 +5,20 @@
 """
 
 import os
-from flask import Flask, Response
-import random
+import uvicorn
+from fastapi import FastAPI
 
-app = Flask(__name__)
+app = FastAPI()
 
 
-@app.route("/")
+@app.get("/")
 def hello_world():
     return "<p>Hello, World!</p>"
 
 
 # TODO: Add a predict endpoint...
 
-@app.route("/metrics")
+@app.get("/metrics")
 def metrics():
     text = "# HELP my_random A random number\n"
     text += "# TYPE my_random gauge\n"
@@ -30,4 +30,5 @@ def metrics():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     print(f"Running Flask app on port {port}")
-    app.run(host="0.0.0.0", port=port, debug=True)
+
+    uvicorn.run("serve_model:app", host="0.0.0.0", port=port, debug=True, port=port, log_level='debug')
