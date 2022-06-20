@@ -5,8 +5,9 @@
 """
 
 import os
-from flask import Flask, Response
 import random
+
+from flask import Flask, Response
 
 app = Flask(__name__)
 
@@ -18,13 +19,14 @@ def hello_world():
 
 # TODO: Add a predict endpoint...
 
+
 @app.route("/metrics")
 def metrics():
     text = "# HELP my_random A random number\n"
     text += "# TYPE my_random gauge\n"
     text += f"my_random {random.random()}\n\n"
 
-    return Response(text, mimetype='text/plain')
+    return Response(text, mimetype="text/plain")
 
 
 if __name__ == "__main__":
