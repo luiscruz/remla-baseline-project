@@ -38,6 +38,7 @@ jobs:
             poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             poetry-${{ hashFiles('**/poetry.lock') }}
+            poetry-
 
       - name: Install dependencies
         run: |
