@@ -47,5 +47,5 @@ jobs:
             # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version_major }}.${{ env.version_minor }}-latest
             # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version }}
 
-            docker push --all-tags ${IMG}/$img_name
+            docker push ${IMG}/$img_name:test
           done
