@@ -215,6 +215,12 @@ def main(input_filepath: Path, output_filepath: Path):
     pickle.dump(mlb_y_val, open(output_filepath + "mlb_val.pickle", "wb"))
 
 
+FeatureExtractors = {
+    ModelName.tfidf: FeatureExtractorTfidf,
+    ModelName.bow: FeatureExtractorBow,
+}
+
+
 if __name__ == "__main__":
     log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     logging.basicConfig(level=logging.INFO, format=log_fmt)

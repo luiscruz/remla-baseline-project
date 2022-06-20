@@ -42,6 +42,15 @@ def main():
 
 
 class Evaluator:
+
+    evaluation_metrics = [
+        "accuracy",
+        "recall",
+        "f1-score",
+        "average-precision-score",
+        "roc-score",
+    ]
+
     def __init__(self):
         self.mlb_y_val = validation_file(ModelName.mlb)
 
