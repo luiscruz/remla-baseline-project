@@ -95,5 +95,5 @@ lineprecision.txt
 # Pyre type checker
 .pyre/
 
-
-
+# Data
+models/*
