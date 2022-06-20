@@ -1,7 +1,7 @@
 name: Build workflow
 on:
   push:
-    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+    # tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
 permissions:
   packages: write
@@ -36,7 +36,7 @@ jobs:
         run: |
           IMG=ghcr.io/${REPO}
           # TODO: add this when web frontend is integrated in the docker-compose file
-          IMG_NAMES=('inference-service' 'training-service' 'scraping-service' 'scraping-controller')
+          IMG_NAMES=('inference-service')
           for img_name in "${IMG_NAMES[@]}";
           do
             echo $img_name
@@ -44,10 +44,10 @@ jobs:
             
             docker-compose -f deployment/docker-compose/docker-compose.yml build $img_name
 
-            docker tag $img_name:latest ${IMG}/$img_name 
-            docker tag $img_name:latest ${IMG}/$img_name:${{ env.version_major }}-latest
-            docker tag $img_name:latest ${IMG}/$img_name:${{ env.version_major }}.${{ env.version_minor }}-latest
-            docker tag $img_name:latest ${IMG}/$img_name:${{ env.version }}
+            docker tag $img_name:test ${IMG}/$img_name 
+            # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version_major }}-latest
+            # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version_major }}.${{ env.version_minor }}-latest
+            # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version }}
 
             docker push --all-tags ${IMG}/$img_name
           done

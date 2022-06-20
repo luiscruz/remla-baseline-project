@@ -27,31 +27,32 @@ WORKDIR /root/dvc-versioning
 # load google drive api key secret into file for use by DVC
 RUN echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
 RUN export KEY_FILE=remla-352721-99f80e5bc090.json
-RUN python load_key.py
+RUN echo $printenv > env.txt
+# RUN python load_key.py
 
-RUN dvc init -f
+# RUN dvc init -f
 
-# create config entries for gdrive authentication to go automatically 
-# by utilizing the API_KEY_SECRET json credentials
-# add dvc cache remote and link it with json creds (and set as default remote)
-RUN dvc remote add -d dvc-cache-remote gdrive://1pwqW-DruetPFaUBeO2KnnnPwccOZGdZw &&\
-    dvc remote modify dvc-cache-remote gdrive_use_service_account true &&\
-    dvc remote modify dvc-cache-remote --local gdrive_service_account_json_file_path remla-352721-99f80e5bc090.json
+# # create config entries for gdrive authentication to go automatically 
+# # by utilizing the API_KEY_SECRET json credentials
+# # add dvc cache remote and link it with json creds (and set as default remote)
+# RUN dvc remote add -d dvc-cache-remote gdrive://1pwqW-DruetPFaUBeO2KnnnPwccOZGdZw &&\
+#     dvc remote modify dvc-cache-remote gdrive_use_service_account true &&\
+#     dvc remote modify dvc-cache-remote --local gdrive_service_account_json_file_path remla-352721-99f80e5bc090.json
 
-RUN dvc pull
+# RUN dvc pull
 
-FROM python:3.8.13-slim
+# FROM python:3.8.13-slim
 
-WORKDIR /root/
+# WORKDIR /root/
 
-RUN mkdir models
-COPY --from=model_build /root/dvc-versioning/models models
-COPY --from=model_build /root/dvc-versioning/nltk_data nltk_data
+# RUN mkdir models
+# COPY --from=model_build /root/dvc-versioning/models models
+# COPY --from=model_build /root/dvc-versioning/nltk_data nltk_data
 
-COPY src src
+# COPY src src
 
-COPY requirements.txt params.yaml pyproject.toml setup.py ./
-RUN python -m pip install --upgrade pip &&\
-    python -m pip install -r src/requirements.txt
+# COPY requirements.txt params.yaml pyproject.toml setup.py ./
+# RUN python -m pip install --upgrade pip &&\
+#     python -m pip install -r src/requirements.txt
 
-EXPOSE 5000
+# EXPOSE 5000
