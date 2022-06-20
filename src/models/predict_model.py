@@ -11,7 +11,7 @@ from sklearn.metrics import (
 )
 from sklearn.metrics import roc_auc_score as roc_auc
 
-from ..project_types import ModelName
+from src.project_types import ModelName
 
 source_file = Path(__file__)
 project_dir = source_file.parent.parent.parent
@@ -24,7 +24,7 @@ def validation_file(model: ModelName):
 
 def model_file(model: ModelName):
     model_filepath = project_dir / "models/"
-    return pickle.load(model_filepath.joinpath(f"{model}").open("rb"))
+    return pickle.load(model_filepath.joinpath(f"{model}_model.pickle").open("rb"))
 
 
 def main():
@@ -78,16 +78,19 @@ class Evaluator:
         }
 
 
+default_format = "{:.2f}"
+
+
 def print_evaluation_scores(
-    logger: logging.Logger, scores: Dict[str, float], format: str
+    logger: logging.Logger, scores: Dict[str, float], format: str = default_format
 ):
     text = evaluation_scores_to_text(scores, format)
     for line in text:
-        logger.info()
+        logger.info(line)
 
 
 def evaluation_scores_to_text(
-    scores: Dict[str, float], format: str = "{:.2f}"
+    scores: Dict[str, float], format: str = default_format
 ) -> List[str]:
     return [
         "Accuracy score: " + format.format(scores["accuracy"]),
@@ -100,6 +103,7 @@ def evaluation_scores_to_text(
 
 
 if __name__ == "__main__":
+    print("name", __name__)
     log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
