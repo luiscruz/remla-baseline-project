@@ -90,6 +90,7 @@ target/
 
 .dmypy.json
 dmypy.json
+lineprecision.txt
 
 # Pyre type checker
 .pyre/

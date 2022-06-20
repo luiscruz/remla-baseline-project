@@ -1,5 +1,6 @@
 import logging
 import pickle
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -7,27 +8,30 @@ from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from src.project_types import ModelName
 from src.util.util import read_data, write_data
 
+source_file = Path(__file__)
+project_dir = source_file.parent.parent.parent
 
-def tfidf_features(X_train, X_val, X_test):
+
+class FeatureExtractorTfidf:
     """
     X_train, X_val, X_test — samples
     return TF-IDF vectorized representation of each sample and vocabulary
     """
+
     # Create TF-IDF vectorizer with a proper parameters choice
     # Fit the vectorizer on the train set
     # Transform the train, test, and val sets and return the result
+    def __init__(self, X_train):
+        self.tfidf_vectorizer = TfidfVectorizer(
+            min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern="(\S+)"
+        )
+        self.tfidf_train = self.tfidf_vectorizer.fit_transform(X_train)
 
-    tfidf_vectorizer = TfidfVectorizer(
-        min_df=5, max_df=0.9, ngram_range=(1, 2), token_pattern="(\S+)"
-    )  # YOUR CODE HERE #######
-
-    X_train = tfidf_vectorizer.fit_transform(X_train)
-    X_val = tfidf_vectorizer.transform(X_val)
-    X_test = tfidf_vectorizer.transform(X_test)
-
-    return X_train, X_val, X_test, tfidf_vectorizer.vocabulary_
+    def get_features(self, X):
+        return self.tfidf_vectorizer.transform(X)
 
 
 def my_bag_of_words(text, words_to_index, dict_size):
@@ -69,6 +73,27 @@ def count_words_lists(list_of_lists):
     return count_dict
 
 
+class FeatureExtractorBow:
+    def __init__(self, X_train):
+        self.words_counts = count_words_strings(X_train)
+
+        self.DICT_SIZE = 5000
+        self.INDEX_TO_WORDS = sorted(
+            self.words_counts, key=self.words_counts.get, reverse=True
+        )[: self.DICT_SIZE]
+        self.WORDS_TO_INDEX = {word: i for i, word in enumerate(self.INDEX_TO_WORDS)}
+
+    def get_features(self, X):
+        return sp_sparse.vstack(
+            [
+                sp_sparse.csr_matrix(
+                    my_bag_of_words(text, self.WORDS_TO_INDEX, self.DICT_SIZE)
+                )
+                for text in X
+            ]
+        )
+
+
 def bow_features(X_train, X_val, X_test):
     words_counts = count_words_strings(X_train)
 
@@ -100,30 +125,28 @@ def bow_features(X_train, X_val, X_test):
     return X_train_mybag, X_val_mybag, X_test_mybag
 
 
-def mlb_labels(y_train, y_val):
-    tags_counts = count_words_lists(y_train)
+class LabelsMlb:
+    def __init__(self, tags_counts):
+        self.mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
 
-    mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
-    y_train = mlb.fit_transform(y_train)
-    y_val = mlb.fit_transform(y_val)
-
-    return mlb, y_train, y_val
+    def get_features(self, y):
+        return self.mlb.fit_transform(y)
 
 
-def main(input_filepath="data/interim/", output_filepath="data/processed/"):
+def main(input_filepath: Path, output_filepath: Path):
     """Runs data processing scripts to turn pre-processed data from (../interim) into
     feature data ready to be trained/tested (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
     logger.info("making final data set from interim data")
 
-    train_file_name_in = input_filepath + "train.tsv"
-    val_file_name_in = input_filepath + "validation.tsv"
-    test_file_name_in = input_filepath + "test.tsv"
+    train_file_name_in = input_filepath / "train.tsv"
+    val_file_name_in = input_filepath / "validation.tsv"
+    test_file_name_in = input_filepath / "test.tsv"
 
-    train_file_name_out = output_filepath + "train.tsv"
-    val_file_name_out = output_filepath + "validation.tsv"
-    test_file_name_out = output_filepath + "test.tsv"
+    train_file_name_out = output_filepath / "train.tsv"
+    val_file_name_out = output_filepath / "validation.tsv"
+    test_file_name_out = output_filepath / "test.tsv"
 
     # Load data from tsv files in directory
     train = read_data(train_file_name_in)
@@ -132,11 +155,11 @@ def main(input_filepath="data/interim/", output_filepath="data/processed/"):
 
     logger.info(
         "Finished reading data from: \n\t"
-        + train_file_name_in
+        + str(train_file_name_in)
         + "\n\t"
-        + val_file_name_in
+        + str(val_file_name_in)
         + "\n\t"
-        + test_file_name_in
+        + str(test_file_name_in)
     )
 
     # Select columns to use
@@ -144,15 +167,26 @@ def main(input_filepath="data/interim/", output_filepath="data/processed/"):
     X_val, y_val = validation["title"].values, validation["tags"].values
     X_test = test["title"].values
 
-    bow_train, bow_val, bow_test = bow_features(X_train, X_val, X_test)
+    bow_features = FeatureExtractorBow(X_train)
+    bow_train, bow_val, bow_test = map(
+        bow_features.get_features, [X_train, X_val, X_test]
+    )
     logger.info("Finished generating the bag of words matrices")
 
-    tfidf_train, tfidf_val, tfidf_test, tfidf_vocab = tfidf_features(
-        X_train, X_val, X_test
-    )
+    tfidf_features = FeatureExtractorTfidf(X_train)
+    tfidf_val = tfidf_features.get_features(X_val)
+    tfidf_test = tfidf_features.get_features(X_test)
+    tfidf_train = tfidf_features.tfidf_train
+
     logger.info("Finished generating the tfidf")
 
-    mlb, mlb_y_train, mlb_y_val = mlb_labels(y_train, y_val)
+    tags_counts = count_words_lists(y_train)
+    labels_mlb = LabelsMlb(tags_counts)
+
+    mlb = labels_mlb.mlb
+    mlb_y_train = labels_mlb.get_features(y_train)
+    mlb_y_val = labels_mlb.get_features(y_val)
+
     logger.info("finished generating the multiclass labels")
 
     #  Lists to pd for easy writing
@@ -167,6 +201,8 @@ def main(input_filepath="data/interim/", output_filepath="data/processed/"):
     test_out = pd.DataFrame(
         list(zip(X_test, bow_test, tfidf_test)), columns=["title", "bow", "tfidf"]
     )
+
+    output_filepath: str = str(output_filepath) + "/"
 
     pickle.dump(X_train, open(output_filepath + "X_train.pickle", "wb"))
     pickle.dump(X_val, open(output_filepath + "X_val.pickle", "wb"))
@@ -185,8 +221,17 @@ def main(input_filepath="data/interim/", output_filepath="data/processed/"):
     pickle.dump(mlb_y_val, open(output_filepath + "mlb_val.pickle", "wb"))
 
 
+FeatureExtractors = {
+    ModelName.tfidf: FeatureExtractorTfidf,
+    ModelName.bow: FeatureExtractorBow,
+}
+
+
 if __name__ == "__main__":
     log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-    main()
+    main(
+        input_filepath=project_dir / "data/interim",
+        output_filepath=project_dir / "data/processed/",
+    )

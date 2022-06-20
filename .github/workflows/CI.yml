@@ -51,6 +51,10 @@ jobs:
           mv gdrive-creds.json .dvc/tmp/gdrive-user-credentials.json
           poetry run dvc pull
 
+      # mllint also checks if you use a dependency manager.
+      # Poetry was added to the system,
+      # but the installation made mllint crash, ironically
+      # https://github.com/bvobart/mllint/issues/35
       # - name: Run mllint
       #   run:
       #     poetry run mllint -o mllint-report.md
@@ -80,7 +84,7 @@ jobs:
           path: report.txt
 
       - name: Run mypy
-        run: poetry run mypy src --lineprecision-report . --install-types --non-interactive --ignore-missing-imports
+        run: poetry run mypy src --lineprecision-report . --install-types --non-interactive --ignore-missing-imports --allow-redefinition
 
       - name: Upload `mypy` report
         uses: actions/upload-artifact@v3

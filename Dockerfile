@@ -31,6 +31,7 @@ ENV GIT_HASH=$GIT_HASH
 LABEL git_hash=$GIT_HASH
 
 COPY . .
+RUN poetry install  # With the code copied, install the root package.
 RUN poetry run dvc pull
 
 ARG PORT=5000
@@ -38,5 +39,5 @@ ENV PORT=$PORT
 
 EXPOSE $PORT
 
-ENTRYPOINT ["poetry", "run", "python"]
+# ENTRYPOINT ["poetry", "run", "python"]
 CMD ["poetry", "run", "src/serve_model.py"]

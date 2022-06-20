@@ -28,22 +28,22 @@ stages:
       - data/processed/mlb.pickle
       - data/processed/mlb_val.pickle
       - data/processed/mlb_train.pickle
-#  train_model:
-#    cmd: python src/models/train_model.py
-#    deps:
-#      - src/models/train_model.py
-#      - data/processed/X_train.pickle
-#      - data/processed/X_val.pickle
-#      - data/processed/X_test.pickle
-#      - data/processed/bow_train.pickle
-#      - data/processed/bow_val.pickle
-#      - data/processed/bow_test.pickle
-#      - data/processed/tfidf_train.pickle
-#      - data/processed/tfidf_val.pickle
-#      - data/processed/tfidf_test.pickle
-#      - data/processed/mlb.pickle
-#      - data/processed/mlb_val.pickle
-#      - data/processed/mlb_train.pickle
-#    outs:
-#      - models/bow_model.pickle
-#      - models/tfidf_model.pickle
+  # train_model:
+  #   cmd: python src/models/train_model.py
+  #   deps:
+  #     - src/models/train_model.py
+  #     - data/processed/X_train.pickle
+  #     - data/processed/X_val.pickle
+  #     - data/processed/X_test.pickle
+  #     - data/processed/bow_train.pickle
+  #     - data/processed/bow_val.pickle
+  #     - data/processed/bow_test.pickle
+  #     - data/processed/tfidf_train.pickle
+  #     - data/processed/tfidf_val.pickle
+  #     - data/processed/tfidf_test.pickle
+  #     - data/processed/mlb.pickle
+  #     - data/processed/mlb_val.pickle
+  #     - data/processed/mlb_train.pickle
+  #   outs:
+  #     - models/bow_model.pickle
+  #     - models/tfidf_model.pickle
