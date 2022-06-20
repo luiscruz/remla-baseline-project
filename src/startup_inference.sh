@@ -2,13 +2,13 @@
 rm -rf $PROMETHEUS_MULTIPROC_DIR
 mkdir $PROMETHEUS_MULTIPROC_DIR
 
-# load google drive api key secret into file for use by DVC
-python src/training_service/load_key.py
-
 # clone dvc-versioning branch and set origin to url with auth token
 git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git dvc-versioning
 cd dvc-versioning
 git remote set-url origin https://$GITHUB_ACCESS_TOKEN@github.com/Adam-TU/remla-project.git
+
+# load google drive api key secret into file for use by DVC
+python src/training_service/load_key.py
 
 dvc init -f
 
