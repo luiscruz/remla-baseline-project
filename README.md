@@ -1,13 +1,23 @@
 # Release engeneering of Multilabel classification on Stack Overflow tags
 
-This project designs a Release pipeline for a multilabel classifying ML applications. The application detials can be found on [the forked project](https://github.com/luiscruz/remla-baseline-project/blob/main/README.md). The team working on this project has applied the following changes to improve the development of the ML applications:
+This project designs a Release pipeline for a multilabel classifying ML applications. The application is an extended version of [the forked project](https://github.com/luiscruz/remla-baseline-project/blob/main/README.md). The team working on this project has applied the following changes to improve the development of the ML applications:
 
-- Modularise code in separate code files
-- PyTest
-- MLLint
-- Docker
-- DVC
-- Kubernetes
+ * Project is now logically split into different files.
+ * There is DVC to manage data artifacts.
+ * There is a package manager (poetry) added.
+ * The application will be tested by CI when a PR is made.
+ * This includes various linters and checkers (pylint, mllint, bandit, mypy, black, isort).
+ * This also includes automatic testing with pytest including data validation using tensorflow.
+ * There are also pipelines for automatic versioning and automatic release.
+ * There is a Dockerfile present.
+ * The application can be run as a webserver and has a REST API endpoints.
+ * There are instructions to deploy the application on Kubernetes.
+ * This includes configuration to monitor it with Grafana.
+
+
+NB. mllint is currently disabled on the CI because of the following bug:
+
+https://github.com/bvobart/mllint/issues/35
 
 # Table of Content
 
@@ -19,17 +29,34 @@ This project designs a Release pipeline for a multilabel classifying ML applicat
 
 # Installation
 
-## Local (with `venv` as virtual environemnt)
+## Local (Using Poetry)
+
+First install Poetry
+
+```sh
+curl -sSL -o install-poetry.py https://install.python-poetry.org
+python3 install-poetry.py --pre
+PATH=/root/.local/bin/:$PATH
+```
+
+You can now install all the dependencies.
+
 
 ```
-python -m venv ./venv
-. ./venv/bin/activate
-pip install -r requirements.txt
-dvc pull
+poetry shell
+poetry install
+dvc pull  # see next section
 python src/serve_model.py
 ```
 
 ## Docker
+
+Make sure you have Docker installed. For example with the following:
+
+```sh
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+```
 
 ```
 export GIT_COMMIT=$(git rev-parse HEAD)
@@ -97,7 +124,7 @@ dvc push
 
 # Testing with PyTest
 
-Pytests can be found in the "tests" directory. Newly added test classes should end with "test\_\*.py" and newly added test functions should start with "test"
+Pytests can be found in the "tests" directory. Newly added test classes should be formatted as "test\_\*.py" and newly added test functions should start with "test"
 
 # Kubernetes
 
