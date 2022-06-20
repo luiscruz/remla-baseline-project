@@ -8,6 +8,7 @@ from scipy import sparse as sp_sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from src.project_types import ModelName
 from src.util.util import read_data, write_data
 
 source_file = Path(__file__)
@@ -73,23 +74,24 @@ def count_words_lists(list_of_lists):
 
 
 class FeatureExtractorBow:
-    def __init__(self, X_train)
+    def __init__(self, X_train):
         self.words_counts = count_words_strings(X_train)
 
         self.DICT_SIZE = 5000
-        self.INDEX_TO_WORDS = sorted(words_counts, key=self.words_counts.get, reverse=True)[
-            :self.DICT_SIZE
-        ]
-        self.WORDS_TO_INDEX = {word: i for i, word in enumerate(INDEX_TO_WORDS)}
+        self.INDEX_TO_WORDS = sorted(
+            self.words_counts, key=self.words_counts.get, reverse=True
+        )[: self.DICT_SIZE]
+        self.WORDS_TO_INDEX = {word: i for i, word in enumerate(self.INDEX_TO_WORDS)}
 
     def get_features(self, X):
         return sp_sparse.vstack(
             [
-                sp_sparse.csr_matrix(my_bag_of_words(text, self.WORDS_TO_INDEX, self.DICT_SIZE))
+                sp_sparse.csr_matrix(
+                    my_bag_of_words(text, self.WORDS_TO_INDEX, self.DICT_SIZE)
+                )
                 for text in X
             ]
         )
-
 
 
 def bow_features(X_train, X_val, X_test):
@@ -153,11 +155,11 @@ def main(input_filepath: Path, output_filepath: Path):
 
     logger.info(
         "Finished reading data from: \n\t"
-        + train_file_name_in
+        + str(train_file_name_in)
         + "\n\t"
-        + val_file_name_in
+        + str(val_file_name_in)
         + "\n\t"
-        + test_file_name_in
+        + str(test_file_name_in)
     )
 
     # Select columns to use
@@ -166,7 +168,9 @@ def main(input_filepath: Path, output_filepath: Path):
     X_test = test["title"].values
 
     bow_features = FeatureExtractorBow(X_train)
-    bow_train, bow_val, bow_test = map(bow_features.get_features, [X_train, X_val, X_test])
+    bow_train, bow_val, bow_test = map(
+        bow_features.get_features, [X_train, X_val, X_test]
+    )
     logger.info("Finished generating the bag of words matrices")
 
     tfidf_features = FeatureExtractorTfidf(X_train)
@@ -176,7 +180,7 @@ def main(input_filepath: Path, output_filepath: Path):
 
     logger.info("Finished generating the tfidf")
 
-    tags_counts = count_words_lists(y_train + y_val)
+    tags_counts = count_words_lists(y_train)
     labels_mlb = LabelsMlb(tags_counts)
 
     mlb = labels_mlb.mlb
@@ -197,6 +201,8 @@ def main(input_filepath: Path, output_filepath: Path):
     test_out = pd.DataFrame(
         list(zip(X_test, bow_test, tfidf_test)), columns=["title", "bow", "tfidf"]
     )
+
+    output_filepath = str(output_filepath) + "/"
 
     pickle.dump(X_train, open(output_filepath + "X_train.pickle", "wb"))
     pickle.dump(X_val, open(output_filepath + "X_val.pickle", "wb"))
