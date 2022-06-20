@@ -84,7 +84,7 @@ jobs:
           path: report.txt
 
       - name: Run mypy
-        run: poetry run mypy src --lineprecision-report . --install-types --non-interactive --ignore-missing-imports
+        run: poetry run mypy src --lineprecision-report . --install-types --non-interactive --ignore-missing-imports --allow-redefinition
 
       - name: Upload `mypy` report
         uses: actions/upload-artifact@v3
