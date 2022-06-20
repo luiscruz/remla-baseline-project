@@ -80,7 +80,7 @@ jobs:
           path: report.txt
 
       - name: Run mypy
-        run: mypy src --lineprecision-report . --install-types --non-interactive --ignore-missing-imports
+        run: poetry run mypy src --lineprecision-report . --install-types --non-interactive --ignore-missing-imports
 
       - name: Upload `mypy` report
         uses: actions/upload-artifact@v3
@@ -89,7 +89,7 @@ jobs:
           path: lineprecision.txt
 
       - name: Run bandit
-        run: bandit -r src -o bandit.txt -f txt
+        run: poetry run bandit -r src -o bandit.txt -f txt
         continue-on-error: true
 
       - name: Upload `bandit` report
