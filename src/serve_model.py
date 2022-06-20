@@ -10,12 +10,13 @@ from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI, UploadFile, status
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
-from .data.make_dataset import text_prepare
-from .features.build_features import FeatureExtractors
-from .models.predict_model import Evaluator
-from .project_types import ModelName
+from src.data.make_dataset import text_prepare
+from src.features.build_features import FeatureExtractors
+from src.models.predict_model import Evaluator
+from src.project_types import ModelName
 
 source_file = Path(__file__)
 project_dir = source_file.parent.parent.parent
@@ -30,7 +31,7 @@ class Text(BaseModel):
 
 @app.get("/")
 async def root():
-    return "<p>Hello, World!</p>"
+    return HTMLResponse(content="<p>Hello, World!</p>")
 
 
 @app.get("/metrics/")
@@ -86,6 +87,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=port,
         debug=True,
-        port=port,
         log_level="debug",
     )
