@@ -39,5 +39,5 @@ ENV PORT=$PORT
 
 EXPOSE $PORT
 
-ENTRYPOINT ["poetry", "run", "python"]
+# ENTRYPOINT ["poetry", "run", "python"]
 CMD ["poetry", "run", "src/serve_model.py"]
