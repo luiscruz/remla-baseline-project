@@ -43,9 +43,6 @@ jobs:
             docker-compose -f deployment/docker-compose/docker-compose.yml build $img_name
 
             docker tag $img_name:test ${IMG}/$img_name 
-            # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version_major }}-latest
-            # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version_major }}.${{ env.version_minor }}-latest
-            # docker tag $img_name:latest ${IMG}/$img_name:${{ env.version }}
-
+            
             docker push ${IMG}/$img_name:test
           done

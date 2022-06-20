@@ -10,7 +10,7 @@ services:
 
   inference-service:
     build: ../../
-    image: inference-service:latest
+    image: inference-service:test
     command: sh src/startup.sh
     environment:
       - APP_MODULE=serve_model
