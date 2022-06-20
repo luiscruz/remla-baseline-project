@@ -24,9 +24,10 @@
 
 # WORKDIR /root/dvc-versioning
 
-# # load google drive api key secret into file for use by DVC
+# load google drive api key secret into file for use by DVC
 # RUN echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
 # RUN export KEY_FILE=remla-352721-99f80e5bc090.json
+# RUN echo $printenv > env.txt
 # RUN python load_key.py
 
 # RUN dvc init -f
