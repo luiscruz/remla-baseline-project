@@ -13,16 +13,17 @@ from sklearn.metrics import roc_auc_score as roc_auc
 
 from ..project_types import ModelName
 
-project_root = Path("../../")
+source_file = Path(__file__)
+project_dir = source_file.parent.parent.parent
 
 
 def validation_file(model: ModelName):
-    input_filepath = project_root / "data/processed/"
+    input_filepath = project_dir / "data/processed/"
     return pickle.load(input_filepath.joinpath(f"{model}_val.pickle").open("rb"))
 
 
 def model_file(model: ModelName):
-    model_filepath = project_root / "models/"
+    model_filepath = project_dir / "models/"
     return pickle.load(model_filepath.joinpath(f"{model}").open("rb"))
 
 
