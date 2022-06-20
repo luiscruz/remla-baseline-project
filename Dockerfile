@@ -19,11 +19,15 @@ RUN python -m pip install --upgrade pip &&\
 #     mkdir models
 
 RUN git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git dvc-versioning
+COPY src/training_service/load_key.py ./
+RUN mv load_key.py dvc-versioning
 
 WORKDIR /root/dvc-versioning
 
 # load google drive api key secret into file for use by DVC
 RUN echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
+RUN export KEY_FILE=remla-352721-99f80e5bc090.json
+RUN python load_key.py
 
 RUN dvc init -f
 
