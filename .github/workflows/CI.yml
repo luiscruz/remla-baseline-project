@@ -100,16 +100,6 @@ jobs:
       #   # Use always() to always run this step to publish test results when there are test failures
       #   if: ${{ always() }}
 
-      - name: Run mllint
-        run:
-          mllint -o mllint-report.md
-
-      - name: Upload `mllint` report
-        uses: actions/upload-artifact@v3
-        with:
-          name: mllint-report.md
-          path: mllint-report.md
-
       - name: Install pytest plugin
         run: poetry run python -m pip install pytest-github-actions-annotate-failures
 
