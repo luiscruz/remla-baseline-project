@@ -31,6 +31,7 @@ ENV GIT_HASH=$GIT_HASH
 LABEL git_hash=$GIT_HASH
 
 COPY . .
+RUN poetry install  # With the code copied, install the root package.
 RUN poetry run dvc pull
 
 ARG PORT=5000
