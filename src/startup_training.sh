@@ -3,7 +3,10 @@
 # load google drive api key secret into file for use by DVC
 python src/training_service/load_key.py
 
-dvc init --no-scm -f
+# clone dvc-versioning branch
+git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git
+
+dvc init -f
 
 # create config entries for gdrive authentication to go automatically 
 # by utilizing the API_KEY_SECRET json credentials

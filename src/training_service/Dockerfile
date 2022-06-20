@@ -4,7 +4,7 @@ FROM python:3.8.13-slim
 WORKDIR /app/src
 
 COPY src/training_service/requirements.txt .
-RUN apt-get update; apt-get install -y curl
+RUN apt-get update; apt-get install -y curl; apt-get install -y git
 RUN python -m pip install --upgrade pip && python -m pip install -r ./requirements.txt
 
 COPY src/models ./models
