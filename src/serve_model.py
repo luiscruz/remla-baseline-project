@@ -62,7 +62,7 @@ async def predict(model_name: ModelName, text: Text):
     feature_extractor = FeatureExtractors[model_name](X_train)
     model = pickle.load(model_dir.joinpath(f"{model_name}_model.pickle").open("rb"))
 
-    feature_vector = feature_extractor.get_features([val])
+    feature_vector = feature_extractor.get_features([val])  # type: ignore
     predicted_vector = model.predict(feature_vector)
     tags = mlb.inverse_transform(predicted_vector)
 
@@ -71,9 +71,9 @@ async def predict(model_name: ModelName, text: Text):
 
 @app.post("/upload/{date_string}", status_code=status.HTTP_201_CREATED)
 async def upload(date_string: str, file: UploadFile):
-    contents = await file.file.read()
+    contents = file.file.read()
     output_file = project_dir.joinpath(f"data/raw/{date_string}.tsv")
-    with output_file.open("w") as f:
+    with output_file.open("wb") as f:
         f.write(contents)
     return
 

@@ -202,7 +202,7 @@ def main(input_filepath: Path, output_filepath: Path):
         list(zip(X_test, bow_test, tfidf_test)), columns=["title", "bow", "tfidf"]
     )
 
-    output_filepath = str(output_filepath) + "/"
+    output_filepath: str = str(output_filepath) + "/"
 
     pickle.dump(X_train, open(output_filepath + "X_train.pickle", "wb"))
     pickle.dump(X_val, open(output_filepath + "X_val.pickle", "wb"))
