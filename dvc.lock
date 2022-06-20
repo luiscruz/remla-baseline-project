@@ -72,3 +72,52 @@ stages:
     - path: data/processed/tfidf_val.pickle
       md5: 32660800dcabd09aa9535714d9064c40
       size: 76300
+  train_model:
+    cmd: python src/models/train_model.py
+    deps:
+    - path: data/processed/X_test.pickle
+      md5: 75b7caa7680b4c537502dd02058548aa
+      size: 1554
+    - path: data/processed/X_train.pickle
+      md5: 77c22eff2f88bea70e1b37977b1931ea
+      size: 1360817
+    - path: data/processed/X_val.pickle
+      md5: ba9842ff90e83c9ae1dd6c07c9e73a9c
+      size: 45448
+    - path: data/processed/bow_test.pickle
+      md5: 8f5f99d6252965219e344c6688b057b5
+      size: 2353
+    - path: data/processed/bow_train.pickle
+      md5: 585ea0c2a88489dba902118eda516e12
+      size: 2071751
+    - path: data/processed/bow_val.pickle
+      md5: 999be91f922fb33867957752251dbfbd
+      size: 68068
+    - path: data/processed/mlb.pickle
+      md5: 7eb3a94349cd226ac41a7c769be5b3ea
+      size: 1880
+    - path: data/processed/mlb_train.pickle
+      md5: a8f394fc7b46e4a2d7bbd87a8b8d8f4e
+      size: 25139362
+    - path: data/processed/mlb_val.pickle
+      md5: d75e004203e5ac04ec525f7dcfbf4365
+      size: 834562
+    - path: data/processed/tfidf_test.pickle
+      md5: 73c3c697505a8b6c3df5f1b859016bc5
+      size: 2533
+    - path: data/processed/tfidf_train.pickle
+      md5: cfd0522f00a6a146efb86eda4aec7e43
+      size: 2356307
+    - path: data/processed/tfidf_val.pickle
+      md5: 32660800dcabd09aa9535714d9064c40
+      size: 76300
+    - path: src/models/train_model.py
+      md5: 3b06b610b5434044ed924bd30d46ae30
+      size: 1538
+    outs:
+    - path: models/bow_model.pickle
+      md5: 6ad8cf421bcd74bc6ffe69d35582f5e1
+      size: 4026203
+    - path: models/tfidf_model.pickle
+      md5: c28bd4e9741879eb81a0a92118492b4d
+      size: 4996603
