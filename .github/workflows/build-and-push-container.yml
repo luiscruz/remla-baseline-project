@@ -31,6 +31,8 @@ jobs:
         run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build and push
+        env:
+          API_KEY_SECRET: ${{secrets.API_KEY_SECRET}}
         run: |
           IMG=ghcr.io/${REPO}
           # TODO: add this when web frontend is integrated in the docker-compose file
