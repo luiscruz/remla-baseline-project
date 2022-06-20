@@ -48,6 +48,8 @@ spec:
               value: training_service.train_app
             - name: TRAIN_INTERVAL_SECONDS
               value: "300"
+            - name: DVC_VERSIONING_PATH
+              value: "/app/dvc-versioning"
             - name: KEY_FILE
               value: "gdrive_key.json"
             - name: API_KEY_SECRET

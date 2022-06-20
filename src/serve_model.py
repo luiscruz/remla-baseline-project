@@ -15,6 +15,7 @@ from prometheus_client import (
     generate_latest,
     multiprocess,
 )
+import subprocess  # nosec
 
 from src.preprocess.preprocess_data import text_prepare
 
@@ -97,6 +98,21 @@ def predict():
     res = {"tags": tags, "classifier": "decision tree", "title": title}
     app.logger.debug(f"prediction: {res}")
     return jsonify(res)
+
+
+@app.route("/checkout_commit/<commit>")
+def checkout_commit_dvc(commit_hash: str):
+    # set commit hash as env to be read by the script
+    os.environ["CHECKOUT_COMMIT_HASH"] = str(commit_hash)
+    output = subprocess.run(["sh", "checkout_and_pull_dvc.sh"], capture_output=True)  # nosec
+    if output.returncode == 0:
+        app.logger.info(f"DVC checkout commit succesfull.")
+        return "", 200
+    else:
+        app.logger.warning(
+            f"serve_model.sh returned non zero exit code: \nstdout:{output.stdout}" f"\n stderr: {output.stderr}"
+        )
+        return "", 400
 
 
 @app.route("/metrics")

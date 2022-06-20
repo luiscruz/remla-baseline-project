@@ -7,7 +7,8 @@ python src/training_service/load_key.py
 git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git dvc-versioning
 cd dvc-versioning
 git remote set-url origin https://$GITHUB_ACCESS_TOKEN@github.com/Adam-TU/remla-project.git
-cd ..
+
+echo $(pwd)
 
 dvc init -f
 
@@ -50,5 +51,7 @@ dvc add $SHARED_DATA_PATH/raw/ -o data/raw/
 # reproduce pipeline to create the models and output data
 # this also updates the cache if something has changed in the data
 dvc repro
+
+cd ..
 
 gunicorn -c src/gunicorn_config.py -b 0.0.0.0:5000 --timeout 600 src.$APP_MODULE:app
