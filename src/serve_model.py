@@ -19,7 +19,7 @@ from src.models.predict_model import Evaluator
 from src.project_types import ModelName
 
 source_file = Path(__file__)
-project_dir = source_file.parent.parent.parent
+project_dir = source_file.parent.parent
 
 
 app = FastAPI()
@@ -51,7 +51,7 @@ async def metrics(model_name: ModelName):
 
 @app.post("/predict/{model_name}")
 async def predict(model_name: ModelName, text: Text):
-    val = text_prepare(text["data"])
+    val = text_prepare(text.data)
 
     processed_dir = project_dir.joinpath("data/processed")
     model_dir = project_dir / "models/"
@@ -60,9 +60,9 @@ async def predict(model_name: ModelName, text: Text):
     mlb = pickle.load(processed_dir.joinpath("mlb.pickle").open("rb"))
 
     feature_extractor = FeatureExtractors[model_name](X_train)
-    model = pickle.load(model_dir.joinpath(f"{model_name}_mode.pickle").open("rb"))
+    model = pickle.load(model_dir.joinpath(f"{model_name}_model.pickle").open("rb"))
 
-    feature_vector = feature_extractor.get_features(val)
+    feature_vector = feature_extractor.get_features([val])
     predicted_vector = model.predict(feature_vector)
     tags = mlb.inverse_transform(predicted_vector)
 
