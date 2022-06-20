@@ -49,15 +49,15 @@ jobs:
           mv gdrive-creds.json .dvc/tmp/gdrive-user-credentials.json
           poetry run dvc pull
 
-      - name: Run mllint
-        run:
-          poetry run mllint -o mllint-report.md
+      # - name: Run mllint
+      #   run:
+      #     poetry run mllint -o mllint-report.md
 
-      - name: Upload `mllint` report
-        uses: actions/upload-artifact@v3
-        with:
-          name: mllint-report.md
-          path: mllint-report.md
+      # - name: Upload `mllint` report
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: mllint-report.md
+      #     path: mllint-report.md
 
       - name: Lint with pylint
         run: poetry run pylint $(git ls-files '*.py')
