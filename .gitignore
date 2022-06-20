@@ -142,4 +142,4 @@ models/*
 # secrets
 deployment/docker-compose/api-keys.txt
 /deployment/k8s/secrets.yaml
-src/training_service/remla-352721*
+remla-352721*

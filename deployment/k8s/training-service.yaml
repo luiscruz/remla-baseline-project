@@ -49,12 +49,17 @@ spec:
             - name: TRAIN_INTERVAL_SECONDS
               value: "300"
             - name: KEY_FILE
-              value: 'gdrive_key.json'
+              value: "gdrive_key.json"
             - name: API_KEY_SECRET
               valueFrom:
                 secretKeyRef:
                   name: drive-secrets
                   key: DRIVE_SVC_JSON
+            - name: GITHUB_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: github-api-key
+                  key: GITHUB_ACCESS_TOKEN
           volumeMounts:
             - name: project-shared
               mountPath: /data/shared/

@@ -81,7 +81,7 @@ def merge_scraped():
 
 @app.route("/push_dvc_cache", methods=["POST"])
 def push_dvc_cache():
-    output = subprocess.run(["dvc", "push"], capture_output=True)  # nosec
+    output = subprocess.run(["sh", "src/training_service/push_dvc_cache.sh"], capture_output=True)  # nosec
     if output.returncode == 0:
         app.logger.info(f"DVC push completed. DVC cache is saved in GDrive and can be pulled using dvc pull.")
         return "", 200

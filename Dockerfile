@@ -2,6 +2,8 @@ FROM python:3.8.13-slim AS model_build
 
 WORKDIR /root/
 
+RUN apt-get update; apt-get install -y git
+
 COPY pyproject.toml setup.py ./
 COPY src src
 COPY services-shared-folder/data data
@@ -19,6 +21,9 @@ RUN mkdir -p data/processed &&\
 # load google drive api key secret into file for use by DVC
 RUN echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
 
+RUN git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git dvc-versioning
+RUN mv dvc-versioning/dvc.lock .
+
 RUN dvc init --no-scm -f
 
 # create config entries for gdrive authentication to go automatically 
@@ -28,7 +33,7 @@ RUN dvc remote add -d dvc-cache-remote gdrive://1pwqW-DruetPFaUBeO2KnnnPwccOZGdZ
     dvc remote modify dvc-cache-remote gdrive_use_service_account true &&\
     dvc remote modify dvc-cache-remote --local gdrive_service_account_json_file_path remla-352721-99f80e5bc090.json
 
-RUN dvc repro
+RUN dvc pull
 
 FROM python:3.8.13-slim
 
