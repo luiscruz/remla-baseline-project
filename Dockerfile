@@ -6,25 +6,26 @@ RUN apt-get update; apt-get install -y git
 
 COPY pyproject.toml setup.py ./
 COPY src src
-COPY services-shared-folder/data data
-COPY reports reports
-COPY params.yaml dvc.yaml ./
+# COPY services-shared-folder/data data
+# COPY reports reports
+# COPY params.yaml dvc.yaml ./
 
 RUN python -m pip install --upgrade pip &&\
     python -m pip install -r src/requirements.txt
 
-RUN mkdir -p data/processed &&\
-    mkdir -p data/interim &&\
-    mkdir -p data/external &&\
-    mkdir models
+# RUN mkdir -p data/processed &&\
+#     mkdir -p data/interim &&\
+#     mkdir -p data/external &&\
+#     mkdir models
+
+RUN git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git dvc-versioning
+
+WORKDIR /root/dvc-versioning
 
 # load google drive api key secret into file for use by DVC
 RUN echo $API_KEY_SECRET > remla-352721-99f80e5bc090.json
 
-RUN git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git dvc-versioning
-RUN mv dvc-versioning/dvc.lock .
-
-RUN dvc init --no-scm -f
+RUN dvc init -f
 
 # create config entries for gdrive authentication to go automatically 
 # by utilizing the API_KEY_SECRET json credentials
@@ -40,8 +41,8 @@ FROM python:3.8.13-slim
 WORKDIR /root/
 
 RUN mkdir models
-COPY --from=model_build /root/models models
-COPY --from=model_build /root/nltk_data nltk_data
+COPY --from=model_build /root/dvc-versioning/models models
+COPY --from=model_build /root/dvc-versioning/nltk_data nltk_data
 
 COPY src src
 
