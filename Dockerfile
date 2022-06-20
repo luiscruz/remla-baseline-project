@@ -21,11 +21,11 @@ RUN python3 install-poetry.py --pre
 ENV PATH=/root/.local/bin/:$PATH
 RUN poetry config virtualenvs.in-project true
 
-COPY pyproject.toml . 
+COPY pyproject.toml .
 COPY poetry.lock .
 
-RUN poetry install
-RUN echo "source /root/.venv/bin/activate" >> /root/.profile
+RUN poetry install --no-root
+RUN echo ". /root/.venv/bin/activate" >> /root/.profile
 SHELL ["sh", "-lc"]
 
 ARG GIT_HASH=dev
@@ -33,7 +33,7 @@ ENV GIT_HASH=$GIT_HASH
 LABEL git_hash=$GIT_HASH
 
 COPY . .
-RUN dvc pull
+# RUN dvc pull
 
 ARG PORT=5000
 ENV PORT=$PORT
