@@ -1,6 +1,4 @@
 rules:
-  disabled:
-    - dependency-management
 testing:
   report: tests-report.xml # JUnit-report for rule testing/pass
   coverage:
