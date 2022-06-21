@@ -106,6 +106,7 @@ def checkout_commit_dvc(commit_hash: str):
     os.environ["CHECKOUT_COMMIT_HASH"] = str(commit_hash)
     output = subprocess.run(["sh", "checkout_and_pull_dvc.sh"], capture_output=True)  # nosec
     if output.returncode == 0:
+        init_app()
         app.logger.info(f"DVC checkout commit succesfull.")
         return "", 200
     else:
