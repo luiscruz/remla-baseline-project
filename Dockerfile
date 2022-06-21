@@ -53,7 +53,7 @@ COPY src src
 
 COPY requirements.txt params.yaml pyproject.toml setup.py ./
 
-RUN apt-get update; apt-get install -y git
+RUN apt-get update; apt-get install -y git; apt-get install -y curl
 RUN python -m pip install --upgrade pip &&\
     python -m pip install -r src/requirements.txt
 

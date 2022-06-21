@@ -100,7 +100,7 @@ def predict():
     return jsonify(res)
 
 
-@app.route("/checkout_commit/<commit>")
+@app.post("/checkout_commit/<commit_hash>")
 def checkout_commit_dvc(commit_hash: str):
     # set commit hash as env to be read by the script
     os.environ["CHECKOUT_COMMIT_HASH"] = str(commit_hash)
