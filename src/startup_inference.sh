@@ -7,8 +7,20 @@ git clone -b dvc-versioning https://github.com/Adam-TU/remla-project.git dvc-ver
 cd dvc-versioning
 git remote set-url origin https://$GITHUB_ACCESS_TOKEN@github.com/Adam-TU/remla-project.git
 
+git config --global user.email "inference@inference.com"
+git config --global user.name "inference-service"
+
+echo $(pwd)
+
+cd ../src/training_service/
+
 # load google drive api key secret into file for use by DVC
-python src/training_service/load_key.py
+python load_key.py
+mv $KEY_FILE $DVC_VERSIONING_PATH
+
+cd $DVC_VERSIONING_PATH
+
+echo $KEY_FILE >> .gitignore
 
 dvc init -f
 
@@ -19,7 +31,7 @@ dvc remote modify dvc-cache-remote --local gdrive_service_account_json_file_path
 
 dvc pull
 
-mv -f models ..
+cp -r models ..
 
 cd ..
 

@@ -8,4 +8,4 @@ git checkout $CHECKOUT_COMMIT_HASH -- dvc.lock
 # to get the same version as in dvc.lock for every stage
 dvc checkout
 
-mv -f models ..
+cp -r models ..
